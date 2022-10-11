@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.transaction.Transactional;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
@@ -22,10 +23,12 @@ public class TutorService {
     @Autowired
     private TutorRepository tutorRepository;
 
+
     public List<TutorDto> listar() {
         return TutorDto.converter(tutorRepository.findAll());
     }
 
+    @Transactional
     public ResponseEntity<TutorDto> cadastrar(@RequestBody CadastroTutorForm form, UriComponentsBuilder uriBuilder) {
         Tutor tutor = form.converter();
         tutorRepository.save(tutor);
@@ -42,11 +45,22 @@ public class TutorService {
         return ResponseEntity.notFound().build();
     }
 
+    @Transactional
     public ResponseEntity<TutorDto> atualizar(@PathVariable Long id, @RequestBody AtualizacaoTutorForm form) {
         Optional<Tutor> optional = tutorRepository.findById(id);
         if (optional.isPresent()) {
             Tutor tutor = form.atualizar(id, tutorRepository);
             return ResponseEntity.ok(new TutorDto(tutor));
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @Transactional
+    public ResponseEntity<?> deletar(@PathVariable Long id) {
+        Optional<Tutor> tutor = tutorRepository.findById(id);
+        if (tutor.isPresent()) {
+            tutorRepository.delete(tutor.get());
+            return ResponseEntity.ok().build();
         }
         return ResponseEntity.notFound().build();
     }

@@ -24,13 +24,13 @@ public class ServicoController {
 	@Autowired
 	private ServicoService servicoService;
 
+
 	@GetMapping
 	public List<ServicoDto> listar() {
 		return servicoService.listar();
 	}
 
 	@PostMapping
-	@Transactional
 	public ResponseEntity<ServicoDto> cadastrar(@RequestBody @Valid CadastroServicoForm form, UriComponentsBuilder uriBuilder) {
 		return servicoService.cadastrar(form, uriBuilder);
 	}
@@ -41,18 +41,15 @@ public class ServicoController {
 	}
 
 	@PutMapping("/{id}")
-	@Transactional
 	public ResponseEntity<ServicoDto> atualizar(@PathVariable Long id, @RequestBody @Valid AtualizacaoServicoForm form) {
 		return servicoService.atualizar(id, form);
 	}
 
 	@DeleteMapping("/{id}")
-	@Transactional
 	// <?> diz que retorna generics mas nao sabe o tipo
 	public ResponseEntity<?> deletar(@PathVariable Long id) {
-		return null;
+		return servicoService.deletar(id);
 	}
-
 
 
 

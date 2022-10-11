@@ -2,17 +2,15 @@ package com.petshop.banhoetosa.controller;
 
 import com.petshop.banhoetosa.controller.dto.DetalhesDoTutorDto;
 import com.petshop.banhoetosa.controller.dto.TutorDto;
-import com.petshop.banhoetosa.controller.form.AtualizacaoServicoForm;
 import com.petshop.banhoetosa.controller.form.AtualizacaoTutorForm;
 import com.petshop.banhoetosa.controller.form.CadastroTutorForm;
-import com.petshop.banhoetosa.model.Tutor;
 import com.petshop.banhoetosa.service.TutorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.transaction.Transactional;
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -28,8 +26,7 @@ public class TutorController {
     }
 
     @PostMapping
-    @Transactional
-    public ResponseEntity<TutorDto> cadastrar(@RequestBody CadastroTutorForm form, UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<TutorDto> cadastrar(@RequestBody @Valid CadastroTutorForm form, UriComponentsBuilder uriBuilder) {
         return tutorService.cadastrar(form, uriBuilder);
     }
 
@@ -39,9 +36,13 @@ public class TutorController {
     }
 
     @PutMapping("/{id}")
-    @Transactional
-    public ResponseEntity<TutorDto> atualizar(@PathVariable Long id, @RequestBody AtualizacaoTutorForm form) {
-        return null;
+    public ResponseEntity<TutorDto> atualizar(@PathVariable Long id, @RequestBody @Valid AtualizacaoTutorForm form) {
+        return tutorService.atualizar(id, form);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deletar(@PathVariable Long id) {
+        return tutorService.deletar(id);
     }
 
 }

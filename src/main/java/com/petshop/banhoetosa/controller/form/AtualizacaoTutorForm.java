@@ -17,9 +17,7 @@ public class AtualizacaoTutorForm {
     private String telefone1;
     private String telefone2;
     private String email;
-    @NotNull @NotEmpty
     private LocalDateTime dataCadastro;
-    @NotNull @NotEmpty
     private Boolean status;
 
 

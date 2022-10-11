@@ -38,6 +38,7 @@ public class PetService {
         }
     }
 
+    @Transactional
     public ResponseEntity<PetDto> cadastrar(@RequestBody @Valid CadastroPetForm form, UriComponentsBuilder uriBuilder) {  //@RequestBody indica ao Spring que os parâmetros enviados no corpo da requisição devem ser atribuídos ao parâmetro do método
         Pet pet = form.converter(tutorRepository);
         petRepository.save(pet);
@@ -66,6 +67,7 @@ public class PetService {
         return ResponseEntity.notFound().build();
     }
 
+    @Transactional
     public ResponseEntity<?> deletar(@PathVariable Long id) { // <?> diz que tem generics mas nao sabe o tipo
         Optional<Pet> pet = petRepository.findById(id);
         if(pet.isPresent()) {

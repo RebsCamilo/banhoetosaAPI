@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
@@ -24,10 +25,12 @@ public class ServicoService {
     @Autowired
     private ServicoRepository servicoRepository;
 
+
     public List<ServicoDto> listar() {
         return ServicoDto.converter(servicoRepository.findAll());
     }
 
+    @Transactional
     public ResponseEntity<ServicoDto> cadastrar(@RequestBody @Valid CadastroServicoForm form, UriComponentsBuilder uriBuilder) {
         Servico servico = form.converter();
         servicoRepository.save(servico);
@@ -44,6 +47,7 @@ public class ServicoService {
         return ResponseEntity.notFound().build();
     }
 
+    @Transactional
     public ResponseEntity<ServicoDto> atualizar(@PathVariable Long id, @RequestBody @Valid AtualizacaoServicoForm form) {
         Optional<Servico> optional = servicoRepository.findById(id);
         if (optional.isPresent()) {
@@ -53,7 +57,15 @@ public class ServicoService {
         return ResponseEntity.notFound().build();
     }
 
-
+    @Transactional
+    public ResponseEntity<?> deletar(@PathVariable Long id) {
+        Optional<Servico> optional = servicoRepository.findById(id);
+        if (optional.isPresent()) {
+            servicoRepository.delete(optional.get());
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.notFound().build();
+    }
 
 }
 
