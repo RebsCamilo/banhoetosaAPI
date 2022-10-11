@@ -4,6 +4,9 @@ import com.petshop.banhoetosa.model.Pet;
 import lombok.Value;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Value
 public class DetalhesDoPetDto {
@@ -17,7 +20,7 @@ public class DetalhesDoPetDto {
     private String nomeTutor;
     private LocalDateTime dataCadastro;
     private Boolean status;
-//    List<PetServicoDto> listaPetServicos;
+    private List<PetServicoDto> listaPetServicos;
 
 
     public DetalhesDoPetDto(Pet pet) {
@@ -30,8 +33,15 @@ public class DetalhesDoPetDto {
         this.nomeTutor = pet.getTutor().getNome();
         this.status = pet.getStatus();
         this.dataCadastro = pet.getDataCadastro();
-//        this.listaPetServicos = new ArrayList<>();
-//
+        this.listaPetServicos = new ArrayList<>();
+
+        this.listaPetServicos.addAll(pet.getPetServicos()
+                    .stream()
+                    .map(PetServicoDto::new)
+                    .collect(Collectors.toList())
+
+        );
+
 //        this.listaPetServicos.addAll(pet.getPetServicos() //teria que pegar o PetServicoDto
 //                        .stream()
 //                        .filter(p -> p.equals())

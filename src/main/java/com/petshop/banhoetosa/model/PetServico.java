@@ -2,6 +2,7 @@ package com.petshop.banhoetosa.model;
 
 import com.petshop.banhoetosa.enums.StatusPagamentoEnum;
 import com.petshop.banhoetosa.enums.StatusServicoEnum;
+import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -9,6 +10,7 @@ import java.time.LocalDateTime;
 //classe para representar a tabela de relação de pet e serviço. Precisei adicionar id e data
 //ref https://stackoverflow.com/questions/71456192/why-hibernate-is-not-performing-the-join-on-this-many-to-many-association-table
 @Entity
+@Data
 @Table(name = "pet_servico")
 public class PetServico {
 
