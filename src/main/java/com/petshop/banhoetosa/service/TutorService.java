@@ -2,6 +2,7 @@ package com.petshop.banhoetosa.service;
 
 import com.petshop.banhoetosa.controller.dto.DetalhesDoTutorDto;
 import com.petshop.banhoetosa.controller.dto.TutorDto;
+import com.petshop.banhoetosa.controller.form.AtualizacaoTutorForm;
 import com.petshop.banhoetosa.controller.form.CadastroTutorForm;
 import com.petshop.banhoetosa.model.Tutor;
 import com.petshop.banhoetosa.repository.TutorRepository;
@@ -37,6 +38,15 @@ public class TutorService {
         Optional<Tutor> tutor = tutorRepository.findById(id);
         if(tutor.isPresent()) {
             return ResponseEntity.ok(new DetalhesDoTutorDto(tutor.get()));
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    public ResponseEntity<TutorDto> atualizar(@PathVariable Long id, @RequestBody AtualizacaoTutorForm form) {
+        Optional<Tutor> optional = tutorRepository.findById(id);
+        if (optional.isPresent()) {
+            Tutor tutor = form.atualizar(id, tutorRepository);
+            return ResponseEntity.ok(new TutorDto(tutor));
         }
         return ResponseEntity.notFound().build();
     }

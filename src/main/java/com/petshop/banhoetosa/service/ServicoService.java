@@ -2,6 +2,7 @@ package com.petshop.banhoetosa.service;
 
 import com.petshop.banhoetosa.controller.dto.DetalhesDoServicoDto;
 import com.petshop.banhoetosa.controller.dto.ServicoDto;
+import com.petshop.banhoetosa.controller.form.AtualizacaoServicoForm;
 import com.petshop.banhoetosa.controller.form.CadastroServicoForm;
 import com.petshop.banhoetosa.model.Servico;
 import com.petshop.banhoetosa.repository.ServicoRepository;
@@ -42,4 +43,18 @@ public class ServicoService {
         }
         return ResponseEntity.notFound().build();
     }
+
+    public ResponseEntity<ServicoDto> atualizar(@PathVariable Long id, @RequestBody @Valid AtualizacaoServicoForm form) {
+        Optional<Servico> optional = servicoRepository.findById(id);
+        if (optional.isPresent()) {
+            Servico servico = form.atualizar(id, servicoRepository);
+            return ResponseEntity.ok(new ServicoDto(servico));
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+
+
 }
+
+

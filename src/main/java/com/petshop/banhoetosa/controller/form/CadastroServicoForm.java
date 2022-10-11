@@ -19,4 +19,5 @@ public class CadastroServicoForm {
         Servico servico = new Servico(descricaoServico, preco);
         return servico;
     }
+
 }

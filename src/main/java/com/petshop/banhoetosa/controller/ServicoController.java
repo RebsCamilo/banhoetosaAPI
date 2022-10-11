@@ -4,6 +4,7 @@ import com.petshop.banhoetosa.controller.dto.DetalhesDoServicoDto;
 import com.petshop.banhoetosa.controller.dto.DetalhesDoTutorDto;
 import com.petshop.banhoetosa.controller.dto.PetDto;
 import com.petshop.banhoetosa.controller.dto.ServicoDto;
+import com.petshop.banhoetosa.controller.form.AtualizacaoServicoForm;
 import com.petshop.banhoetosa.controller.form.CadastroPetForm;
 import com.petshop.banhoetosa.controller.form.CadastroServicoForm;
 import com.petshop.banhoetosa.service.ServicoService;
@@ -41,8 +42,8 @@ public class ServicoController {
 
 	@PutMapping("/{id}")
 	@Transactional
-	public ResponseEntity<ServicoDto> atualizar(@PathVariable Long id, @RequestBody @Valid CadastroServicoForm form) {
-		return null;
+	public ResponseEntity<ServicoDto> atualizar(@PathVariable Long id, @RequestBody @Valid AtualizacaoServicoForm form) {
+		return servicoService.atualizar(id, form);
 	}
 
 	@DeleteMapping("/{id}")

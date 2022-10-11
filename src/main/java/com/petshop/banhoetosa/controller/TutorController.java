@@ -2,6 +2,8 @@ package com.petshop.banhoetosa.controller;
 
 import com.petshop.banhoetosa.controller.dto.DetalhesDoTutorDto;
 import com.petshop.banhoetosa.controller.dto.TutorDto;
+import com.petshop.banhoetosa.controller.form.AtualizacaoServicoForm;
+import com.petshop.banhoetosa.controller.form.AtualizacaoTutorForm;
 import com.petshop.banhoetosa.controller.form.CadastroTutorForm;
 import com.petshop.banhoetosa.model.Tutor;
 import com.petshop.banhoetosa.service.TutorService;
@@ -34,6 +36,12 @@ public class TutorController {
     @GetMapping("/{id}")
     public ResponseEntity<DetalhesDoTutorDto> detalhar(@PathVariable Long id) {
         return tutorService.detalhar(id);
+    }
+
+    @PutMapping("/{id}")
+    @Transactional
+    public ResponseEntity<TutorDto> atualizar(@PathVariable Long id, @RequestBody AtualizacaoTutorForm form) {
+        return null;
     }
 
 }
