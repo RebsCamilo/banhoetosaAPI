@@ -1,11 +1,8 @@
 package com.petshop.banhoetosa.repository;
 
 import com.petshop.banhoetosa.model.Pet;
-import com.petshop.banhoetosa.model.Tutor;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.List;
 
 public interface PetRepository extends JpaRepository<Pet, Long> {

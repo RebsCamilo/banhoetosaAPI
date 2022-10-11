@@ -9,8 +9,6 @@ import com.petshop.banhoetosa.repository.TutorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.transaction.Transactional;
@@ -29,7 +27,7 @@ public class TutorService {
     }
 
     @Transactional
-    public ResponseEntity<TutorDto> cadastrar(@RequestBody CadastroTutorForm form, UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<TutorDto> cadastrar(CadastroTutorForm form, UriComponentsBuilder uriBuilder) {
         Tutor tutor = form.converter();
         tutorRepository.save(tutor);
 
@@ -37,7 +35,7 @@ public class TutorService {
         return ResponseEntity.created(uri).body(new TutorDto(tutor));
     }
 
-    public ResponseEntity<DetalhesDoTutorDto> detalhar(@PathVariable Long id) {
+    public ResponseEntity<DetalhesDoTutorDto> detalhar(Long id) {
         Optional<Tutor> tutor = tutorRepository.findById(id);
         if(tutor.isPresent()) {
             return ResponseEntity.ok(new DetalhesDoTutorDto(tutor.get()));
@@ -46,7 +44,7 @@ public class TutorService {
     }
 
     @Transactional
-    public ResponseEntity<TutorDto> atualizar(@PathVariable Long id, @RequestBody AtualizacaoTutorForm form) {
+    public ResponseEntity<TutorDto> atualizar(Long id, AtualizacaoTutorForm form) {
         Optional<Tutor> optional = tutorRepository.findById(id);
         if (optional.isPresent()) {
             Tutor tutor = form.atualizar(id, tutorRepository);
@@ -56,7 +54,7 @@ public class TutorService {
     }
 
     @Transactional
-    public ResponseEntity<?> deletar(@PathVariable Long id) {
+    public ResponseEntity<?> deletar(Long id) {
         Optional<Tutor> tutor = tutorRepository.findById(id);
         if (tutor.isPresent()) {
             tutorRepository.delete(tutor.get());

@@ -2,10 +2,8 @@ package com.petshop.banhoetosa.controller.form;
 
 import com.petshop.banhoetosa.model.Endereco;
 import com.petshop.banhoetosa.model.Tutor;
-import com.petshop.banhoetosa.repository.EnderecoRepository;
 import lombok.Data;
 
-import javax.persistence.Column;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;

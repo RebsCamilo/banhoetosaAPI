@@ -39,14 +39,12 @@ public class PetController {
 	}
 
 	@PutMapping("/{id}")
-	@Transactional //para comitar as alterações no banco de dados
 	public ResponseEntity<PetDto> atualizar(@PathVariable Long id, @RequestBody @Valid AtualizacaoPetForm form) {
 		return petService.atualizar(id, form);
 	}
 
 	@DeleteMapping("/{id}")
-	@Transactional
-	public ResponseEntity<?> deletar(@PathVariable Long id) { // <?> diz que tem generics mas nao sabe o tipo
+	public ResponseEntity<?> deletar(Long id) { // <?> diz que tem generics mas nao sabe o tipo
 		return petService.deletar(id);
 	}
 

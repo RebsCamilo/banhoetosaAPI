@@ -6,9 +6,6 @@ import com.petshop.banhoetosa.model.Tutor;
 import lombok.AllArgsConstructor;
 import lombok.Value;
 
-import javax.persistence.Column;
-import javax.persistence.OneToMany;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,7 +19,6 @@ public class TutorDto {
     private String telefone1;
     private String telefone2;
     private String email;
-    private LocalDateTime dataCadastro;
     private List<String> nomePets;
     private List<String> NomeBairro;
 
@@ -32,8 +28,6 @@ public class TutorDto {
         this.telefone1 = tutor.getTelefone1();
         this.telefone2 = tutor.getTelefone2();
         this.email = tutor.getEmail();
-        this.dataCadastro = tutor.getDataCadastro();
-
         this.nomePets = new ArrayList<>();
         if(!nomePets.isEmpty()) {
             this.nomePets.addAll(tutor.getPets()

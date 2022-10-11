@@ -4,7 +4,6 @@ import com.petshop.banhoetosa.model.Tutor;
 import lombok.Value;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Value
 public class DetalhesDoTutorDto {
@@ -25,8 +24,8 @@ public class DetalhesDoTutorDto {
         this.telefone1 = tutor.getTelefone1();
         this.telefone2 = tutor.getTelefone2();
         this.email = tutor.getEmail();
-        this.status = tutor.getStatus();
         this.dataCadastro = tutor.getDataCadastro();
+        this.status = tutor.getStatus();
 
 //        this.detalhe = tutor.getDetalhe();
 //        this.nomeTutor = tutor.getTutor().getNome();

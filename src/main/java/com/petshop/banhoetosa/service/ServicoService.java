@@ -9,12 +9,9 @@ import com.petshop.banhoetosa.repository.ServicoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.transaction.Transactional;
-import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
@@ -31,7 +28,7 @@ public class ServicoService {
     }
 
     @Transactional
-    public ResponseEntity<ServicoDto> cadastrar(@RequestBody @Valid CadastroServicoForm form, UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<ServicoDto> cadastrar(CadastroServicoForm form, UriComponentsBuilder uriBuilder) {
         Servico servico = form.converter();
         servicoRepository.save(servico);
 
@@ -39,7 +36,7 @@ public class ServicoService {
         return ResponseEntity.created(uri).body(new ServicoDto(servico)); //devolve status 201 e redireciona para a pagina do objeto criado
     }
 
-    public ResponseEntity<DetalhesDoServicoDto> detalhar(@PathVariable Long id) {
+    public ResponseEntity<DetalhesDoServicoDto> detalhar(Long id) {
         Optional<Servico> servico = servicoRepository.findById(id);
         if(servico.isPresent()) {
             return ResponseEntity.ok(new DetalhesDoServicoDto(servico.get()));
@@ -48,7 +45,7 @@ public class ServicoService {
     }
 
     @Transactional
-    public ResponseEntity<ServicoDto> atualizar(@PathVariable Long id, @RequestBody @Valid AtualizacaoServicoForm form) {
+    public ResponseEntity<ServicoDto> atualizar(Long id, AtualizacaoServicoForm form) {
         Optional<Servico> optional = servicoRepository.findById(id);
         if (optional.isPresent()) {
             Servico servico = form.atualizar(id, servicoRepository);
@@ -58,7 +55,7 @@ public class ServicoService {
     }
 
     @Transactional
-    public ResponseEntity<?> deletar(@PathVariable Long id) {
+    public ResponseEntity<?> deletar(Long id) {
         Optional<Servico> optional = servicoRepository.findById(id);
         if (optional.isPresent()) {
             servicoRepository.delete(optional.get());

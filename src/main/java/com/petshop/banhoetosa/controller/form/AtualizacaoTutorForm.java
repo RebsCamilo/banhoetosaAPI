@@ -4,7 +4,6 @@ import com.petshop.banhoetosa.model.Tutor;
 import com.petshop.banhoetosa.repository.TutorRepository;
 import lombok.Data;
 
-import javax.persistence.Column;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
