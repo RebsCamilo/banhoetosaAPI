@@ -19,8 +19,7 @@ public class DetalhesDoPetDto {
     private String detalhe;
     private String nomeTutor;
     private LocalDateTime dataCadastro;
-    private Boolean status;
-    private List<PetServicoDto> listaPetServicos;
+    private List<PetServicoDetalheDoPetDto> listaPetServicos;
 
 
     public DetalhesDoPetDto(Pet pet) {
@@ -31,15 +30,13 @@ public class DetalhesDoPetDto {
         this.idade = pet.getIdade();
         this.detalhe = pet.getDetalhe();
         this.nomeTutor = pet.getTutor().getNome();
-        this.status = pet.getStatus();
         this.dataCadastro = pet.getDataCadastro();
         this.listaPetServicos = new ArrayList<>();
 
         this.listaPetServicos.addAll(pet.getPetServicos()
                     .stream()
-                    .map(PetServicoDto::new)
+                    .map(PetServicoDetalheDoPetDto::new)
                     .collect(Collectors.toList())
-
         );
 
 //        this.listaPetServicos.addAll(pet.getPetServicos() //teria que pegar o PetServicoDto

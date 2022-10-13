@@ -13,13 +13,11 @@ public class DetalhesDoServicoDto {
     private String descricaoServico;
     private BigDecimal preco;
     private LocalDateTime dataCadastro;
-    private Boolean status;
 
     public DetalhesDoServicoDto(Servico servico) {
         this.id = servico.getId();
         this.descricaoServico = servico.getDescricaoServico();
         this.preco = servico.getPreco();
         this.dataCadastro = servico.getDataCadastro();
-        this.status = servico.getStatus();
     }
 }

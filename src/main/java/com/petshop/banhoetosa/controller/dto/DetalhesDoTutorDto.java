@@ -13,7 +13,6 @@ public class DetalhesDoTutorDto {
     private String telefone2;
     private String email;
     private LocalDateTime dataCadastro;
-    private Boolean status;
 //    List<String> nomeBairro;
 //    List<String> pets;
 
@@ -25,7 +24,6 @@ public class DetalhesDoTutorDto {
         this.telefone2 = tutor.getTelefone2();
         this.email = tutor.getEmail();
         this.dataCadastro = tutor.getDataCadastro();
-        this.status = tutor.getStatus();
 
 //        this.detalhe = tutor.getDetalhe();
 //        this.nomeTutor = tutor.getTutor().getNome();

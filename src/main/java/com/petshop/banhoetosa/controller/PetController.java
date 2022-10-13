@@ -44,7 +44,7 @@ public class PetController {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> deletar(Long id) { // <?> diz que tem generics mas nao sabe o tipo
+	public ResponseEntity<?> deletar(@PathVariable Long id) { // <?> diz que tem generics mas nao sabe o tipo
 		return petService.deletar(id);
 	}
 

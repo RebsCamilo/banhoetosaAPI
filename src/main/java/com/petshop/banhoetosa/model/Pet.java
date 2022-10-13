@@ -1,5 +1,6 @@
 package com.petshop.banhoetosa.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -28,14 +29,16 @@ public class Pet {
     private Integer idade;
     private String detalhe;
     private LocalDateTime dataCadastro = LocalDateTime.now(); //tem alguma forma do spring manter as alterações no banco (guardar os logs?)
-    @Column(columnDefinition = "Boolean default true")
-    private Boolean status;
+//    @Column(columnDefinition = "Boolean default true")
+//    private Boolean status;
 
+//    (cascade = CascadeType.PERSIST)
     @ManyToOne
     @JoinColumn(name = "id_tutor")
     private Tutor tutor;
 
-    @OneToMany(mappedBy = "pet")
+    @JsonIgnore
+    @OneToMany(mappedBy = "pet", fetch = FetchType.LAZY)
     List<PetServico> petServicos;
 
     @Override

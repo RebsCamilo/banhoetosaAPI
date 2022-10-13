@@ -68,6 +68,8 @@ public class PetService {
     public ResponseEntity<?> deletar(Long id) { // <?> diz que tem generics mas nao sabe o tipo
         Optional<Pet> pet = petRepository.findById(id);
         if(pet.isPresent()) {
+            pet.get().setTutor(null);
+            pet.get().setPetServicos(null);
             petRepository.deleteById(id);
             return ResponseEntity.ok().build();
         }

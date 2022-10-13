@@ -28,8 +28,6 @@ public class Endereco {
     @Column(length = 10)
     private String cep;
     private LocalDateTime dataCadastro = LocalDateTime.now(); //tem alguma forma do spring manter as alterações no banco (guardar os logs?)
-    @Column(columnDefinition = "Boolean default true")
-    private Boolean status;
 
     @ManyToOne
     @JoinColumn(name = "id_tutor")

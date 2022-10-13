@@ -21,7 +21,6 @@ public class EnderecoDto { //apenas classes primitivas do Java, não classes cri
     private String complemento;
     private String cep;
     private LocalDateTime dataCadastro;
-    private Boolean status;
 
     public EnderecoDto(Endereco endereco) {
         this.id = endereco.getId();
@@ -31,7 +30,6 @@ public class EnderecoDto { //apenas classes primitivas do Java, não classes cri
         this.complemento = endereco.getComplemento();
         this.cep = endereco.getCep();
         this.dataCadastro = endereco.getDataCadastro();
-        this.status = endereco.getStatus();
     }
 
 //    public static List<EnderecoDto> converter(List<Endereco> endereco) {

@@ -16,8 +16,6 @@ public class AtualizacaoTutorForm {
     private String telefone1;
     private String telefone2;
     private String email;
-    private LocalDateTime dataCadastro;
-    private Boolean status;
 
 
     public Tutor atualizar(Long id, TutorRepository tutorRepository) {
@@ -27,8 +25,6 @@ public class AtualizacaoTutorForm {
         tutor.setTelefone1(this.telefone1);
         tutor.setTelefone2(this.telefone2);
         tutor.setEmail(this.email);
-        tutor.setDataCadastro(LocalDateTime.now());
-        tutor.setStatus(this.status);
 
         return tutor;
     }

@@ -30,8 +30,6 @@ public class Tutor {
     @Column(length = 100)
     private String email;
     private LocalDateTime dataCadastro = LocalDateTime.now(); //tem alguma forma do spring manter as alterações no banco (guardar os logs?)
-    @Column(columnDefinition = "Boolean default true")
-    private Boolean status;
 
     @OneToMany(mappedBy = "tutor")
     private List<Endereco> enderecos;
