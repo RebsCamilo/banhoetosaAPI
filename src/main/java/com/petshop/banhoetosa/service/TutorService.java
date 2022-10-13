@@ -31,7 +31,7 @@ public class TutorService {
         Tutor tutor = form.converter();
         tutorRepository.save(tutor);
 
-        URI uri = uriBuilder.path("tutores/{id}").buildAndExpand(tutor.getId()).toUri();
+        URI uri = uriBuilder.path("tutor/{id}").buildAndExpand(tutor.getId()).toUri();
         return ResponseEntity.created(uri).body(new TutorDto(tutor));
     }
 

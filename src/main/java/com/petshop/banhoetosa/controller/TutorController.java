@@ -14,7 +14,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/tutores")
+@RequestMapping("/tutor")
 public class TutorController {
 
     @Autowired

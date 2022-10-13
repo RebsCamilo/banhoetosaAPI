@@ -14,18 +14,19 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "pet_servico")
 @Data
+@NoArgsConstructor
 public class PetServico {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private LocalDateTime dataCadastro = LocalDateTime.now(); //tem alguma forma do spring manter as alterações no banco (guardar os logs?)
-    @Column(columnDefinition = "varchar(30) default 'AGUARDANDO'")
+    @Column//(columnDefinition = "varchar(30) default 'AGUARDANDO'")
     @Enumerated(EnumType.STRING)
-    private StatusServicoEnum statusServico = StatusServicoEnum.AGUARDANDO;
-    @Column(columnDefinition = "varchar(30) default 'EM_ABERTO'")
+    private StatusServicoEnum statusServico; // = StatusServicoEnum.AGUARDANDO;
+    @Column//(columnDefinition = "varchar(30) default 'EM_ABERTO'")
     @Enumerated(EnumType.STRING)
-    private StatusPagamentoEnum statusPagamento = StatusPagamentoEnum.EM_ABERTO;
+    private StatusPagamentoEnum statusPagamento; // = StatusPagamentoEnum.EM_ABERTO;
 
     @ManyToOne
     @JoinColumn(name = "id_pet")
@@ -35,5 +36,11 @@ public class PetServico {
     @JoinColumn(name = "id_servico")
     private Servico servico;
 
+    public PetServico(Pet pet, Servico servico, StatusServicoEnum statusServico, StatusPagamentoEnum statusPagamento) {
+        this.pet = pet;
+        this.servico = servico;
+        this.statusServico = statusServico;
+        this.statusPagamento = statusPagamento;
+    }
 }
 

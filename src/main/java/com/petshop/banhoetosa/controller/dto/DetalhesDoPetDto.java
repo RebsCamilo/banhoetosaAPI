@@ -19,7 +19,7 @@ public class DetalhesDoPetDto {
     private String detalhe;
     private String nomeTutor;
     private LocalDateTime dataCadastro;
-    private List<PetServicoDetalheDoPetDto> listaPetServicos;
+    private List<DetalhesDoPetServicoDto> listaPetServicos;
 
 
     public DetalhesDoPetDto(Pet pet) {
@@ -35,7 +35,7 @@ public class DetalhesDoPetDto {
 
         this.listaPetServicos.addAll(pet.getPetServicos()
                     .stream()
-                    .map(PetServicoDetalheDoPetDto::new)
+                    .map(DetalhesDoPetServicoDto::new)
                     .collect(Collectors.toList())
         );
 
