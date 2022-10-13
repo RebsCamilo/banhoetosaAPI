@@ -31,10 +31,10 @@ public class Tutor {
     private String email;
     private LocalDateTime dataCadastro = LocalDateTime.now(); //tem alguma forma do spring manter as alterações no banco (guardar os logs?)
 
-    @OneToMany(mappedBy = "tutor")
+    @OneToMany(mappedBy = "tutor", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Endereco> enderecos;
 
-    @OneToMany(mappedBy = "tutor")
+    @OneToMany(mappedBy = "tutor", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Pet> pets;
 
     public Tutor(String nome, String telefone1, String telefone2, String email, List<Endereco> enderecos) {

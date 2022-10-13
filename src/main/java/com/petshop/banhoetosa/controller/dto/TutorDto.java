@@ -5,6 +5,7 @@ import com.petshop.banhoetosa.model.Pet;
 import com.petshop.banhoetosa.model.Tutor;
 import lombok.AllArgsConstructor;
 import lombok.Value;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +21,7 @@ public class TutorDto {
     private String telefone2;
     private String email;
     private List<String> nomePets;
-    private List<String> NomeBairro;
+    private List<String> nomeBairro;
 
     public TutorDto(Tutor tutor) {
         this.id = tutor.getId();
@@ -29,22 +30,24 @@ public class TutorDto {
         this.telefone2 = tutor.getTelefone2();
         this.email = tutor.getEmail();
         this.nomePets = new ArrayList<>();
-        if(!nomePets.isEmpty()) {
+        List<Pet> pets = tutor.getPets();
+        if(!CollectionUtils.isEmpty(pets)) {
             this.nomePets.addAll(tutor.getPets()
                     .stream()
                     .map(Pet::getNome)
                     .collect(Collectors.toList())
             );
         }
-        this.NomeBairro = new ArrayList<>();
-        if(!NomeBairro.isEmpty()) {
-            this.NomeBairro.addAll(tutor.getEnderecos()
-                .stream()
-                .map(Endereco::getBairro)
-                .collect(Collectors.toList())
+
+        this.nomeBairro = new ArrayList<>();
+        List<Endereco> enderecos = tutor.getEnderecos();
+        if(!enderecos.isEmpty()) {
+            this.nomeBairro.addAll(tutor.getEnderecos()
+                    .stream()
+                    .map(Endereco::getBairro)
+                    .collect(Collectors.toList())
             );
         }
-
     }
 
 

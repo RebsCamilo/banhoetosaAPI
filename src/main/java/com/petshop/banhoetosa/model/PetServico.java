@@ -28,11 +28,11 @@ public class PetServico {
     @Enumerated(EnumType.STRING)
     private StatusPagamentoEnum statusPagamento; // = StatusPagamentoEnum.EM_ABERTO;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_pet")
     private Pet pet;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_servico")
     private Servico servico;
 

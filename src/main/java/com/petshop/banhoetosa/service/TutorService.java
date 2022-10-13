@@ -4,7 +4,9 @@ import com.petshop.banhoetosa.controller.dto.DetalhesDoTutorDto;
 import com.petshop.banhoetosa.controller.dto.TutorDto;
 import com.petshop.banhoetosa.controller.form.AtualizacaoTutorForm;
 import com.petshop.banhoetosa.controller.form.CadastroTutorForm;
+import com.petshop.banhoetosa.model.Pet;
 import com.petshop.banhoetosa.model.Tutor;
+import com.petshop.banhoetosa.repository.PetRepository;
 import com.petshop.banhoetosa.repository.TutorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,8 @@ import java.util.Optional;
 public class TutorService {
     @Autowired
     private TutorRepository tutorRepository;
+    @Autowired
+    private PetRepository petRepository;
 
 
     public List<TutorDto> listar() {
@@ -31,7 +35,7 @@ public class TutorService {
         Tutor tutor = form.converter();
         tutorRepository.save(tutor);
 
-        URI uri = uriBuilder.path("tutor/{id}").buildAndExpand(tutor.getId()).toUri();
+        URI uri = uriBuilder.path("/tutor/{id}").buildAndExpand(tutor.getId()).toUri();
         return ResponseEntity.created(uri).body(new TutorDto(tutor));
     }
 
@@ -57,6 +61,9 @@ public class TutorService {
     public ResponseEntity<?> deletar(Long id) {
         Optional<Tutor> tutor = tutorRepository.findById(id);
         if (tutor.isPresent()) {
+//            List<Pet> petsTutor = tutor.get().getPets();
+            //excluir pets
+            //excluir endereços
             tutorRepository.delete(tutor.get());
             return ResponseEntity.ok().build();
         }

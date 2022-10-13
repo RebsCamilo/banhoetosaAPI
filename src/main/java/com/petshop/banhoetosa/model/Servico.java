@@ -29,7 +29,7 @@ public class Servico {
 //    @ManyToMany(mappedBy = "servicos")
 //    private List<Pet> pets;
 
-    @OneToMany(mappedBy = "servico")
+    @OneToMany(mappedBy = "servico", cascade = CascadeType.ALL)
     List<PetServico> petServicos;
 
     public Servico(String descricaoServico, BigDecimal preco) {

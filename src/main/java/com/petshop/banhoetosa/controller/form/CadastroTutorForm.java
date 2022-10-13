@@ -16,19 +16,14 @@ public class CadastroTutorForm {
     private String nome;
     @NotNull @NotEmpty
     private String telefone1;
-    @NotEmpty
     private String telefone2;
-    @NotEmpty
     private String email;
     //cadastrar endereco
-    @NotEmpty
     private String rua;
     private Integer numero;
-    @NotEmpty
+    @NotNull @NotEmpty
     private String bairro;
-    @NotEmpty
     private String complemento;
-    @NotEmpty
     private String cep;
 
     public Tutor converter() {
