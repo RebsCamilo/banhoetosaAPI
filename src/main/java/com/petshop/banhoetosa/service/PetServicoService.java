@@ -6,6 +6,7 @@ import com.petshop.banhoetosa.controller.form.AtualizacaoPetServicoForm;
 import com.petshop.banhoetosa.controller.form.CadastroPetServicoForm;
 import com.petshop.banhoetosa.enums.StatusPagamentoEnum;
 import com.petshop.banhoetosa.enums.StatusServicoEnum;
+import com.petshop.banhoetosa.model.Pet;
 import com.petshop.banhoetosa.model.PetServico;
 import com.petshop.banhoetosa.repository.PetRepository;
 import com.petshop.banhoetosa.repository.PetServicoRepository;
@@ -38,12 +39,15 @@ public class PetServicoService {
 
     public ResponseEntity<PetServicoDto> cadastrar(CadastroPetServicoForm form, UriComponentsBuilder uriBuilder) {
         PetServico petServico = form.converter(petRepository, servicoRepository);
-        petServico.setStatusServico(StatusServicoEnum.AGUARDANDO);
-        petServico.setStatusPagamento(StatusPagamentoEnum.EM_ABERTO);
-        petServicoRepository.save(petServico);
+        if (petServico.getServico().getStatus()) {
+            petServico.setStatusServico(StatusServicoEnum.AGUARDANDO);
+            petServico.setStatusPagamento(StatusPagamentoEnum.EM_ABERTO);
+            petServicoRepository.save(petServico);
 
-        URI uri = uriBuilder.path("/petservico/{id}").buildAndExpand(petServico.getId()).toUri();
-        return ResponseEntity.created(uri).body(new PetServicoDto(petServico));
+            URI uri = uriBuilder.path("/petservico/{id}").buildAndExpand(petServico.getId()).toUri();
+            return ResponseEntity.created(uri).body(new PetServicoDto(petServico));
+        }
+        return ResponseEntity.notFound().build();
     }
 
     public ResponseEntity<DetalhesDoPetServicoDto> detalhar(Long id) {
@@ -70,6 +74,7 @@ public class PetServicoService {
     public ResponseEntity<?> deletar(Long id) {
         Optional<PetServico> petServico = petServicoRepository.findById(id);
         if (petServico.isPresent()) {
+            petServico.get().setServico(null);
             petServicoRepository.delete(petServico.get());
             return ResponseEntity.ok().build();
         }

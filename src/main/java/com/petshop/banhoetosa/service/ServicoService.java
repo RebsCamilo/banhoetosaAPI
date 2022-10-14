@@ -24,6 +24,10 @@ public class ServicoService {
 
 
     public List<ServicoDto> listar() {
+        return ServicoDto.converter(servicoRepository.findByStatus(true));
+    }
+
+    public List<ServicoDto> listarTodos() {
         return ServicoDto.converter(servicoRepository.findAll());
     }
 
@@ -58,7 +62,8 @@ public class ServicoService {
     public ResponseEntity<?> deletar(Long id) {
         Optional<Servico> optional = servicoRepository.findById(id);
         if (optional.isPresent()) {
-            servicoRepository.delete(optional.get());
+//            servicoRepository.delete(optional.get());
+            optional.get().setStatus(false);
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.notFound().build();

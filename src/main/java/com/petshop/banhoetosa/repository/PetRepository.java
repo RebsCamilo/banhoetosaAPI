@@ -1,12 +1,20 @@
 package com.petshop.banhoetosa.repository;
 
 import com.petshop.banhoetosa.model.Pet;
+import com.petshop.banhoetosa.model.Tutor;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
 public interface PetRepository extends JpaRepository<Pet, Long> {
     List<Pet> findByNome(String nomePet);
+
+//    @Query("select p from #{#pet} p where e.deleteFlag=true")
+//    @Modifying
+//    @Query("delete from Pet p where p.tutor = ?tutor")
+//    void deleteByTutor(Tutor tutor);
 
     // se quisesse acessar o nome do tutor do pet. poderia fzr algo parecido com: //findByEntidade_AtributoDaEntidade
 //    List<Pet> findByTutor_Nome(String nomeTutor);

@@ -30,6 +30,11 @@ public class ServicoController {
 		return servicoService.listar();
 	}
 
+	@GetMapping("/todos")
+	public List<ServicoDto> listarTodos() {
+		return servicoService.listarTodos();
+	}
+
 	@PostMapping
 	public ResponseEntity<ServicoDto> cadastrar(@RequestBody @Valid CadastroServicoForm form, UriComponentsBuilder uriBuilder) {
 		return servicoService.cadastrar(form, uriBuilder);

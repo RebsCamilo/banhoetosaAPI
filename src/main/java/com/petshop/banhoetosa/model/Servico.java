@@ -25,11 +25,14 @@ public class Servico {
     private BigDecimal preco;
     private LocalDateTime dataCadastro = LocalDateTime.now(); //tem alguma forma do spring manter as alterações no banco (guardar os logs?)
 
+    @Column(columnDefinition = "Boolean default true")
+    private Boolean status;
+
 //    Não resolveu pois preciso do id das relações pet-servico
 //    @ManyToMany(mappedBy = "servicos")
 //    private List<Pet> pets;
 
-    @OneToMany(mappedBy = "servico", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "servico")//, cascade = CascadeType.ALL, orphanRemoval = true)
     List<PetServico> petServicos;
 
     public Servico(String descricaoServico, BigDecimal preco) {

@@ -13,10 +13,9 @@ import javax.validation.constraints.NotNull;
 @Data
 public class AtualizacaoPetServicoForm {
 
-    private Long idPet;
-    private Long idServico;
+//    private Long idPet;
+//    private Long idServico;
     @NotNull
-
     private StatusServicoEnum statusServico;
     @NotNull
     private StatusPagamentoEnum statusPagamento;
@@ -24,8 +23,8 @@ public class AtualizacaoPetServicoForm {
     public PetServico atualizar(Long id, PetServicoRepository petServicoRepository, PetRepository petRepository, ServicoRepository servicoRepository) {
         PetServico petServico = petServicoRepository.getReferenceById(id);
 
-        petServico.setPet(petRepository.getReferenceById(this.idPet));
-        petServico.setServico(servicoRepository.getReferenceById(this.idServico));
+//        petServico.setPet(petRepository.getReferenceById(this.idPet));
+//        petServico.setServico(servicoRepository.getReferenceById(this.idServico));
         petServico.setStatusServico(this.statusServico);
         petServico.setStatusPagamento(this.statusPagamento);
 

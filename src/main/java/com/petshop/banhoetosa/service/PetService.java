@@ -6,6 +6,7 @@ import com.petshop.banhoetosa.controller.form.AtualizacaoPetForm;
 import com.petshop.banhoetosa.controller.form.CadastroPetForm;
 import com.petshop.banhoetosa.model.Pet;
 import com.petshop.banhoetosa.repository.PetRepository;
+import com.petshop.banhoetosa.repository.PetServicoRepository;
 import com.petshop.banhoetosa.repository.TutorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,8 @@ public class PetService {
     private PetRepository petRepository;
     @Autowired
     private TutorRepository tutorRepository;
+    @Autowired
+    private PetServicoRepository petServicoRepository;
 
 
 
@@ -68,8 +71,9 @@ public class PetService {
     public ResponseEntity<?> deletar(Long id) { // <?> diz que tem generics mas nao sabe o tipo
         Optional<Pet> pet = petRepository.findById(id);
         if(pet.isPresent()) {
-            pet.get().setTutor(null);
-            pet.get().setPetServicos(null);
+//            pet.get().setTutor(null);
+//            pet.get().getPetServicos().forEach(petServico -> petServico.setServico(null));
+//            pet.get().setPetServicos(null);
             petRepository.deleteById(id);
             return ResponseEntity.ok().build();
         }

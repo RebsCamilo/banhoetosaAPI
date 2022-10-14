@@ -29,7 +29,7 @@ public class Endereco {
     private String cep;
     private LocalDateTime dataCadastro = LocalDateTime.now(); //tem alguma forma do spring manter as alterações no banco (guardar os logs?)
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne//(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_tutor")
     private Tutor tutor;
 

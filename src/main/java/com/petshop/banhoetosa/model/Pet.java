@@ -33,12 +33,12 @@ public class Pet {
 //    private Boolean status;
 
 //    (cascade = CascadeType.PERSIST)
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne//(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_tutor")
     private Tutor tutor;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "pet", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
     List<PetServico> petServicos;
 
     @Override
