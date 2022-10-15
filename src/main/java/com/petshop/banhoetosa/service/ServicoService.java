@@ -59,11 +59,21 @@ public class ServicoService {
     }
 
     @Transactional
-    public ResponseEntity<?> deletar(Long id) {
+    public ResponseEntity<?> desativar(Long id) {
         Optional<Servico> optional = servicoRepository.findById(id);
         if (optional.isPresent()) {
 //            servicoRepository.delete(optional.get());
             optional.get().setStatus(false);
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @Transactional
+    public ResponseEntity<?> ativar(Long id) {
+        Optional<Servico> optional = servicoRepository.findById(id);
+        if (optional.isPresent()) {
+            optional.get().setStatus(true);
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.notFound().build();

@@ -6,7 +6,6 @@ import com.petshop.banhoetosa.controller.form.AtualizacaoPetServicoForm;
 import com.petshop.banhoetosa.controller.form.CadastroPetServicoForm;
 import com.petshop.banhoetosa.enums.StatusPagamentoEnum;
 import com.petshop.banhoetosa.enums.StatusServicoEnum;
-import com.petshop.banhoetosa.model.Pet;
 import com.petshop.banhoetosa.model.PetServico;
 import com.petshop.banhoetosa.repository.PetRepository;
 import com.petshop.banhoetosa.repository.PetServicoRepository;
