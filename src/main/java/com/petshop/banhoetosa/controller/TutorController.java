@@ -56,15 +56,15 @@ public class TutorController {
             tutorService.atualizar(id, tutor);
             return ResponseEntity.status(HttpStatus.CREATED).body("Cadastro do tutor atualizado com sucesso");
         }
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Tutor não encontrado");
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deletar(@PathVariable Long id) {
         if(tutorService.existeId(id)) {
             tutorService.deletar(id);
-            return ResponseEntity.ok().build();
+            return ResponseEntity.status(HttpStatus.OK).body("Tutor excluído com sucesso");
         }
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Tutor não encontrado");
     }
 }

@@ -23,61 +23,67 @@ public class ServicoService {
     private ServicoRepository servicoRepository;
 
 
-    public List<ServicoDto> listar() {
-        return ServicoDto.converter(servicoRepository.findByStatus(true));
+    public List<Servico> listar() {
+//        return ServicoDto.converter(servicoRepository.findByStatus(true));
+        return servicoRepository.findByStatus(true); //"substituir por filtro"
     }
 
-    public List<ServicoDto> listarTodos() {
-        return ServicoDto.converter(servicoRepository.findAll());
-    }
-
-    @Transactional
-    public ResponseEntity<ServicoDto> cadastrar(CadastroServicoForm form, UriComponentsBuilder uriBuilder) {
-        Servico servico = form.converter();
-        servicoRepository.save(servico);
-
-        URI uri = uriBuilder.path("/servicos/{id}").buildAndExpand(servico.getId()).toUri(); //o ResponseEntity precisa o uri para ser criado. Este recebe a url da pagina a ser redirecionada
-        return ResponseEntity.created(uri).body(new ServicoDto(servico)); //devolve status 201 e redireciona para a pagina do objeto criado
-    }
-
-    public ResponseEntity<DetalhesDoServicoDto> detalhar(Long id) {
-        Optional<Servico> servico = servicoRepository.findById(id);
-        if(servico.isPresent()) {
-            return ResponseEntity.ok(new DetalhesDoServicoDto(servico.get()));
-        }
-        return ResponseEntity.notFound().build();
+    public List<Servico> listarTodos() {
+        return servicoRepository.findAll(); //"substituir por filtro"
     }
 
     @Transactional
-    public ResponseEntity<ServicoDto> atualizar(Long id, AtualizacaoServicoForm form) {
-        Optional<Servico> optional = servicoRepository.findById(id);
-        if (optional.isPresent()) {
-            Servico servico = form.atualizar(id, servicoRepository);
-            return ResponseEntity.ok(new ServicoDto(servico));
-        }
-        return ResponseEntity.notFound().build();
+    public Servico cadastrar(Servico servico) {
+        servico.setStatus(true);
+        return servicoRepository.save(servico);
+    }
+
+    public Servico detalhar(Long id) {
+        return servicoRepository.getReferenceById(id);
     }
 
     @Transactional
-    public ResponseEntity<?> desativar(Long id) {
-        Optional<Servico> optional = servicoRepository.findById(id);
-        if (optional.isPresent()) {
-//            servicoRepository.delete(optional.get());
-            optional.get().setStatus(false);
-            return ResponseEntity.ok().build();
-        }
-        return ResponseEntity.notFound().build();
+    public Servico atualizar(Long id, Servico servicoAtt) {
+        Servico servico = servicoRepository.getReferenceById(id);
+
+        servico.setDescricaoServico(servicoAtt.getDescricaoServico());
+        servico.setPreco(servicoAtt.getPreco());
+
+        return servicoRepository.save(servico);
     }
 
     @Transactional
-    public ResponseEntity<?> ativar(Long id) {
-        Optional<Servico> optional = servicoRepository.findById(id);
-        if (optional.isPresent()) {
-            optional.get().setStatus(true);
-            return ResponseEntity.ok().build();
-        }
-        return ResponseEntity.notFound().build();
+    public void desativar(Long id) {
+        servicoRepository.getReferenceById(id).setStatus(false);
     }
+
+    @Transactional
+    public void ativar(Long id) {
+        servicoRepository.getReferenceById(id).setStatus(true);
+    }
+
+//    @Transactional
+//    public ResponseEntity<?> ativar(Long id) {
+//        Optional<Servico> optional = servicoRepository.findById(id);
+//        if (optional.isPresent()) {
+//            optional.get().setStatus(true);
+//            return ResponseEntity.ok().build();
+//        }
+//        return ResponseEntity.notFound().build();
+//    }
+
+    public boolean existeDescricao(String descricaoServico) {
+        return servicoRepository.existsByDescricaoServico(descricaoServico);
+    }
+
+    public boolean existeId(Long id) {
+        return servicoRepository.existsById(id);
+    }
+
+    public boolean status(Long id) {
+        return servicoRepository.getReferenceById(id).getStatus();
+    }
+
 
 }
 

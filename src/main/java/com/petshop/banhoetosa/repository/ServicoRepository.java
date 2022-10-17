@@ -11,5 +11,9 @@ public interface ServicoRepository extends JpaRepository<Servico, Long> {
 
     List<Servico> findByStatus(Boolean status);
 
+
+    boolean existsByDescricaoServico(String descricaoServico);
+
+
 }
 

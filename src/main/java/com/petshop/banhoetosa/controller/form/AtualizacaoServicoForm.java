@@ -25,4 +25,9 @@ public class AtualizacaoServicoForm {
 
         return servico;
     }
+
+    public Servico converter() {
+        Servico servico = new Servico(descricaoServico, preco);
+        return servico;
+    }
 }
