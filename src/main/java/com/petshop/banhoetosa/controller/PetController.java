@@ -5,8 +5,15 @@ import com.petshop.banhoetosa.controller.dto.DetalhesDoPetDto;
 import com.petshop.banhoetosa.controller.dto.PetDto;
 import com.petshop.banhoetosa.controller.form.AtualizacaoPetForm;
 import com.petshop.banhoetosa.controller.form.CadastroPetForm;
+import com.petshop.banhoetosa.model.Pet;
 import com.petshop.banhoetosa.service.PetService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -23,6 +30,7 @@ public class PetController {
 	private PetService petService;
 
 	@GetMapping
+	@ResponseStatus(HttpStatus.OK) //swagger open api
 	public List<PetDto> listar(String nomePet) {
 		return petService.listar(nomePet);
 	}
@@ -33,6 +41,15 @@ public class PetController {
 		return petService.cadastrar(form, uriBuilder);
 	}
 
+	@Operation(summary = "Get a pet by its id")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Found the pet",
+					content = { @Content(mediaType = "application/json",
+							schema = @Schema(implementation = Pet.class)) }),
+			@ApiResponse(responseCode = "400", description = "Invalid id supplied",
+					content = @Content),
+			@ApiResponse(responseCode = "404", description = "Pet not found",
+					content = @Content) })
 	@GetMapping("/{id}")
 	public ResponseEntity<DetalhesDoPetDto> detalhar(@PathVariable Long id) {
 		return petService.detalhar(id);
