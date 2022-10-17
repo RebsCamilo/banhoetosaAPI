@@ -50,13 +50,13 @@ public class ServicoController {
 		return servicoService.atualizar(id, form);
 	}
 
-	@PutMapping("/{id}")
+	@PutMapping("/desativar/{id}")
 	// <?> diz que retorna generics mas nao sabe o tipo
 	public ResponseEntity<?> desativar(@PathVariable Long id) {
 		return servicoService.desativar(id);
 	}
 
-	@PutMapping("/{id}")
+	@PutMapping("/ativar/{id}")
 	public ResponseEntity<?> ativar(@PathVariable Long id) {
 		return servicoService.ativar(id);
 	}
