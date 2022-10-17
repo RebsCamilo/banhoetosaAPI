@@ -39,12 +39,11 @@ public class PetService {
     }
 
     @Transactional //para comitar as alterações no banco de dados
-    public ResponseEntity<PetDto> cadastrar(CadastroPetForm form, UriComponentsBuilder uriBuilder) {  //@RequestBody indica ao Spring que os parâmetros enviados no corpo da requisição devem ser atribuídos ao parâmetro do método
-        Pet pet = form.converter(tutorRepository);
-        petRepository.save(pet);
+    public Pet cadastrar(Pet pet) {  //@RequestBody indica ao Spring que os parâmetros enviados no corpo da requisição devem ser atribuídos ao parâmetro do método
+        return petRepository.save(pet);
 
-        URI uri = uriBuilder.path("/pet/{id}").buildAndExpand(pet.getId()).toUri(); //o ResponseEntity precisa o uri para ser criado. Este recebe a url da pagina a ser redirecionada
-        return ResponseEntity.created(uri).body(new PetDto(pet)); //ResponseEntity para devolver o status 201 na Response
+//        URI uri = uriBuilder.path("/pets/{id}").buildAndExpand(pet.getId()).toUri(); //o ResponseEntity precisa o uri para ser criado. Este recebe a url da pagina a ser redirecionada
+//        return ResponseEntity.created(uri).body(new PetDto(pet)); //ResponseEntity para devolver o status 201 na Response
     }
 
     public ResponseEntity<DetalhesDoPetDto> detalhar(Long id) {

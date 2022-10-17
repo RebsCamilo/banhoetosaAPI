@@ -36,7 +36,7 @@ public class ServicoService {
         Servico servico = form.converter();
         servicoRepository.save(servico);
 
-        URI uri = uriBuilder.path("/servico/{id}").buildAndExpand(servico.getId()).toUri(); //o ResponseEntity precisa o uri para ser criado. Este recebe a url da pagina a ser redirecionada
+        URI uri = uriBuilder.path("/servicos/{id}").buildAndExpand(servico.getId()).toUri(); //o ResponseEntity precisa o uri para ser criado. Este recebe a url da pagina a ser redirecionada
         return ResponseEntity.created(uri).body(new ServicoDto(servico)); //devolve status 201 e redireciona para a pagina do objeto criado
     }
 

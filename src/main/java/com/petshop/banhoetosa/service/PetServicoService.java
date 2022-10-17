@@ -43,7 +43,7 @@ public class PetServicoService {
             petServico.setStatusPagamento(StatusPagamentoEnum.EM_ABERTO);
             petServicoRepository.save(petServico);
 
-            URI uri = uriBuilder.path("/petservico/{id}").buildAndExpand(petServico.getId()).toUri();
+            URI uri = uriBuilder.path("/petservicos/{id}").buildAndExpand(petServico.getId()).toUri();
             return ResponseEntity.created(uri).body(new PetServicoDto(petServico));
         }
         return ResponseEntity.notFound().build();

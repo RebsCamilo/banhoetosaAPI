@@ -50,7 +50,7 @@
 			<optional>true</optional>
 		</dependency>
 
-<!--		Swagger com SpringFoc-->
+<!--		Swagger com SpringFox-->
 <!--		<dependency>-->
 <!--			<groupId>io.springfox</groupId>-->
 <!--			<artifactId>springfox-boot-starter</artifactId>-->
@@ -62,7 +62,7 @@
 <!--			<version>3.0.0</version>-->
 <!--		</dependency>-->
 
-<!--		Swagger com Open Api-->
+<!--		Swagger com OpenApi-->
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-ui</artifactId>

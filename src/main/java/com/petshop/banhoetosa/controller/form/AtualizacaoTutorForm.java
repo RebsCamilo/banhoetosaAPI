@@ -1,5 +1,6 @@
 package com.petshop.banhoetosa.controller.form;
 
+import com.petshop.banhoetosa.model.Endereco;
 import com.petshop.banhoetosa.model.Tutor;
 import com.petshop.banhoetosa.repository.TutorRepository;
 import lombok.Data;
@@ -7,6 +8,8 @@ import lombok.Data;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 public class AtualizacaoTutorForm {
@@ -18,14 +21,19 @@ public class AtualizacaoTutorForm {
     private String email;
 
 
-    public Tutor atualizar(Long id, TutorRepository tutorRepository) {
-        Tutor tutor = tutorRepository.getReferenceById(id);
-
-        tutor.setNome(this.nome);
-        tutor.setTelefone1(this.telefone1);
-        tutor.setTelefone2(this.telefone2);
-        tutor.setEmail(this.email);
-
+    public Tutor converter() {
+        Tutor tutor = new Tutor(nome, telefone1, telefone2, email);
         return tutor;
     }
+
+//    public Tutor atualizar(Long id, TutorRepository tutorRepository) {
+//        Tutor tutor = tutorRepository.getReferenceById(id);
+//
+//        tutor.setNome(this.nome);
+//        tutor.setTelefone1(this.telefone1);
+//        tutor.setTelefone2(this.telefone2);
+//        tutor.setEmail(this.email);
+//
+//        return tutor;
+//    }
 }

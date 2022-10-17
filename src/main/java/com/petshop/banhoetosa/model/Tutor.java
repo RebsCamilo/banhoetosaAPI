@@ -44,5 +44,12 @@ public class Tutor {
         this.email = email;
         this.enderecos = enderecos;
     }
+
+    public Tutor(String nome, String telefone1, String telefone2, String email) {
+        this.nome = nome;
+        this.telefone1 = telefone1;
+        this.telefone2 = telefone2;
+        this.email = email;
+    }
 }
 

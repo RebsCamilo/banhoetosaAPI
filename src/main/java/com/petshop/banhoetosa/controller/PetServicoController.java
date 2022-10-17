@@ -15,7 +15,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/petservico")
+@RequestMapping("/petservicos")
 public class PetServicoController {
 
     @Autowired
