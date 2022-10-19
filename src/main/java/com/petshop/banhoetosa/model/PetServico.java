@@ -42,5 +42,10 @@ public class PetServico {
         this.statusServico = statusServico;
         this.statusPagamento = statusPagamento;
     }
+
+    public PetServico(StatusServicoEnum statusServico, StatusPagamentoEnum statusPagamento) {
+        this.statusServico = statusServico;
+        this.statusPagamento = statusPagamento;
+    }
 }
 

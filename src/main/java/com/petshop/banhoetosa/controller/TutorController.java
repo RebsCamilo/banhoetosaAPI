@@ -29,7 +29,6 @@ public class TutorController {
 
     @PostMapping
     public ResponseEntity<Object> cadastrar(@RequestBody @Valid CadastroTutorForm form) {
-
         if(tutorService.validarEmail(form.getEmail())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Já existe um tutor com este email");
         }

@@ -11,6 +11,7 @@ import com.petshop.banhoetosa.repository.PetRepository;
 import com.petshop.banhoetosa.repository.PetServicoRepository;
 import com.petshop.banhoetosa.repository.ServicoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -30,54 +31,59 @@ public class PetServicoService {
     @Autowired
     private PetServicoRepository petServicoRepository;
 
-    public List<PetServicoDto> listar() {
-        return PetServicoDto.converter(petServicoRepository.findAll());
+    public List<PetServico> listar() {
+        return petServicoRepository.findAll();
     }
 
     @Transactional
 
-    public ResponseEntity<PetServicoDto> cadastrar(CadastroPetServicoForm form, UriComponentsBuilder uriBuilder) {
-        PetServico petServico = form.converter(petRepository, servicoRepository);
+    public PetServico cadastrar(PetServico petServico) {
+        System.out.println(petServico.getPet().getIdade());
+        System.out.println(petServico.getServico().getDataCadastro());
+        System.out.println(petServico.getServico().getDescricaoServico());
         if (petServico.getServico().getStatus()) {
             petServico.setStatusServico(StatusServicoEnum.AGUARDANDO);
             petServico.setStatusPagamento(StatusPagamentoEnum.EM_ABERTO);
             petServicoRepository.save(petServico);
-
-            URI uri = uriBuilder.path("/petservicos/{id}").buildAndExpand(petServico.getId()).toUri();
-            return ResponseEntity.created(uri).body(new PetServicoDto(petServico));
         }
-        return ResponseEntity.notFound().build();
+        return petServicoRepository.save(petServico);
     }
 
-    public ResponseEntity<DetalhesDoPetServicoDto> detalhar(Long id) {
-        Optional<PetServico> petServico = petServicoRepository.findById(id);
-        if (petServico.isPresent()) {
-            return ResponseEntity.ok(new DetalhesDoPetServicoDto(petServico.get()));
-        }
-        return ResponseEntity.notFound().build();
+    public Optional<PetServico> detalhar(Long id) {
+        return petServicoRepository.findById(id);
     }
 
     @Transactional
-    public ResponseEntity<PetServicoDto> atualizar(Long id, AtualizacaoPetServicoForm form) {
-        Optional<PetServico> optional = petServicoRepository.findById(id);
-        if (optional.isPresent()) {
-            PetServico petServico = form.atualizar(id, petServicoRepository, petRepository, servicoRepository);
-            petServicoRepository.save(petServico);
+    public PetServico atualizar(Long id, PetServico petServicoAtt) {
+        PetServico petServico = petServicoRepository.getReferenceById(id);
 
-            return ResponseEntity.ok(new PetServicoDto(petServico));
-        }
-        return ResponseEntity.notFound().build();
+        petServico.setStatusServico(petServicoAtt.getStatusServico());
+        petServico.setStatusPagamento(petServicoAtt.getStatusPagamento());
+
+        return petServicoRepository.save(petServico);
     }
 
     @Transactional
-    public ResponseEntity<?> deletar(Long id) {
-        Optional<PetServico> petServico = petServicoRepository.findById(id);
-        if (petServico.isPresent()) {
-            petServico.get().setServico(null);
-            petServicoRepository.delete(petServico.get());
-            return ResponseEntity.ok().build();
-        }
-        return ResponseEntity.notFound().build();
+    public void deletar(Long id) {
+        PetServico petServico = petServicoRepository.getReferenceById(id);
+        petServico.setServico(null);
+        petServicoRepository.delete(petServico);
     }
+
+
+    public boolean existeId(Long id) {
+        return petServicoRepository.existsById(id);
+    }
+
+    public boolean validarIdPet(Long id) {
+        return petRepository.existsById(id);
+    }
+
+    public boolean validarIdServico(Long id) {
+        return servicoRepository.existsById(id);
+    }
+
+
+
 
 }
