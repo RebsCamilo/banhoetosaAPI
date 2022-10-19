@@ -67,6 +67,14 @@ public class Pet {
         this.detalhe = detalhe;
         this.tutor = tutor;
     }
+    public Pet(String nome, String especie, String raca, Integer idade, String detalhe) {
+        this.nome = nome;
+        this.especie = especie;
+        this.raca = raca;
+        this.idade = idade;
+        this.detalhe = detalhe;
+        this.tutor = tutor;
+    }
 
 
 }

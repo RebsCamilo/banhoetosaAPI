@@ -51,5 +51,9 @@ public class Tutor {
         this.telefone2 = telefone2;
         this.email = email;
     }
+
+    public Tutor(String email) {
+        this.email = email;
+    }
 }
 

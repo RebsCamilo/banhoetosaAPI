@@ -1,7 +1,6 @@
 package com.petshop.banhoetosa.controller;
 
 import com.petshop.banhoetosa.controller.dto.DetalhesDoServicoDto;
-import com.petshop.banhoetosa.controller.dto.DetalhesDoTutorDto;
 import com.petshop.banhoetosa.controller.dto.ServicoDto;
 import com.petshop.banhoetosa.controller.form.AtualizacaoServicoForm;
 import com.petshop.banhoetosa.controller.form.CadastroServicoForm;
@@ -11,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -55,7 +53,6 @@ public class ServicoController {
 
 	@PutMapping("/{id}")
 	public ResponseEntity<Object> atualizar(@PathVariable Long id, @RequestBody @Valid AtualizacaoServicoForm form) {
-		System.out.println(servicoService.existeId(id));
 		if (servicoService.existeId(id) && servicoService.status(id)) {
 			Servico servico = form.converter();
 			servicoService.atualizar(id, servico);

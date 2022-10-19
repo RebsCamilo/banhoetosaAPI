@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
@@ -34,23 +33,25 @@ public class PetController {
 	private TutorRepository tutorRepository;
 
 	@GetMapping
-	@ResponseStatus(HttpStatus.OK) //swagger open api
-	public List<PetDto> listar(String nomePet) {
-		return petService.listar(nomePet);
+//	@ResponseStatus(HttpStatus.OK) //anotacao da swagger open api
+	public ResponseEntity<List<PetDto>> listar() {
+		return ResponseEntity.status(HttpStatus.OK).body(PetDto.converter(petService.listar()));
 	}
 
 	@PostMapping
 	@Transactional
-	public ResponseEntity<PetDto> cadastrar(@RequestBody @Valid CadastroPetForm form) {  //@RequestBody indica ao Spring que os parâmetros enviados no corpo da requisição devem ser atribuídos ao parâmetro do método
-		Pet pet = form.converter(tutorRepository);
+	public ResponseEntity<Object> cadastrar(@RequestBody @Valid CadastroPetForm form) {  //@RequestBody indica ao Spring que os parâmetros enviados no corpo da requisição devem ser atribuídos ao parâmetro do método
+		System.out.println("[controller 3] " + petService.validarPet(form.getNome() , form.getEmailTutor()));
+		if (petService.validarPet(form.getNome() , form.getEmailTutor())) {
+			return ResponseEntity.status(HttpStatus.CONFLICT).body("Pet já cadastrado ou tutor não encontrado");
+		}
+		Pet pet = form.converter();
 		petService.cadastrar(pet);
-
-//        URI uri = uriBuilder.path("/pet/{id}").buildAndExpand(pet.getId()).toUri(); //o ResponseEntity precisa o uri para ser criado. Este recebe a url da pagina a ser redirecionada
-        return ResponseEntity.ok().body(new PetDto(pet)); //ResponseEntity para devolver o status 201 na Response
-//		HttpStatus.CREATED)
+		return ResponseEntity.status(HttpStatus.CREATED).body("Pet cadastrado com sucesso");
+//        return ResponseEntity.status(HttpStatus.OK).body(new PetDto(pet)); //ResponseEntity para devolver o status 201 na Response e os dados no PetDto
 	}
 
-	@Operation(summary = "Get a pet by its id")
+	@Operation(summary = "Get a pet by its id") //@Operation e @ApiResponses são anotações da implantação do swagger OpenApi
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Found the pet",
 					content = { @Content(mediaType = "application/json",
@@ -61,17 +62,30 @@ public class PetController {
 					content = @Content) })
 	@GetMapping("/{id}")
 	public ResponseEntity<DetalhesDoPetDto> detalhar(@PathVariable Long id) {
-		return petService.detalhar(id);
+		if (petService.existeId(id)) {
+			Pet pet = (petService.detalhar(id)).get(); //detalhar devolve Optional<Pet>, não precisa pois existeId ja diz se tem pet com id especificado
+			return ResponseEntity.status(HttpStatus.OK).body(new DetalhesDoPetDto(pet));
+		}
+        return ResponseEntity.notFound().build();
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<PetDto> atualizar(@PathVariable Long id, @RequestBody @Valid AtualizacaoPetForm form) {
-		return petService.atualizar(id, form);
+	public ResponseEntity<Object> atualizar(@PathVariable Long id, @RequestBody @Valid AtualizacaoPetForm form) {
+		if (petService.existeId(id)) {
+			Pet pet = form.converter();
+			petService.atualizar(id, pet);
+			return ResponseEntity.status(HttpStatus.CREATED).body("Cadastro do pet atualizado com sucesso");
+		}
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pet não encontrado");
 	}
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> deletar(@PathVariable Long id) { // <?> diz que tem generics mas nao sabe o tipo
-		return petService.deletar(id);
+		if(petService.existeId(id)) {
+			petService.deletar(id);
+			return ResponseEntity.status(HttpStatus.OK).body("Pet excluído com sucesso");
+		}
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pet não encontrado");
 	}
 
 }

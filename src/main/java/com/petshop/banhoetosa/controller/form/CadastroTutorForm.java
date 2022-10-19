@@ -17,6 +17,7 @@ public class CadastroTutorForm {
     @NotNull @NotEmpty
     private String telefone1;
     private String telefone2;
+    @NotNull @NotEmpty
     private String email;
     //cadastrar endereco
     private String rua;

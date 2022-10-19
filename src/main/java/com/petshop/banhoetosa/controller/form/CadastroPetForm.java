@@ -1,6 +1,7 @@
 package com.petshop.banhoetosa.controller.form;
 
 import com.petshop.banhoetosa.model.Pet;
+import com.petshop.banhoetosa.model.Servico;
 import com.petshop.banhoetosa.model.Tutor;
 import com.petshop.banhoetosa.repository.TutorRepository;
 import lombok.Data;
@@ -22,13 +23,19 @@ public class CadastroPetForm {
     @Length(max = 255)
     private String detalhe;
     @NotNull @NotEmpty
-    private String nomeTutor;
+    private String emailTutor;
 
-    public Pet converter(TutorRepository tutorRepository) {
-        Tutor tutor = tutorRepository.findByNome(nomeTutor);
-        //encontra o tutor no bd com o nome passado no cadastro
-        Pet pet = new Pet(nome, especie, raca, idade, detalhe, tutor); //cria o objeto Pet a ser retornado
+//    public Pet converter(TutorRepository tutorRepository) {
+//        Tutor tutor = tutorRepository.findByNome(emailTutor);
+//        //encontra o tutor no bd com o nome passado no cadastro
+//        Pet pet = new Pet(nome, especie, raca, idade, detalhe, tutor); //cria o objeto Pet a ser retornado
+//        return pet;
+//    }
+
+    public Pet converter() {
+        Pet pet = new Pet(nome, especie, raca, idade, detalhe);
         return pet;
     }
+
 }
 

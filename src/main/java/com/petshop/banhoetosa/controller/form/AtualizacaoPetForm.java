@@ -1,6 +1,7 @@
 package com.petshop.banhoetosa.controller.form;
 
 import com.petshop.banhoetosa.model.Pet;
+import com.petshop.banhoetosa.model.Tutor;
 import com.petshop.banhoetosa.repository.PetRepository;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
@@ -22,15 +23,9 @@ public class AtualizacaoPetForm {
     @Length(max = 255)
     private String detalhe;
 
-    public Pet atualizar(Long id, PetRepository petRepository) {
-        Pet pet = petRepository.getReferenceById(id);
 
-        pet.setNome(this.nome);
-        pet.setEspecie(this.especie);
-        pet.setRaca(this.raca);
-        pet.setIdade(this.idade);
-        pet.setDetalhe(this.detalhe);
-
+    public Pet converter() {
+        Pet pet = new Pet(this.nome, this.especie, this.raca, this.idade, this.detalhe);
         return pet;
     }
 }

@@ -41,7 +41,6 @@ public class TutorController {
 
     @GetMapping("/{id}")
     public ResponseEntity<DetalhesDoTutorDto> detalhar(@PathVariable Long id) {
-        System.out.println(tutorService.existeId(id));
         if(tutorService.existeId(id)) {
             Tutor tutor = (tutorService.detalhar(id)).get();     //detalhar devolve Optional<Tutor>
             return ResponseEntity.status(HttpStatus.OK).body(new DetalhesDoTutorDto(tutor));
