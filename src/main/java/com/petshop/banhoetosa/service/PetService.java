@@ -41,7 +41,8 @@ public class PetService {
     }
 
     @Transactional //para comitar as alterações no banco de dados
-    public Pet cadastrar(Pet pet) {  //@RequestBody indica ao Spring que os parâmetros enviados no corpo da requisição devem ser atribuídos ao parâmetro do método
+    public Pet cadastrar(Pet pet, String email) {  //@RequestBody indica ao Spring que os parâmetros enviados no corpo da requisição devem ser atribuídos ao parâmetro do método
+        pet.setTutor(buscaTutor(email));
         return petRepository.save(pet);
 
 //        URI uri = uriBuilder.path("/pets/{id}").buildAndExpand(pet.getId()).toUri(); //o ResponseEntity precisa o uri para ser criado. Este recebe a url da pagina a ser redirecionada
@@ -53,13 +54,14 @@ public class PetService {
     }
 
     @Transactional //para comitar as alterações no banco de dados
-    public Pet atualizar(Long id, Pet petAtt) {
+    public Pet atualizar(Long id, Pet petAtt, String email) {
         Pet pet = petRepository.getReferenceById(id);
             pet.setNome(petAtt.getNome());
             pet.setRaca(petAtt.getRaca());
             pet.setEspecie(petAtt.getEspecie());
             pet.setIdade(petAtt.getIdade());
             pet.setDetalhe(petAtt.getDetalhe());
+            pet.setTutor(buscaTutor(email));
 
             return petRepository.save(pet);
         }
@@ -73,14 +75,18 @@ public class PetService {
 
 
     public boolean validarPet(String nome, String email) {
-        System.out.println("[service 1] " + petRepository.existsByTutor_Email(email));
-        if (!petRepository.existsByTutor_Email(email)) {
-            return true;
+        System.out.println("[service 1] " + existeEmailTutor(email));
+//        if (!petRepository.existsByTutor_Email(email)) { //valida se o pet já esta cadastrado neste tutor e se o tutor existe
+//            return true;
+//        }
+        if (existeEmailTutor(email)) { //valida se o tutor existe
+            System.out.println("[service 2] ");
+            System.out.println("[service 2] " + petRepository.hasThisPetNameByEmailDoTutor(nome, email));
+            if (!petRepository.hasThisPetNameByEmailDoTutor(nome, email)) { //valida se o tutor ja tem pet com mesmo nome
+                return true;
+            }
         }
-        System.out.println("[service 2] " + petRepository.existsPetByEmailDoTutor(nome, email));
-        if (petRepository.existsPetByEmailDoTutor(nome, email)) {
-            return true;
-        }
+        System.out.println("FAAAAAAAAALSE");
         return false;
     }
 
@@ -90,6 +96,14 @@ public class PetService {
 
     public boolean existeId(Long id) {
         return petRepository.existsById(id);
+    }
+
+    public boolean existeEmailTutor(String email) {
+        return tutorRepository.existsByEmail(email);
+    }
+
+    public Tutor buscaTutor(String email) {
+        return tutorRepository.findByEmail(email);
     }
 
 }

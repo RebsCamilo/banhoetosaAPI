@@ -47,13 +47,9 @@ public class PetServicoController {
     @GetMapping("/{id}")
     public ResponseEntity<DetalhesDoPetServicoDto> detalhar(@PathVariable Long id) {
         if (petServicoService.existeId(id)) {
-            System.out.println("ENTRA AQUI?");
             PetServico petServico = (petServicoService.detalhar(id)).get();
-            System.out.println(petServico.getPet().getNome());
-            System.out.println(petServico.getServico().getDescricaoServico());
             return ResponseEntity.status(HttpStatus.OK).body(new DetalhesDoPetServicoDto(petServico));
         }
-        System.out.println("NÃO ENTRA ALI");
         return ResponseEntity.notFound().build();
     }
 

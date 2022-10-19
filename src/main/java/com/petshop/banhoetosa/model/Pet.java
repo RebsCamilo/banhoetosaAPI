@@ -73,7 +73,7 @@ public class Pet {
         this.raca = raca;
         this.idade = idade;
         this.detalhe = detalhe;
-        this.tutor = tutor;
+//        this.tutor = tutor;
     }
 
 

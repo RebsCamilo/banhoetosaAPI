@@ -41,14 +41,14 @@ public class PetController {
 	@PostMapping
 	@Transactional
 	public ResponseEntity<Object> cadastrar(@RequestBody @Valid CadastroPetForm form) {  //@RequestBody indica ao Spring que os parâmetros enviados no corpo da requisição devem ser atribuídos ao parâmetro do método
-		System.out.println("[controller 3] " + petService.validarPet(form.getNome() , form.getEmailTutor()));
-		if (petService.validarPet(form.getNome() , form.getEmailTutor())) {
-			return ResponseEntity.status(HttpStatus.CONFLICT).body("Pet já cadastrado ou tutor não encontrado");
+		System.out.println("[controller 3] " + form.getNome() + " " + form.getEmailTutor());
+		if (petService.validarPet(form.getNome() , form.getEmailTutor())) { //valida se o pet já esta cadastrado neste tutor e se o tutor existe
+			Pet pet = form.converter();
+			petService.cadastrar(pet, form.getEmailTutor());
+			return ResponseEntity.status(HttpStatus.CREATED).body("Pet cadastrado com sucesso");
 		}
-		Pet pet = form.converter();
-		petService.cadastrar(pet);
-		return ResponseEntity.status(HttpStatus.CREATED).body("Pet cadastrado com sucesso");
 //        return ResponseEntity.status(HttpStatus.OK).body(new PetDto(pet)); //ResponseEntity para devolver o status 201 na Response e os dados no PetDto
+		return ResponseEntity.status(HttpStatus.CONFLICT).body("Pet já cadastrado ou tutor não encontrado");
 	}
 
 	@Operation(summary = "Get a pet by its id") //@Operation e @ApiResponses são anotações da implantação do swagger OpenApi
@@ -73,7 +73,7 @@ public class PetController {
 	public ResponseEntity<Object> atualizar(@PathVariable Long id, @RequestBody @Valid AtualizacaoPetForm form) {
 		if (petService.existeId(id)) {
 			Pet pet = form.converter();
-			petService.atualizar(id, pet);
+			petService.atualizar(id, pet, form.getEmailTutor());
 			return ResponseEntity.status(HttpStatus.CREATED).body("Cadastro do pet atualizado com sucesso");
 		}
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pet não encontrado");

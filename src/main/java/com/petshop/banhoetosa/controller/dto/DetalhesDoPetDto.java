@@ -23,6 +23,7 @@ public class DetalhesDoPetDto {
 
 
     public DetalhesDoPetDto(Pet pet) {
+        System.out.println("AAAAAAAAAAAAAAAAAAAAHHH "+pet.getTutor().getId());
         this.id = pet.getId();
         this.nome = pet.getNome();
         this.especie = pet.getEspecie();

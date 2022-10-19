@@ -22,6 +22,8 @@ public class AtualizacaoPetForm {
     private Integer idade;
     @Length(max = 255)
     private String detalhe;
+    @NotNull @NotEmpty
+    private String emailTutor;
 
 
     public Pet converter() {
