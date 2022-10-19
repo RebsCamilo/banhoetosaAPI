@@ -34,7 +34,6 @@ public class TutorController {
         }
         Tutor tutor = form.converter();
         tutorService.cadastrar(tutor);
-
         return ResponseEntity.status(HttpStatus.CREATED).body("Tutor cadastrado com sucesso");
     }
 

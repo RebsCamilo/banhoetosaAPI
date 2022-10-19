@@ -1,9 +1,6 @@
 package com.petshop.banhoetosa.controller.form;
 
 import com.petshop.banhoetosa.model.Pet;
-import com.petshop.banhoetosa.model.Servico;
-import com.petshop.banhoetosa.model.Tutor;
-import com.petshop.banhoetosa.repository.TutorRepository;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 

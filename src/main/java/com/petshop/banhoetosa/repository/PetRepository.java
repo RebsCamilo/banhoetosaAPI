@@ -16,10 +16,11 @@ public interface PetRepository extends JpaRepository<Pet, Long> {
             "WHERE t.email = :email AND p.nome = :nome", nativeQuery = true)
     boolean hasThisPetNameByEmailDoTutor(@Param("nome") String nome, @Param("email") String email);
 
-//    @Query(value = "SELECT\tp.nome = :nome " +
+    //Da erro
+//    @Query(value = "SELECT\tp.nome" +
 //            "FROM pets p\n" +
 //            "INNER JOIN tutores t ON p.id_tutor = t.id\n" +
-//            "WHERE t.email = :email", nativeQuery = true)
+//            "WHERE t.email = :email AND p.nome = :nome", nativeQuery = true)
 //    boolean existsPetByEmailDoTutor(@Param("nome") String nome, @Param("email") String email);
 
     boolean existsByTutor_Email(String email);

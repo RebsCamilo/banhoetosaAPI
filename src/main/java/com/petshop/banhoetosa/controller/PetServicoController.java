@@ -4,6 +4,7 @@ import com.petshop.banhoetosa.controller.dto.DetalhesDoPetServicoDto;
 import com.petshop.banhoetosa.controller.dto.PetServicoDto;
 import com.petshop.banhoetosa.controller.form.AtualizacaoPetServicoForm;
 import com.petshop.banhoetosa.controller.form.CadastroPetServicoForm;
+import com.petshop.banhoetosa.model.Pet;
 import com.petshop.banhoetosa.model.PetServico;
 import com.petshop.banhoetosa.service.PetServicoService;
 import org.springframework.beans.BeanUtils;
@@ -31,26 +32,29 @@ public class PetServicoController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> cadastrar(@RequestBody @Valid CadastroPetServicoForm form, UriComponentsBuilder uriBuilder) {
-        if (!petServicoService.validarIdPet(form.getIdPet())) {
+    public ResponseEntity<Object> cadastrar(@RequestBody @Valid CadastroPetServicoForm form) {
+        if (!petServicoService.validarIdPet(form.getIdPet())) { //validar se id do pet existe
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Id referente ao Pet não encontrado");
         }
-        if (!petServicoService.validarIdServico(form.getIdServico())) {
+        if (!petServicoService.validarIdServico(form.getIdServico())) { //validar se id do serviço existe
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Id referente ao Serviço não encontrado");
         }
-        PetServico petServico = new PetServico();
-        BeanUtils.copyProperties(form, petServico);
-        petServicoService.cadastrar(petServico);
+        if (!petServicoService.validarStatusServico(form.getIdServico())) { //validar se serviço esta ativo
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Serviço indisponível");
+        }
+        PetServico petServico = form.converter();
+        petServicoService.cadastrar(petServico, form.getIdPet(), form.getIdServico());
         return ResponseEntity.status(HttpStatus.CREATED).body("Serviço relacionado ao pet cadastrado com sucesso");
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<DetalhesDoPetServicoDto> detalhar(@PathVariable Long id) {
+    public ResponseEntity<Object> detalhar(@PathVariable Long id) {
         if (petServicoService.existeId(id)) {
             PetServico petServico = (petServicoService.detalhar(id)).get();
             return ResponseEntity.status(HttpStatus.OK).body(new DetalhesDoPetServicoDto(petServico));
         }
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Serviço relacionado ao pet não encontrado");
+//        return ResponseEntity.notFound().build();
     }
 
     @PutMapping("/{id}")

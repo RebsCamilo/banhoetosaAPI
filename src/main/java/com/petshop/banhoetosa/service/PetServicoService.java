@@ -6,7 +6,9 @@ import com.petshop.banhoetosa.controller.form.AtualizacaoPetServicoForm;
 import com.petshop.banhoetosa.controller.form.CadastroPetServicoForm;
 import com.petshop.banhoetosa.enums.StatusPagamentoEnum;
 import com.petshop.banhoetosa.enums.StatusServicoEnum;
+import com.petshop.banhoetosa.model.Pet;
 import com.petshop.banhoetosa.model.PetServico;
+import com.petshop.banhoetosa.model.Servico;
 import com.petshop.banhoetosa.model.Tutor;
 import com.petshop.banhoetosa.repository.PetRepository;
 import com.petshop.banhoetosa.repository.PetServicoRepository;
@@ -31,6 +33,8 @@ public class PetServicoService {
     @Autowired
     private ServicoRepository servicoRepository;
     @Autowired
+    private TutorRepository tutorRepository;
+    @Autowired
     private PetServicoRepository petServicoRepository;
 
     public List<PetServico> listar() {
@@ -39,15 +43,14 @@ public class PetServicoService {
 
     @Transactional
 
-    public PetServico cadastrar(PetServico petServico) {
-        System.out.println(petServico.getPet().getIdade());
-        System.out.println(petServico.getServico().getDataCadastro());
-        System.out.println(petServico.getServico().getDescricaoServico());
-        if (petServico.getServico().getStatus()) {
-            petServico.setStatusServico(StatusServicoEnum.AGUARDANDO);
-            petServico.setStatusPagamento(StatusPagamentoEnum.EM_ABERTO);
-            petServicoRepository.save(petServico);
-        }
+    public PetServico cadastrar(PetServico petServico, Long idPet, Long idServico) {
+        petServico.setStatusServico(StatusServicoEnum.AGUARDANDO);
+        petServico.setStatusPagamento(StatusPagamentoEnum.EM_ABERTO);
+        petServico.setPet(buscaPet(idPet));
+        petServico.setServico(buscaServico(idServico));
+        System.out.println(" 0000000000000001 " + petServico.getPet().getIdade());
+        System.out.println(" 0000000000000002 " + petServico.getServico().getDataCadastro());
+        System.out.println(" 0000000000000003 " + petServico.getServico().getDescricaoServico());
         return petServicoRepository.save(petServico);
     }
 
@@ -85,6 +88,16 @@ public class PetServicoService {
         return servicoRepository.existsById(id);
     }
 
+    public boolean validarStatusServico(Long id) {
+        return servicoRepository.getReferenceById(id).getStatus();
+    }
+
+    public Pet buscaPet(Long id) {
+        return petRepository.findById(id).get();
+    }
+    public Servico buscaServico(Long id) {
+        return servicoRepository.findById(id).get();
+    }
 
 
 
