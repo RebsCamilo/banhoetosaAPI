@@ -4,6 +4,7 @@ import com.petshop.banhoetosa.controller.dto.DetalhesDoTutorDto;
 import com.petshop.banhoetosa.controller.dto.TutorDto;
 import com.petshop.banhoetosa.controller.form.AtualizacaoTutorForm;
 import com.petshop.banhoetosa.controller.form.CadastroTutorForm;
+import com.petshop.banhoetosa.model.Endereco;
 import com.petshop.banhoetosa.model.Tutor;
 import com.petshop.banhoetosa.service.TutorService;
 import org.springframework.beans.factory.annotation.Autowired;

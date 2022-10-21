@@ -34,7 +34,7 @@ public class Pet {
 
 //    (cascade = CascadeType.PERSIST)
     @ManyToOne//(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_tutor")
+    @JoinColumn(name = "tutor_id")
     private Tutor tutor;
 
     @JsonIgnore

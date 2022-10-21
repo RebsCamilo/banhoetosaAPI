@@ -29,9 +29,6 @@ public class CadastroTutorForm {
 
     public Tutor converter() {
         Endereco endereco = new Endereco(rua, numero, bairro, complemento, cep);
-        List<Endereco> listaEnderecos = new ArrayList<>();
-        listaEnderecos.add(endereco);
-        Tutor tutor = new Tutor(nome, telefone1, telefone2, email, listaEnderecos);
-        return tutor;
+        return new Tutor(nome, telefone1, telefone2, email, endereco);
     }
 }

@@ -21,7 +21,7 @@ public class TutorDto {
     private String telefone2;
     private String email;
     private List<String> nomePets;
-    private List<String> nomeBairro;
+    private String nomeBairro;
 
     public TutorDto(Tutor tutor) {
         this.id = tutor.getId();
@@ -29,6 +29,7 @@ public class TutorDto {
         this.telefone1 = tutor.getTelefone1();
         this.telefone2 = tutor.getTelefone2();
         this.email = tutor.getEmail();
+        this.nomeBairro = tutor.getEndereco().getBairro();
         this.nomePets = new ArrayList<>();
         List<Pet> pets = tutor.getPets();
         if(!CollectionUtils.isEmpty(pets)) {
@@ -39,15 +40,15 @@ public class TutorDto {
             );
         }
 
-        this.nomeBairro = new ArrayList<>();
-        List<Endereco> enderecos = tutor.getEnderecos();
-        if(!enderecos.isEmpty()) {
-            this.nomeBairro.addAll(tutor.getEnderecos()
-                    .stream()
-                    .map(Endereco::getBairro)
-                    .collect(Collectors.toList())
-            );
-        }
+//        this.nomeBairro = new ArrayList<>();
+//        List<Endereco> enderecos = tutor.getEnderecos();
+//        if(!enderecos.isEmpty()) {
+//            this.nomeBairro.addAll(tutor.getEnderecos()
+//                    .stream()
+//                    .map(Endereco::getBairro)
+//                    .collect(Collectors.toList())
+//            );
+//        }
     }
 
 

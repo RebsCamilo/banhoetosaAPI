@@ -19,11 +19,18 @@ public class AtualizacaoTutorForm {
     private String telefone1;
     private String telefone2;
     private String email;
+    //atualizar endereco
+    private String rua;
+    private Integer numero;
+    @NotNull @NotEmpty
+    private String bairro;
+    private String complemento;
+    private String cep;
 
 
     public Tutor converter() {
-        Tutor tutor = new Tutor(nome, telefone1, telefone2, email);
-        return tutor;
+        Endereco endereco = new Endereco(rua, numero, bairro, complemento, cep);
+        return new Tutor(nome, telefone1, telefone2, email, endereco);
     }
 
 //    public Tutor atualizar(Long id, TutorRepository tutorRepository) {
