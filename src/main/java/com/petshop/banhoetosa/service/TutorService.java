@@ -39,7 +39,7 @@ public class TutorService {
     }
 
     @Transactional
-    public Tutor atualizar(Long id, Tutor tutorAtt) {
+    public Tutor atualizar(Long id, Tutor tutorAtt, Endereco enderecoAtt) {
             Tutor tutor = tutorRepository.getReferenceById(id);
             tutor.setNome(tutorAtt.getNome());
             tutor.setTelefone1(tutorAtt.getTelefone1());
@@ -47,12 +47,11 @@ public class TutorService {
             tutor.setEmail(tutorAtt.getEmail());
 
             Endereco endereco = tutor.getEndereco();
-            endereco.setRua(tutorAtt.getEndereco().getRua());
-            endereco.setNumero(tutorAtt.getEndereco().getNumero());
-            endereco.setBairro(tutorAtt.getEndereco().getBairro());
-            endereco.setComplemento(tutorAtt.getEndereco().getComplemento());
-            endereco.setCep(tutorAtt.getEndereco().getCep());
-//            enderecoRepository.save(endereco);
+            endereco.setRua(enderecoAtt.getRua());
+            endereco.setNumero(enderecoAtt.getNumero());
+            endereco.setBairro(enderecoAtt.getBairro());
+            endereco.setComplemento(enderecoAtt.getComplemento());
+            endereco.setCep(enderecoAtt.getCep());
 
             return tutorRepository.save(tutor);
     }

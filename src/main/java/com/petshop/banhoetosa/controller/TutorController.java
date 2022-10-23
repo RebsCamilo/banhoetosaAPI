@@ -67,8 +67,9 @@ public class TutorController {
     @PutMapping("/{id}")
     public ResponseEntity<Object> atualizar(@PathVariable Long id, @RequestBody @Valid TutorRequest request) {
         if(tutorService.existeId(id)) {
-            Tutor tutor = TutorMapper.INSTANCE.tutorRequestToTutor(request);
-            tutorService.atualizar(id, tutor);
+            Tutor tutor = tutorMapper.tutorRequestToTutor(request);
+            Endereco endereco = tutorMapper.tutorRequestToEndereco(request);
+            tutorService.atualizar(id, tutor, endereco);
             return ResponseEntity.status(HttpStatus.CREATED).body("Cadastro do tutor atualizado com sucesso");
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Tutor não encontrado");
