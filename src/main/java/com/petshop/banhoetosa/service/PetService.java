@@ -106,4 +106,11 @@ public class PetService {
         return tutorRepository.findByEmail(email);
     }
 
+    public List<Pet> buscaPetPorIdTutor(Long id) {
+        if (petRepository.findByTutorId(id).isPresent()) {
+            return petRepository.findByTutorId(id).get();
+        }
+        return null;
+    }
+
 }

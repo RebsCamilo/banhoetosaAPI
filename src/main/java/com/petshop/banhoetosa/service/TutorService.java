@@ -3,6 +3,7 @@ package com.petshop.banhoetosa.service;
 import com.petshop.banhoetosa.model.Endereco;
 import com.petshop.banhoetosa.model.Tutor;
 import com.petshop.banhoetosa.repository.EnderecoRepository;
+import com.petshop.banhoetosa.repository.PetRepository;
 import com.petshop.banhoetosa.repository.TutorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,8 @@ public class TutorService {
     private TutorRepository tutorRepository;
     @Autowired
     private EnderecoRepository enderecoRepository;
+    @Autowired
+    private PetRepository petRepository;
 
 
     public List<Tutor> listar() {
@@ -26,7 +29,8 @@ public class TutorService {
     }
 
     @Transactional
-    public Tutor cadastrar(Tutor tutor) {
+    public Tutor cadastrar(Tutor tutor, Endereco endereco) {
+        tutor.setEndereco(endereco);
         return tutorRepository.save(tutor);
     }
 
@@ -43,7 +47,7 @@ public class TutorService {
             tutor.setEmail(tutorAtt.getEmail());
 
             Endereco endereco = tutor.getEndereco();
-            endereco.setRua(tutorAtt.getEndereco().getRua()); //-----------
+            endereco.setRua(tutorAtt.getEndereco().getRua());
             endereco.setNumero(tutorAtt.getEndereco().getNumero());
             endereco.setBairro(tutorAtt.getEndereco().getBairro());
             endereco.setComplemento(tutorAtt.getEndereco().getComplemento());
@@ -58,7 +62,6 @@ public class TutorService {
         Tutor tutor = tutorRepository.getReferenceById(id);
         tutorRepository.delete(tutor);
     }
-
 
 
     public boolean validarEmail(String email) {

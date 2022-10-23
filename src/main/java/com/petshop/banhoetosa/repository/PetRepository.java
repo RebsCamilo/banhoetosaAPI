@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface PetRepository extends JpaRepository<Pet, Long> {
     List<Pet> findByNome(String nomePet);
@@ -15,6 +16,8 @@ public interface PetRepository extends JpaRepository<Pet, Long> {
             "INNER JOIN tutores t ON p.id_tutor = t.id\n" +
             "WHERE t.email = :email AND p.nome = :nome", nativeQuery = true)
     boolean hasThisPetNameByEmailDoTutor(@Param("nome") String nome, @Param("email") String email);
+
+    Optional<List<Pet>> findByTutorId(Long id);
 
     //Da erro
 //    @Query(value = "SELECT\tp.nome" +
