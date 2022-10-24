@@ -5,6 +5,9 @@ import com.petshop.banhoetosa.controller.dto.DetalhesDoPetDto;
 import com.petshop.banhoetosa.controller.dto.PetDto;
 import com.petshop.banhoetosa.controller.form.AtualizacaoPetForm;
 import com.petshop.banhoetosa.controller.form.CadastroPetForm;
+import com.petshop.banhoetosa.controller.mapper.PetMapper;
+import com.petshop.banhoetosa.controller.request.PetRequest;
+import com.petshop.banhoetosa.controller.response.PetResponse;
 import com.petshop.banhoetosa.model.Pet;
 import com.petshop.banhoetosa.repository.TutorRepository;
 import com.petshop.banhoetosa.service.PetService;
@@ -32,21 +35,25 @@ public class PetController {
 	@Autowired
 	private TutorRepository tutorRepository;
 
+	@Autowired
+	private PetMapper petMapper;
+
 	@GetMapping
 //	@ResponseStatus(HttpStatus.OK) //anotacao da swagger open api
-	public ResponseEntity<List<PetDto>> listar() {
-		return ResponseEntity.status(HttpStatus.OK).body(PetDto.converter(petService.listar()));
+	public ResponseEntity<List<PetResponse>> listar() {
+		List<Pet> lista = petService.listar();
+		List<PetResponse> listaResp = petMapper.petListToPetResponseList(lista);
+		return ResponseEntity.status(HttpStatus.OK).body(listaResp);
 	}
 
 	@PostMapping
-	@Transactional
-	public ResponseEntity<Object> cadastrar(@RequestBody @Valid CadastroPetForm form) {  //@RequestBody indica ao Spring que os parâmetros enviados no corpo da requisição devem ser atribuídos ao parâmetro do método
-		System.out.println("[controller 3] " + form.getNome() + " " + form.getEmailTutor());
-		if (!petService.validarPet(form.getNome() , form.getEmailTutor())) { //valida se o pet já esta cadastrado neste tutor e se o tutor existe
+	public ResponseEntity<Object> cadastrar(@RequestBody @Valid PetRequest request) {  //@RequestBody indica ao Spring que os parâmetros enviados no corpo da requisição devem ser atribuídos ao parâmetro do método
+		if (!petService.validarPet(request.getNome() , request.getEmailTutor())) { //valida se o pet já esta cadastrado neste tutor e se o tutor existe
 			return ResponseEntity.status(HttpStatus.CONFLICT).body("Pet já cadastrado ou tutor não encontrado");
 		}
-		Pet pet = form.converter();
-		petService.cadastrar(pet, form.getEmailTutor());
+		Pet pet = petMapper.petRequestToPet(request);
+//		Pet pet = form.converter();
+		petService.cadastrar(pet, request.getEmailTutor());
 		return ResponseEntity.status(HttpStatus.CREATED).body("Pet cadastrado com sucesso");
 //        return ResponseEntity.status(HttpStatus.OK).body(new PetDto(pet)); //ResponseEntity para devolver o status 201 na Response e os dados no PetDto
 	}
