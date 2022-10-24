@@ -23,12 +23,11 @@ public class ServicoService {
     private ServicoRepository servicoRepository;
 
 
-    public List<Servico> listar() {
-//        return ServicoDto.converter(servicoRepository.findByStatus(true));
+    public List<Servico> listarAtivos() {
         return servicoRepository.findByStatus(true); //"substituir por filtro"
     }
 
-    public List<Servico> listarTodos() {
+    public List<Servico> listar() {
         return servicoRepository.findAll(); //"substituir por filtro"
     }
 

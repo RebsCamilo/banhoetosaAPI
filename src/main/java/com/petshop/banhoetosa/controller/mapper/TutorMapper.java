@@ -17,8 +17,8 @@ public interface TutorMapper {
 
     TutorMapper INSTANCE = Mappers.getMapper(TutorMapper.class);
 
-    Tutor tutorRequestToTutor(TutorRequest tutorRequest);
 
+    Tutor tutorRequestToTutor(TutorRequest tutorRequest);
 
     TutorResponse tutorToTutorResponse(Tutor tutor);
 

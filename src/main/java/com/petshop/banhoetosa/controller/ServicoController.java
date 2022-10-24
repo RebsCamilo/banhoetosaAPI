@@ -1,9 +1,12 @@
 package com.petshop.banhoetosa.controller;
 
 import com.petshop.banhoetosa.controller.dto.DetalhesDoServicoDto;
-import com.petshop.banhoetosa.controller.dto.ServicoDto;
 import com.petshop.banhoetosa.controller.form.AtualizacaoServicoForm;
 import com.petshop.banhoetosa.controller.form.CadastroServicoForm;
+import com.petshop.banhoetosa.controller.mapper.ServicoMapper;
+import com.petshop.banhoetosa.controller.request.ServicoRequest;
+import com.petshop.banhoetosa.controller.response.ServicoResponse;
+import com.petshop.banhoetosa.controller.response.TutorResponse;
 import com.petshop.banhoetosa.model.Servico;
 import com.petshop.banhoetosa.service.ServicoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,23 +24,29 @@ public class ServicoController {
 	@Autowired
 	private ServicoService servicoService;
 
+	@Autowired
+	private ServicoMapper servicoMapper;
 
 	@GetMapping
-	public ResponseEntity<List<ServicoDto>> listar() {
-		return ResponseEntity.status(HttpStatus.OK).body(ServicoDto.converter(servicoService.listar()));
+	public ResponseEntity<List<ServicoResponse>> listarAtivos() {
+		List<Servico> lista = servicoService.listarAtivos();
+		List<ServicoResponse> listaResp = servicoMapper.servicoListToServicoResponseList(lista);
+		return ResponseEntity.status(HttpStatus.OK).body(listaResp);
 	}
 
 	@GetMapping("/todos")
-	public ResponseEntity<List<ServicoDto>> listarTodos() {
-		return ResponseEntity.status(HttpStatus.OK).body(ServicoDto.converter(servicoService.listarTodos()));
+	public ResponseEntity<List<ServicoResponse>> listar() {
+		List<Servico> lista = servicoService.listar();
+		List<ServicoResponse> listaResp = servicoMapper.servicoListToServicoResponseList(lista);
+		return ResponseEntity.status(HttpStatus.OK).body(listaResp);
 	}
 
 	@PostMapping
-	public ResponseEntity<Object> cadastrar(@RequestBody @Valid CadastroServicoForm form) {
-		if (servicoService.existeDescricao(form.getDescricaoServico())) {
+	public ResponseEntity<Object> cadastrar(@RequestBody @Valid ServicoRequest request) {
+		if (servicoService.existeDescricao(request.getDescricaoServico())) {
 			return ResponseEntity.status(HttpStatus.CONFLICT).body("Já existe um serviço com essa descrição");
 		}
-		Servico servico = form.converter();
+		Servico servico = servicoMapper.servicoRequestToServico(request);
 		servicoService.cadastrar(servico);
 		return ResponseEntity.status(HttpStatus.CREATED).body("Serviço cadastrado com sucesso");
 	}
