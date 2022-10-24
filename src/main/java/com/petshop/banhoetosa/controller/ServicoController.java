@@ -5,6 +5,7 @@ import com.petshop.banhoetosa.controller.form.AtualizacaoServicoForm;
 import com.petshop.banhoetosa.controller.form.CadastroServicoForm;
 import com.petshop.banhoetosa.controller.mapper.ServicoMapper;
 import com.petshop.banhoetosa.controller.request.ServicoRequest;
+import com.petshop.banhoetosa.controller.response.ServicoDetalhesResponse;
 import com.petshop.banhoetosa.controller.response.ServicoResponse;
 import com.petshop.banhoetosa.controller.response.TutorResponse;
 import com.petshop.banhoetosa.model.Servico;
@@ -52,26 +53,29 @@ public class ServicoController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<DetalhesDoServicoDto> detalhar(@PathVariable Long id) {
+	public ResponseEntity<ServicoDetalhesResponse> detalhar(@PathVariable Long id) {
 		if (servicoService.existeId(id) && servicoService.status(id)) {
-			Servico servico = (servicoService.detalhar(id));
-			return ResponseEntity.status(HttpStatus.OK).body(new DetalhesDoServicoDto(servico));
+			Servico servico = servicoService.detalhar(id);
+			ServicoDetalhesResponse servicoDetalhe = servicoMapper.servicoToServicoDetalhesResponse(servico);
+			return ResponseEntity.status(HttpStatus.OK).body(servicoDetalhe);
 		}
-		return ResponseEntity.notFound().build();
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Object> atualizar(@PathVariable Long id, @RequestBody @Valid AtualizacaoServicoForm form) {
+	public ResponseEntity<Object> atualizar(@PathVariable Long id, @RequestBody @Valid ServicoRequest request) {
 		if (servicoService.existeId(id) && servicoService.status(id)) {
-			Servico servico = form.converter();
-			servicoService.atualizar(id, servico);
-			return ResponseEntity.status(HttpStatus.CREATED).body("Serviço atualizado com sucesso");
+			Servico servico = servicoMapper.servicoRequestToServico(request);
+			if (!servicoService.existeDescricao(servico.getDescricaoServico())) {
+				servicoService.atualizar(id, servico);
+				return ResponseEntity.status(HttpStatus.CREATED).body("Serviço atualizado com sucesso");
+			}
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Serviço com mesma descrição já existente");
 		}
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Serviço não encontrado");
 	}
 
 	@DeleteMapping("/desativar/{id}")
-	// <?> diz que retorna generics mas nao sabe o tipo
 	public ResponseEntity<Object> desativar(@PathVariable Long id) {
 		if (servicoService.existeId(id) && servicoService.status(id)) {
 			servicoService.desativar(id);

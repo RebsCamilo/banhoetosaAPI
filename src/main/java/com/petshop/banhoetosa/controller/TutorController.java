@@ -58,8 +58,8 @@ public class TutorController {
             Tutor tutor = (tutorService.detalhar(id)).get();     //detalhar devolve Optional<Tutor>
             Endereco endereco = tutor.getEndereco();
             List<String> listaPets = tutor.getPets().stream().map(Pet::getNome).collect(Collectors.toList());
-            TutorDetalhesResponse tutorResponse = tutorMapper.tutorEnderecoPetToTutorDetalhesResponse(tutor, endereco, listaPets);
-            return ResponseEntity.status(HttpStatus.OK).body(tutorResponse);
+            TutorDetalhesResponse tutorDetalhe = tutorMapper.tutorEnderecoPetToTutorDetalhesResponse(tutor, endereco, listaPets);
+            return ResponseEntity.status(HttpStatus.OK).body(tutorDetalhe);
         }
         return ResponseEntity.notFound().build();
     }
@@ -74,15 +74,6 @@ public class TutorController {
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Tutor não encontrado");
     }
-//    @PutMapping("/{id}")
-//    public ResponseEntity<Object> atualizar(@PathVariable Long id, @RequestBody @Valid AtualizacaoTutorForm form) {
-//        if(tutorService.existeId(id)) {
-//            Tutor tutor = form.converter();
-//            tutorService.atualizar(id, tutor);
-//            return ResponseEntity.status(HttpStatus.CREATED).body("Cadastro do tutor atualizado com sucesso");
-//        }
-//        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Tutor não encontrado");
-//    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deletar(@PathVariable Long id) {

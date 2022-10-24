@@ -1,8 +1,8 @@
 package com.petshop.banhoetosa.controller.mapper;
 
 import com.petshop.banhoetosa.controller.request.ServicoRequest;
+import com.petshop.banhoetosa.controller.response.ServicoDetalhesResponse;
 import com.petshop.banhoetosa.controller.response.ServicoResponse;
-import com.petshop.banhoetosa.model.Pet;
 import com.petshop.banhoetosa.model.Servico;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -18,6 +18,8 @@ public interface ServicoMapper {
     List<ServicoResponse> servicoListToServicoResponseList(List<Servico> servico);
 
     Servico servicoRequestToServico(ServicoRequest servicoRequest);
+
+    ServicoDetalhesResponse servicoToServicoDetalhesResponse(Servico servico);
 
     ServicoResponse map(Servico servico);
 
