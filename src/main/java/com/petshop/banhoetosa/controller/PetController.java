@@ -7,8 +7,11 @@ import com.petshop.banhoetosa.controller.form.AtualizacaoPetForm;
 import com.petshop.banhoetosa.controller.form.CadastroPetForm;
 import com.petshop.banhoetosa.controller.mapper.PetMapper;
 import com.petshop.banhoetosa.controller.request.PetRequest;
+import com.petshop.banhoetosa.controller.response.PetDetalhesResponse;
 import com.petshop.banhoetosa.controller.response.PetResponse;
 import com.petshop.banhoetosa.model.Pet;
+import com.petshop.banhoetosa.model.PetServico;
+import com.petshop.banhoetosa.model.Servico;
 import com.petshop.banhoetosa.repository.TutorRepository;
 import com.petshop.banhoetosa.service.PetService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/pets")
@@ -52,10 +56,9 @@ public class PetController {
 			return ResponseEntity.status(HttpStatus.CONFLICT).body("Pet já cadastrado ou tutor não encontrado");
 		}
 		Pet pet = petMapper.petRequestToPet(request);
-//		Pet pet = form.converter();
 		petService.cadastrar(pet, request.getEmailTutor());
-		return ResponseEntity.status(HttpStatus.CREATED).body("Pet cadastrado com sucesso");
-//        return ResponseEntity.status(HttpStatus.OK).body(new PetDto(pet)); //ResponseEntity para devolver o status 201 na Response e os dados no PetDto
+		return ResponseEntity.status(HttpStatus.CREATED).body("Pet cadastrado com sucesso"); //ResponseEntity para devolver o status 201 na Response e os dados no PetDto
+//        return ResponseEntity.status(HttpStatus.OK).body(new PetDto(pet));
 	}
 
 	@Operation(summary = "Get a pet by its id") //@Operation e @ApiResponses são anotações da implantação do swagger OpenApi
@@ -71,16 +74,21 @@ public class PetController {
 	public ResponseEntity<DetalhesDoPetDto> detalhar(@PathVariable Long id) {
 		if (petService.existeId(id)) {
 			Pet pet = (petService.detalhar(id)).get(); //detalhar devolve Optional<Pet>, não precisa pois existeId ja diz se tem pet com id especificado
+			List<String> listaPetServicos = pet.getPetServicos()
+					.stream()
+					.map(petServico -> petServico.getServico().getDescricaoServico())
+					.toList();
+			PetDetalhesResponse petDetalhe = petMapper.petServicosToPetDetalhesResponse(pet, listaPetServicos);
 			return ResponseEntity.status(HttpStatus.OK).body(new DetalhesDoPetDto(pet));
 		}
         return ResponseEntity.notFound().build();
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Object> atualizar(@PathVariable Long id, @RequestBody @Valid AtualizacaoPetForm form) {
+	public ResponseEntity<Object> atualizar(@PathVariable Long id, @RequestBody @Valid PetRequest request) {
 		if (petService.existeId(id)) {
-			Pet pet = form.converter();
-			petService.atualizar(id, pet, form.getEmailTutor());
+			Pet pet = petMapper.petRequestToPet(request);
+			petService.atualizar(id, pet, request.getEmailTutor());
 			return ResponseEntity.status(HttpStatus.CREATED).body("Cadastro do pet atualizado com sucesso");
 		}
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pet não encontrado");

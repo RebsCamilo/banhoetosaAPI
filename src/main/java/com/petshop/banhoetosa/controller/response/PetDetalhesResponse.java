@@ -19,6 +19,6 @@ public class PetDetalhesResponse {
     private String detalhe;
     private String nomeTutor;
     private LocalDateTime dataCadastro;
-//    private List<DetalhesDoPetServicoDto> listaPetServicos;
+    private List<String> listaPetServicos;
 
 }

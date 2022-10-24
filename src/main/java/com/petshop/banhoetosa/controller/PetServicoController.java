@@ -47,15 +47,15 @@ public class PetServicoController {
         return ResponseEntity.status(HttpStatus.CREATED).body("Serviço relacionado ao pet cadastrado com sucesso");
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Object> detalhar(@PathVariable Long id) {
-        if (petServicoService.existeId(id)) {
-            PetServico petServico = (petServicoService.detalhar(id)).get();
-            return ResponseEntity.status(HttpStatus.OK).body(new DetalhesDoPetServicoDto(petServico));
-        }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Serviço relacionado ao pet não encontrado");
-//        return ResponseEntity.notFound().build();
-    }
+//    @GetMapping("/{id}")
+//    public ResponseEntity<Object> detalhar(@PathVariable Long id) {
+//        if (petServicoService.existeId(id)) {
+//            PetServico petServico = (petServicoService.detalhar(id)).get();
+//            return ResponseEntity.status(HttpStatus.OK).body(new DetalhesDoPetServicoDto(petServico));
+//        }
+//        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Serviço relacionado ao pet não encontrado");
+////        return ResponseEntity.notFound().build();
+//    }
 
     @PutMapping("/{id}")
     public ResponseEntity<Object> atualizar(@PathVariable Long id, @RequestBody @Valid AtualizacaoPetServicoForm form) {

@@ -28,9 +28,8 @@ public interface PetMapper {
     @Mapping(target="id", source="pet.id")
     @Mapping(target="dataCadastro", source="pet.dataCadastro")
     PetDetalhesResponse petServicosToPetDetalhesResponse(Pet pet, List<String> listaPetServicos);
-//    List<DetalhesDoPetServicoDto> map(List<String> value);
+
     List<String> map(List<Pet> pets);
     String map(Pet pet);
-
 
 }
