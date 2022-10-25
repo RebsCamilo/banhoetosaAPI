@@ -5,6 +5,7 @@ import com.petshop.banhoetosa.controller.response.PetDetalhesResponse;
 import com.petshop.banhoetosa.controller.response.PetResponse;
 import com.petshop.banhoetosa.model.Endereco;
 import com.petshop.banhoetosa.model.Pet;
+import com.petshop.banhoetosa.model.Tutor;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
@@ -26,8 +27,10 @@ public interface PetMapper {
     Endereco petRequestToEndereco(PetRequest petRequest);
 
     @Mapping(target="id", source="pet.id")
+    @Mapping(target="nome", source="pet.nome")
     @Mapping(target="dataCadastro", source="pet.dataCadastro")
-    PetDetalhesResponse petServicosToPetDetalhesResponse(Pet pet, List<String> listaPetServicos);
+    @Mapping(target="nomeTutor", source="tutor.nome")
+    PetDetalhesResponse petServicosToPetDetalhesResponse(Pet pet, Tutor tutor, List<String> listaPetServicos);
 
     List<String> map(List<Pet> pets);
     String map(Pet pet);

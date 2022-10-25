@@ -1,27 +1,18 @@
 package com.petshop.banhoetosa.service;
 
-import com.petshop.banhoetosa.controller.dto.DetalhesDoPetServicoDto;
-import com.petshop.banhoetosa.controller.dto.PetServicoDto;
-import com.petshop.banhoetosa.controller.form.AtualizacaoPetServicoForm;
-import com.petshop.banhoetosa.controller.form.CadastroPetServicoForm;
 import com.petshop.banhoetosa.enums.StatusPagamentoEnum;
 import com.petshop.banhoetosa.enums.StatusServicoEnum;
 import com.petshop.banhoetosa.model.Pet;
 import com.petshop.banhoetosa.model.PetServico;
 import com.petshop.banhoetosa.model.Servico;
-import com.petshop.banhoetosa.model.Tutor;
 import com.petshop.banhoetosa.repository.PetRepository;
 import com.petshop.banhoetosa.repository.PetServicoRepository;
 import com.petshop.banhoetosa.repository.ServicoRepository;
 import com.petshop.banhoetosa.repository.TutorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.transaction.Transactional;
-import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 

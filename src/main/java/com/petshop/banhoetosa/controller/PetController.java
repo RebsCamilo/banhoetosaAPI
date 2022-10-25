@@ -1,17 +1,12 @@
 package com.petshop.banhoetosa.controller;
 
 
-import com.petshop.banhoetosa.controller.dto.DetalhesDoPetDto;
-import com.petshop.banhoetosa.controller.dto.PetDto;
-import com.petshop.banhoetosa.controller.form.AtualizacaoPetForm;
-import com.petshop.banhoetosa.controller.form.CadastroPetForm;
 import com.petshop.banhoetosa.controller.mapper.PetMapper;
 import com.petshop.banhoetosa.controller.request.PetRequest;
 import com.petshop.banhoetosa.controller.response.PetDetalhesResponse;
 import com.petshop.banhoetosa.controller.response.PetResponse;
 import com.petshop.banhoetosa.model.Pet;
-import com.petshop.banhoetosa.model.PetServico;
-import com.petshop.banhoetosa.model.Servico;
+import com.petshop.banhoetosa.model.Tutor;
 import com.petshop.banhoetosa.repository.TutorRepository;
 import com.petshop.banhoetosa.service.PetService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,10 +19,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/pets")
@@ -71,15 +64,16 @@ public class PetController {
 			@ApiResponse(responseCode = "404", description = "Pet not found",
 					content = @Content) })
 	@GetMapping("/{id}")
-	public ResponseEntity<DetalhesDoPetDto> detalhar(@PathVariable Long id) {
+	public ResponseEntity<PetDetalhesResponse> detalhar(@PathVariable Long id) {
 		if (petService.existeId(id)) {
 			Pet pet = (petService.detalhar(id)).get(); //detalhar devolve Optional<Pet>, não precisa pois existeId ja diz se tem pet com id especificado
+			Tutor tutor = pet.getTutor();
 			List<String> listaPetServicos = pet.getPetServicos()
 					.stream()
 					.map(petServico -> petServico.getServico().getDescricaoServico())
 					.toList();
-			PetDetalhesResponse petDetalhe = petMapper.petServicosToPetDetalhesResponse(pet, listaPetServicos);
-			return ResponseEntity.status(HttpStatus.OK).body(new DetalhesDoPetDto(pet));
+			PetDetalhesResponse petDetalhe = petMapper.petServicosToPetDetalhesResponse(pet, tutor, listaPetServicos);
+			return ResponseEntity.status(HttpStatus.OK).body(petDetalhe);
 		}
         return ResponseEntity.notFound().build();
 	}

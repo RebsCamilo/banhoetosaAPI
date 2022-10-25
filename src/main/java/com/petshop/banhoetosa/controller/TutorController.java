@@ -1,13 +1,9 @@
 package com.petshop.banhoetosa.controller;
 
-import com.petshop.banhoetosa.controller.dto.DetalhesDoTutorDto;
-import com.petshop.banhoetosa.controller.dto.TutorDto;
-import com.petshop.banhoetosa.controller.form.AtualizacaoTutorForm;
-import com.petshop.banhoetosa.controller.form.CadastroTutorForm;
+import com.petshop.banhoetosa.controller.mapper.TutorMapper;
 import com.petshop.banhoetosa.controller.request.TutorRequest;
 import com.petshop.banhoetosa.controller.response.TutorDetalhesResponse;
 import com.petshop.banhoetosa.controller.response.TutorResponse;
-import com.petshop.banhoetosa.controller.mapper.*;
 import com.petshop.banhoetosa.model.Endereco;
 import com.petshop.banhoetosa.model.Pet;
 import com.petshop.banhoetosa.model.Tutor;
@@ -18,8 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 

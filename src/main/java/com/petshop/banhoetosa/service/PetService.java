@@ -1,15 +1,11 @@
 package com.petshop.banhoetosa.service;
 
-import com.petshop.banhoetosa.controller.dto.DetalhesDoPetDto;
-import com.petshop.banhoetosa.controller.dto.PetDto;
-import com.petshop.banhoetosa.controller.form.AtualizacaoPetForm;
 import com.petshop.banhoetosa.model.Pet;
 import com.petshop.banhoetosa.model.Tutor;
 import com.petshop.banhoetosa.repository.PetRepository;
 import com.petshop.banhoetosa.repository.PetServicoRepository;
 import com.petshop.banhoetosa.repository.TutorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
