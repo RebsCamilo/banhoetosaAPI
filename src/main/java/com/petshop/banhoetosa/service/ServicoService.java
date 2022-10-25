@@ -1,20 +1,12 @@
 package com.petshop.banhoetosa.service;
 
-import com.petshop.banhoetosa.controller.dto.DetalhesDoServicoDto;
-import com.petshop.banhoetosa.controller.dto.ServicoDto;
-import com.petshop.banhoetosa.controller.form.AtualizacaoServicoForm;
-import com.petshop.banhoetosa.controller.form.CadastroServicoForm;
 import com.petshop.banhoetosa.model.Servico;
 import com.petshop.banhoetosa.repository.ServicoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.transaction.Transactional;
-import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ServicoService {

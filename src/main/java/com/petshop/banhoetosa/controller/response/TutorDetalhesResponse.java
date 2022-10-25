@@ -1,6 +1,5 @@
 package com.petshop.banhoetosa.controller.response;
 
-import com.petshop.banhoetosa.model.Pet;
 import lombok.Getter;
 import lombok.Setter;
 

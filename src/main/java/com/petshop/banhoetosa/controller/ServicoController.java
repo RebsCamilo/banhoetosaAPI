@@ -1,13 +1,9 @@
 package com.petshop.banhoetosa.controller;
 
-import com.petshop.banhoetosa.controller.dto.DetalhesDoServicoDto;
-import com.petshop.banhoetosa.controller.form.AtualizacaoServicoForm;
-import com.petshop.banhoetosa.controller.form.CadastroServicoForm;
 import com.petshop.banhoetosa.controller.mapper.ServicoMapper;
 import com.petshop.banhoetosa.controller.request.ServicoRequest;
 import com.petshop.banhoetosa.controller.response.ServicoDetalhesResponse;
 import com.petshop.banhoetosa.controller.response.ServicoResponse;
-import com.petshop.banhoetosa.controller.response.TutorResponse;
 import com.petshop.banhoetosa.model.Servico;
 import com.petshop.banhoetosa.service.ServicoService;
 import org.springframework.beans.factory.annotation.Autowired;

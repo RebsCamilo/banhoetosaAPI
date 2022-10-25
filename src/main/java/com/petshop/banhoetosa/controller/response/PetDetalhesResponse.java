@@ -1,6 +1,5 @@
 package com.petshop.banhoetosa.controller.response;
 
-import com.petshop.banhoetosa.controller.dto.DetalhesDoPetServicoDto;
 import lombok.Getter;
 import lombok.Setter;
 

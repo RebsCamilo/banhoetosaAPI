@@ -1,7 +1,5 @@
 package com.petshop.banhoetosa.controller;
 
-import com.petshop.banhoetosa.controller.dto.DetalhesDoPetServicoDto;
-import com.petshop.banhoetosa.controller.form.AtualizacaoPetServicoForm;
 import com.petshop.banhoetosa.controller.mapper.PetServicoMapper;
 import com.petshop.banhoetosa.controller.request.PetServicoRequest;
 import com.petshop.banhoetosa.controller.request.PetServicoUpdateRequest;
