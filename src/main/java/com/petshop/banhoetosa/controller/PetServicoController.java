@@ -1,26 +1,20 @@
 package com.petshop.banhoetosa.controller;
 
 import com.petshop.banhoetosa.controller.dto.DetalhesDoPetServicoDto;
-import com.petshop.banhoetosa.controller.dto.PetServicoDto;
 import com.petshop.banhoetosa.controller.form.AtualizacaoPetServicoForm;
-import com.petshop.banhoetosa.controller.form.CadastroPetServicoForm;
 import com.petshop.banhoetosa.controller.mapper.PetServicoMapper;
 import com.petshop.banhoetosa.controller.request.PetServicoRequest;
+import com.petshop.banhoetosa.controller.request.PetServicoUpdateRequest;
 import com.petshop.banhoetosa.controller.response.PetServicoResponse;
-import com.petshop.banhoetosa.model.Pet;
 import com.petshop.banhoetosa.model.PetServico;
 import com.petshop.banhoetosa.service.PetServicoService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/petservicos")
@@ -49,7 +43,7 @@ public class PetServicoController {
         if (!petServicoService.validarStatusServico(request.getIdServico())) { //validar se serviço esta ativo
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Serviço indisponível");
         }
-        PetServico petServico = petServicoMapper.petSservicoRequestToPetServico(request);
+        PetServico petServico = petServicoMapper.petServicoRequestToPetServico(request);
         petServicoService.cadastrar(petServico, request.getIdPet(), request.getIdServico());
         return ResponseEntity.status(HttpStatus.CREATED).body("Serviço relacionado ao pet cadastrado com sucesso");
     }
@@ -58,16 +52,16 @@ public class PetServicoController {
     public ResponseEntity<Object> detalhar(@PathVariable Long id) {
         if (petServicoService.existeId(id)) {
             PetServico petServico = (petServicoService.detalhar(id)).get();
-            return ResponseEntity.status(HttpStatus.OK).body(new DetalhesDoPetServicoDto(petServico));
+            PetServicoResponse petServicoDetalhe = petServicoMapper.petServicoToPetServicoResponse(petServico);
+            return ResponseEntity.status(HttpStatus.OK).body(petServicoDetalhe);
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Serviço relacionado ao pet não encontrado");
-//        return ResponseEntity.notFound().build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Object> atualizar(@PathVariable Long id, @RequestBody @Valid AtualizacaoPetServicoForm form) {
+    public ResponseEntity<Object> atualizar(@PathVariable Long id, @RequestBody @Valid PetServicoUpdateRequest request) {
         if (petServicoService.existeId(id)) {
-            PetServico petServicoAtt = form.converter();
+            PetServico petServicoAtt = petServicoMapper.petServicoUpdateRequestToPetServico(request);
             petServicoService.atualizar(id, petServicoAtt);
             return ResponseEntity.status(HttpStatus.OK).body("Serviço relacionado ao pet atualizado com sucesso");
         }

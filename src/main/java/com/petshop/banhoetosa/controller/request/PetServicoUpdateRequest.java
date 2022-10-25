@@ -1,23 +1,20 @@
-package com.petshop.banhoetosa.controller.response;
+package com.petshop.banhoetosa.controller.request;
 
 import com.petshop.banhoetosa.enums.StatusPagamentoEnum;
 import com.petshop.banhoetosa.enums.StatusServicoEnum;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
-public class PetServicoResponse {
+public class PetServicoUpdateRequest {
 
     @NotNull
-    private Long id;
-    @NotNull
-    private Long idPet;
-    @NotNull
-    private Long idServico;
     private StatusServicoEnum statusServico;
+    @NotNull
     private StatusPagamentoEnum statusPagamento;
 
 }
