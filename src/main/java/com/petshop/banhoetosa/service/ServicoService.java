@@ -83,6 +83,10 @@ public class ServicoService {
         return servicoRepository.getReferenceById(id).getStatus();
     }
 
+    public boolean descricaoIgualIdDescricao(long id, String descricao) {
+        return servicoRepository.getReferenceById(id).getDescricaoServico().equals(descricao);
+    }
+
 
 }
 

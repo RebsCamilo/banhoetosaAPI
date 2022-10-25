@@ -70,6 +70,7 @@ public class PetService {
     @Transactional
     public void deletar(Long id) { // <?> diz que tem generics mas nao sabe o tipo
         Pet pet = petRepository.getReferenceById(id);
+//        pet.setPetServicos(null);
         petRepository.delete(pet);
     }
 

@@ -66,7 +66,7 @@ public class ServicoController {
 	public ResponseEntity<Object> atualizar(@PathVariable Long id, @RequestBody @Valid ServicoRequest request) {
 		if (servicoService.existeId(id) && servicoService.status(id)) {
 			Servico servico = servicoMapper.servicoRequestToServico(request);
-			if (!servicoService.existeDescricao(servico.getDescricaoServico())) {
+			if (!servicoService.existeDescricao(servico.getDescricaoServico()) || servicoService.descricaoIgualIdDescricao(id, request.getDescricaoServico())) {
 				servicoService.atualizar(id, servico);
 				return ResponseEntity.status(HttpStatus.CREATED).body("Serviço atualizado com sucesso");
 			}
