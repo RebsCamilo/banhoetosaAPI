@@ -53,6 +53,22 @@ public class Pet {
                 '}';
     }
 
+
+    public Pet cadastrar(Tutor tutor) {
+        this.setTutor(tutor);
+        return this;
+    }
+
+    public Pet atualizar(Pet petAtt, Tutor tutorAtt) {
+        this.setNome(petAtt.getNome());
+        this.setRaca(petAtt.getRaca());
+        this.setEspecie(petAtt.getEspecie());
+        this.setIdade(petAtt.getIdade());
+        this.setDetalhe(petAtt.getDetalhe());
+        this.setTutor(tutor);
+        return this;
+    }
+
     //    Não resolveu pois preciso do id das relações pet-servico
 //    @ManyToMany
 //    @JoinTable(name = "pets_servicos",
@@ -62,22 +78,22 @@ public class Pet {
 
 
     //Construtor para PetCadastroForm
-    public Pet(String nome, String especie, String raca, Integer idade, String detalhe, Tutor tutor) {
-        this.nome = nome;
-        this.especie = especie;
-        this.raca = raca;
-        this.idade = idade;
-        this.detalhe = detalhe;
-        this.tutor = tutor;
-    }
-    public Pet(String nome, String especie, String raca, Integer idade, String detalhe) {
-        this.nome = nome;
-        this.especie = especie;
-        this.raca = raca;
-        this.idade = idade;
-        this.detalhe = detalhe;
+//    public Pet(String nome, String especie, String raca, Integer idade, String detalhe, Tutor tutor) {
+//        this.nome = nome;
+//        this.especie = especie;
+//        this.raca = raca;
+//        this.idade = idade;
+//        this.detalhe = detalhe;
 //        this.tutor = tutor;
-    }
+//    }
+//    public Pet(String nome, String especie, String raca, Integer idade, String detalhe) {
+//        this.nome = nome;
+//        this.especie = especie;
+//        this.raca = raca;
+//        this.idade = idade;
+//        this.detalhe = detalhe;
+////        this.tutor = tutor;
+//    }
 
 
 }

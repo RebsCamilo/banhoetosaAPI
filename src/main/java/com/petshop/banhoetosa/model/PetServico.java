@@ -35,16 +35,31 @@ public class PetServico {
     @JoinColumn(name = "id_servico")
     private Servico servico;
 
-    public PetServico(Pet pet, Servico servico, StatusServicoEnum statusServico, StatusPagamentoEnum statusPagamento) {
-        this.pet = pet;
-        this.servico = servico;
-        this.statusServico = statusServico;
-        this.statusPagamento = statusPagamento;
+
+    public PetServico cadastrar(Pet pet, Servico servico) {
+        this.setStatusServico(StatusServicoEnum.AGUARDANDO);
+        this.setStatusPagamento(StatusPagamentoEnum.EM_ABERTO);
+        this.setPet(pet);
+        this.setServico(servico);
+        return this;
     }
 
-    public PetServico(StatusServicoEnum statusServico, StatusPagamentoEnum statusPagamento) {
-        this.statusServico = statusServico;
-        this.statusPagamento = statusPagamento;
+    public PetServico atualizar(PetServico petServicoAtt) {
+        this.setStatusServico(petServicoAtt.getStatusServico());
+        this.setStatusPagamento(petServicoAtt.getStatusPagamento());
+        return this;
     }
+
+//    public PetServico(Pet pet, Servico servico, StatusServicoEnum statusServico, StatusPagamentoEnum statusPagamento) {
+//        this.pet = pet;
+//        this.servico = servico;
+//        this.statusServico = statusServico;
+//        this.statusPagamento = statusPagamento;
+//    }
+//
+//    public PetServico(StatusServicoEnum statusServico, StatusPagamentoEnum statusPagamento) {
+//        this.statusServico = statusServico;
+//        this.statusPagamento = statusPagamento;
+//    }
 }
 

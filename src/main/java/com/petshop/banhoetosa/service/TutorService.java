@@ -6,6 +6,8 @@ import com.petshop.banhoetosa.repository.EnderecoRepository;
 import com.petshop.banhoetosa.repository.PetRepository;
 import com.petshop.banhoetosa.repository.TutorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -14,21 +16,22 @@ import java.util.Optional;
 
 @Service
 public class TutorService {
+
+    private final TutorRepository tutorRepository;
+
     @Autowired
-    private TutorRepository tutorRepository;
-    @Autowired
-    private EnderecoRepository enderecoRepository;
-    @Autowired
-    private PetRepository petRepository;
+    public TutorService(TutorRepository tutorRepository) {
+        this.tutorRepository = tutorRepository;
+    }
 
 
-    public List<Tutor> listar() {
-        return tutorRepository.findAll();
+    public List<Tutor> listar() { //(Pageable paginacao) {
+        return tutorRepository.findAll(); //(paginacao);
     }
 
     @Transactional
     public Tutor cadastrar(Tutor tutor, Endereco endereco) {
-        tutor.setEndereco(endereco);
+        tutor.cadastrar(endereco);
         return tutorRepository.save(tutor);
     }
 
@@ -39,18 +42,7 @@ public class TutorService {
     @Transactional
     public Tutor atualizar(Long id, Tutor tutorAtt, Endereco enderecoAtt) {
             Tutor tutor = tutorRepository.getReferenceById(id);
-            tutor.setNome(tutorAtt.getNome());
-            tutor.setTelefone1(tutorAtt.getTelefone1());
-            tutor.setTelefone2(tutorAtt.getTelefone2());
-            tutor.setEmail(tutorAtt.getEmail());
-
-            Endereco endereco = tutor.getEndereco();
-            endereco.setRua(enderecoAtt.getRua());
-            endereco.setNumero(enderecoAtt.getNumero());
-            endereco.setBairro(enderecoAtt.getBairro());
-            endereco.setComplemento(enderecoAtt.getComplemento());
-            endereco.setCep(enderecoAtt.getCep());
-
+            tutor.atualizar(tutorAtt, enderecoAtt);
             return tutorRepository.save(tutor);
     }
 

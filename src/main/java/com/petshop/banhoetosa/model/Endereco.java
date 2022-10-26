@@ -40,4 +40,13 @@ public class Endereco {
         this.cep = cep;
 
     }
+
+    public Endereco atualizar(Endereco enderecoAtt) {
+        this.setRua(enderecoAtt.getRua());
+        this.setNumero(enderecoAtt.getNumero());
+        this.setBairro(enderecoAtt.getBairro());
+        this.setComplemento(enderecoAtt.getComplemento());
+        this.setCep(enderecoAtt.getCep());
+        return this;
+    }
 }

@@ -31,25 +31,29 @@ public class Servico {
     @Column(columnDefinition = "Boolean default true")
     private Boolean status;
 
-//    Não resolveu pois preciso do id das relações pet-servico
-//    @ManyToMany(mappedBy = "servicos")
-//    private List<Pet> pets;
-
     @OneToMany(mappedBy = "servico")//, cascade = CascadeType.ALL, orphanRemoval = true)
     List<PetServico> petServicos;
 
-    public Servico(String descricaoServico, BigDecimal preco) {
-        this.descricaoServico = descricaoServico;
-        this.preco = preco;
+
+    public Servico ativar() {
+        this.setStatus(true);
+        return this;
     }
 
-    @Override
-    public String toString() {
-        return "Servico{" +
-                "id=" + id +
-                ", descricaoServico='" + descricaoServico + '\'' +
-                ", preco=" + preco +
-                ", dataCadastro=" + dataCadastro +
-                '}';
+    public Servico desativar() {
+        this.setStatus(false);
+        return this;
     }
+
+    public Servico atualizar(Servico servicoAtt) {
+        this.setDescricaoServico(servicoAtt.getDescricaoServico());
+        this.setPreco(servicoAtt.getPreco());
+        return this;
+    }
+
+//    public Servico(String descricaoServico, BigDecimal preco) {
+//        this.descricaoServico = descricaoServico;
+//        this.preco = preco;
+//    }
+
 }

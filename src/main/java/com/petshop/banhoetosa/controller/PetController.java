@@ -6,8 +6,8 @@ import com.petshop.banhoetosa.controller.request.PetRequest;
 import com.petshop.banhoetosa.controller.response.PetDetalhesResponse;
 import com.petshop.banhoetosa.controller.response.PetResponse;
 import com.petshop.banhoetosa.model.Pet;
+import com.petshop.banhoetosa.model.PetServico;
 import com.petshop.banhoetosa.model.Tutor;
-import com.petshop.banhoetosa.repository.TutorRepository;
 import com.petshop.banhoetosa.service.PetService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -26,14 +26,15 @@ import java.util.List;
 @RequestMapping("/pets")
 public class PetController {
 
-	@Autowired
-	private PetService petService;
+	private final PetService petService;
+	private final PetMapper petMapper;
 
 	@Autowired
-	private TutorRepository tutorRepository;
+	public PetController(PetService petService, PetMapper petMapper) {
+		this.petService = petService;
+		this.petMapper = petMapper;
+	}
 
-	@Autowired
-	private PetMapper petMapper;
 
 	@GetMapping
 //	@ResponseStatus(HttpStatus.OK) //anotacao da swagger open api

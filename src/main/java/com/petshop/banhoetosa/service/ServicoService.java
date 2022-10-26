@@ -11,8 +11,12 @@ import java.util.List;
 @Service
 public class ServicoService {
 
+    private final ServicoRepository servicoRepository;
+
     @Autowired
-    private ServicoRepository servicoRepository;
+    ServicoService(ServicoRepository servicoRepository) {
+        this.servicoRepository = servicoRepository;
+    }
 
 
     public List<Servico> listarAtivos() {
@@ -25,7 +29,7 @@ public class ServicoService {
 
     @Transactional
     public Servico cadastrar(Servico servico) {
-        servico.setStatus(true);
+        servico.ativar();
         return servicoRepository.save(servico);
     }
 
@@ -36,32 +40,20 @@ public class ServicoService {
     @Transactional
     public Servico atualizar(Long id, Servico servicoAtt) {
         Servico servico = servicoRepository.getReferenceById(id);
-
-        servico.setDescricaoServico(servicoAtt.getDescricaoServico());
-        servico.setPreco(servicoAtt.getPreco());
-
+        servico.atualizar(servicoAtt);
         return servicoRepository.save(servico);
     }
 
     @Transactional
     public void desativar(Long id) {
-        servicoRepository.getReferenceById(id).setStatus(false);
+        servicoRepository.getReferenceById(id).desativar();
     }
 
     @Transactional
     public void ativar(Long id) {
-        servicoRepository.getReferenceById(id).setStatus(true);
+        servicoRepository.getReferenceById(id).ativar();
     }
 
-//    @Transactional
-//    public ResponseEntity<?> ativar(Long id) {
-//        Optional<Servico> optional = servicoRepository.findById(id);
-//        if (optional.isPresent()) {
-//            optional.get().setStatus(true);
-//            return ResponseEntity.ok().build();
-//        }
-//        return ResponseEntity.notFound().build();
-//    }
 
     public boolean existeDescricao(String descricaoServico) {
         return servicoRepository.existsByDescricaoServico(descricaoServico);

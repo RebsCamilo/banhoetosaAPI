@@ -17,8 +17,13 @@ import java.util.List;
 @RestControllerAdvice
 public class ErroDeValidacaoHandler {
 
+    private final MessageSource messageSource;
+
     @Autowired
-    private MessageSource messageSource;
+    public ErroDeValidacaoHandler(MessageSource messageSource) {
+        this.messageSource = messageSource;
+    }
+
 
     @ResponseStatus(code = HttpStatus.BAD_REQUEST) //devolve erro bad request
     @ExceptionHandler(MethodArgumentNotValidException.class) //interceptador, faz o tartamento da exceção

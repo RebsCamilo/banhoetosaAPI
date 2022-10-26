@@ -82,6 +82,7 @@
 			<version>1.6.4</version>
 		</dependency>
 
+<!--		Até agora não entendi para que serve-->
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-webflux-ui</artifactId>
@@ -117,8 +118,6 @@
 					</execution>
 				</executions>
 			</plugin>
-
-
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

@@ -1,6 +1,7 @@
 package com.petshop.banhoetosa.service;
 
 import com.petshop.banhoetosa.model.Pet;
+import com.petshop.banhoetosa.model.PetServico;
 import com.petshop.banhoetosa.model.Tutor;
 import com.petshop.banhoetosa.repository.PetRepository;
 import com.petshop.banhoetosa.repository.PetServicoRepository;
@@ -15,13 +16,14 @@ import java.util.Optional;
 @Service
 public class PetService {
 
-    @Autowired
-    private PetRepository petRepository;
-    @Autowired
-    private TutorRepository tutorRepository;
-    @Autowired
-    private PetServicoRepository petServicoRepository;
+    private final PetRepository petRepository;
+    private final TutorRepository tutorRepository;
 
+    @Autowired
+    public PetService(PetRepository petRepository, TutorRepository tutorRepository) {
+        this.petRepository = petRepository;
+        this.tutorRepository = tutorRepository;
+    }
 
 
 //    public List<Pet> listar(String nomePet) { //não é boa pratica devolver sua entidade no controller e sim um Dto (fazer isso na camada controller)
@@ -38,7 +40,8 @@ public class PetService {
 
     @Transactional //para comitar as alterações no banco de dados
     public Pet cadastrar(Pet pet, String email) {  //@RequestBody indica ao Spring que os parâmetros enviados no corpo da requisição devem ser atribuídos ao parâmetro do método
-        pet.setTutor(buscaTutor(email));
+        Tutor tutor = buscaTutor(email);
+        pet.cadastrar(tutor);
         return petRepository.save(pet);
 
 //        URI uri = uriBuilder.path("/pets/{id}").buildAndExpand(pet.getId()).toUri(); //o ResponseEntity precisa o uri para ser criado. Este recebe a url da pagina a ser redirecionada
@@ -52,16 +55,10 @@ public class PetService {
     @Transactional //para comitar as alterações no banco de dados
     public Pet atualizar(Long id, Pet petAtt, String email) {
         Pet pet = petRepository.getReferenceById(id);
-            pet.setNome(petAtt.getNome());
-            pet.setRaca(petAtt.getRaca());
-            pet.setEspecie(petAtt.getEspecie());
-            pet.setIdade(petAtt.getIdade());
-            pet.setDetalhe(petAtt.getDetalhe());
-            pet.setTutor(buscaTutor(email));
-
-            return petRepository.save(pet);
-        }
-
+        Tutor tutorAtt = buscaTutor(email);
+        pet.atualizar(petAtt, tutorAtt);
+        return petRepository.save(pet);
+    }
 
     @Transactional
     public void deletar(Long id) { // <?> diz que tem generics mas nao sabe o tipo

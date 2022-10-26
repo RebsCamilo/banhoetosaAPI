@@ -18,11 +18,15 @@ import java.util.List;
 @RequestMapping("/servicos")
 public class ServicoController {
 
-	@Autowired
-	private ServicoService servicoService;
+	private final ServicoService servicoService;
+	private final ServicoMapper servicoMapper;
 
 	@Autowired
-	private ServicoMapper servicoMapper;
+	public ServicoController(ServicoService servicoService, ServicoMapper servicoMapper) {
+		this.servicoService = servicoService;
+		this.servicoMapper = servicoMapper;
+	}
+
 
 	@GetMapping
 	public ResponseEntity<List<ServicoResponse>> listarAtivos() {

@@ -9,6 +9,10 @@ import com.petshop.banhoetosa.model.Pet;
 import com.petshop.banhoetosa.model.Tutor;
 import com.petshop.banhoetosa.service.TutorService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,11 +25,14 @@ import java.util.stream.Collectors;
 @RequestMapping("/tutores")
 public class TutorController {
 
-    @Autowired
-    private TutorService tutorService;
+    private final TutorService tutorService;
+    private final TutorMapper tutorMapper;
 
     @Autowired
-    private TutorMapper tutorMapper;
+    public TutorController(TutorService tutorService, TutorMapper tutorMapper) {
+        this.tutorService = tutorService;
+        this.tutorMapper = tutorMapper;
+    }
 
 
     @GetMapping
@@ -34,6 +41,13 @@ public class TutorController {
         List<TutorResponse> listaResp = tutorMapper.tutorListToTutorResponseList(lista);
         return ResponseEntity.status(HttpStatus.OK).body(listaResp);
     }
+//    public ResponseEntity<Page<TutorResponse>> listar(//@RequestParam(required = false) String nomeTutor,
+//                                                      @PageableDefault(sort = "id", direction = Sort.Direction.DESC, page = 0, size = 1) Pageable paginacao) {
+//        Page<Tutor> lista = tutorService.listar(paginacao);
+//        Page<TutorResponse> listaResp = lista.map(tutor -> tutorMapper.tutorToTutorResponse(tutor));
+//        //tutorMapper.tutorListToTutorResponseList(lista);
+//        return ResponseEntity.status(HttpStatus.OK).body(listaResp);
+//    }
 
     @PostMapping
     public ResponseEntity<Object> cadastrar(@RequestBody @Valid TutorRequest request) {

@@ -18,10 +18,15 @@ import java.util.List;
 @RequestMapping("/petservicos")
 public class PetServicoController {
 
+    private final PetServicoService petServicoService;
+    private final PetServicoMapper petServicoMapper;
+
     @Autowired
-    private PetServicoService petServicoService;
-    @Autowired
-    private PetServicoMapper petServicoMapper;
+    public PetServicoController(PetServicoService petServicoService, PetServicoMapper petServicoMapper) {
+        this.petServicoService = petServicoService;
+        this.petServicoMapper = petServicoMapper;
+    }
+
 
     @GetMapping
     public ResponseEntity<List<PetServicoResponse>> listar() {
