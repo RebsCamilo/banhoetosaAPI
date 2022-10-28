@@ -6,14 +6,12 @@ import com.petshop.banhoetosa.controller.request.PetRequest;
 import com.petshop.banhoetosa.controller.response.PetDetalhesResponse;
 import com.petshop.banhoetosa.controller.response.PetResponse;
 import com.petshop.banhoetosa.model.Pet;
-import com.petshop.banhoetosa.model.PetServico;
 import com.petshop.banhoetosa.model.Tutor;
 import com.petshop.banhoetosa.service.PetService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +21,8 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/pets")
+@RequestMapping(value="/pets")
+@Tag(name = "Pets", description = "tudo sobre os pets")
 public class PetController {
 
 	private final PetService petService;
@@ -36,15 +35,30 @@ public class PetController {
 	}
 
 
-	@GetMapping
-//	@ResponseStatus(HttpStatus.OK) //anotacao da swagger open api
+	@Operation(summary = "Busca todos os pets")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Encontrados com sucesso"), //, content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Pet.class))})
+			@ApiResponse(responseCode = "400", description = "Erro na requisição")
+	})
+	@GetMapping(produces="application/json")
 	public ResponseEntity<List<PetResponse>> listar() {
 		List<Pet> lista = petService.listar();
 		List<PetResponse> listaResp = petMapper.petListToPetResponseList(lista);
 		return ResponseEntity.status(HttpStatus.OK).body(listaResp);
 	}
 
-	@PostMapping
+//	@ApiResponses(value = {
+//			@ApiResponse(responseCode = "200", description = "Pet encontrado"),
+//			@ApiResponse(responseCode = "400", description = "Id fornecido é inválido"),
+//			@ApiResponse(responseCode = "404", description = "Pet não encontrado")
+//	})
+	@Operation(summary = "Cadastra um pet")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "201", description = "Cadastrado com sucesso"),
+			@ApiResponse(responseCode = "400", description = "Erro na requisição"),
+			@ApiResponse(responseCode = "409", description = "Pet já cadastrado ou tutor não encontrado")
+	})
+	@PostMapping(consumes="application/json")
 	public ResponseEntity<Object> cadastrar(@RequestBody @Valid PetRequest request) {  //@RequestBody indica ao Spring que os parâmetros enviados no corpo da requisição devem ser atribuídos ao parâmetro do método
 		if (!petService.validarPet(request.getNome() , request.getEmailTutor())) { //valida se o pet já esta cadastrado neste tutor e se o tutor existe
 			return ResponseEntity.status(HttpStatus.CONFLICT).body("Pet já cadastrado ou tutor não encontrado");
@@ -55,16 +69,13 @@ public class PetController {
 //        return ResponseEntity.status(HttpStatus.OK).body(new PetDto(pet));
 	}
 
-	@Operation(summary = "Get a pet by its id") //@Operation e @ApiResponses são anotações da implantação do swagger OpenApi
+	@Operation(summary = "Busca o pet pelo seu id") //@Operation e @ApiResponses são anotações da implantação do swagger OpenApi
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "Found the pet",
-					content = { @Content(mediaType = "application/json",
-							schema = @Schema(implementation = Pet.class)) }),
-			@ApiResponse(responseCode = "400", description = "Invalid id supplied",
-					content = @Content),
-			@ApiResponse(responseCode = "404", description = "Pet not found",
-					content = @Content) })
-	@GetMapping("/{id}")
+			@ApiResponse(responseCode = "201", description = "Encontrado com sucesso"),
+			@ApiResponse(responseCode = "400", description = "Erro na requisição. Id fornecido pode ser inválido"),
+			@ApiResponse(responseCode = "404", description = "Não encontrado")
+	})
+	@GetMapping(value="/{id}")
 	public ResponseEntity<PetDetalhesResponse> detalhar(@PathVariable Long id) {
 		if (petService.existeId(id)) {
 			Pet pet = (petService.detalhar(id)).get(); //detalhar devolve Optional<Pet>, não precisa pois existeId ja diz se tem pet com id especificado
@@ -79,7 +90,13 @@ public class PetController {
         return ResponseEntity.notFound().build();
 	}
 
-	@PutMapping("/{id}")
+	@Operation(summary = "Atualiza o pet pelo seu id")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "201", description = "Cadastrado atualizado com sucesso"),
+			@ApiResponse(responseCode = "400", description = "Erro na requisição. Id fornecido pode ser inválido"),
+			@ApiResponse(responseCode = "404", description = "Não encontrado")
+	})
+	@PutMapping(value="/{id}")
 	public ResponseEntity<Object> atualizar(@PathVariable Long id, @RequestBody @Valid PetRequest request) {
 		if (petService.existeId(id)) {
 			Pet pet = petMapper.petRequestToPet(request);
@@ -89,6 +106,12 @@ public class PetController {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pet não encontrado");
 	}
 
+	@Operation(summary = "Deleta o pet pelo seu id")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Deletado com sucesso"),
+			@ApiResponse(responseCode = "400", description = "Erro na requisição. Id fornecido pode ser inválido"),
+			@ApiResponse(responseCode = "404", description = "Não encontrado")
+	})
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> deletar(@PathVariable Long id) { // <?> diz que tem generics mas nao sabe o tipo
 		if(petService.existeId(id)) {
@@ -97,5 +120,4 @@ public class PetController {
 		}
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pet não encontrado");
 	}
-
 }

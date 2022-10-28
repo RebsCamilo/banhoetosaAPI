@@ -6,6 +6,10 @@ import com.petshop.banhoetosa.controller.response.ServicoDetalhesResponse;
 import com.petshop.banhoetosa.controller.response.ServicoResponse;
 import com.petshop.banhoetosa.model.Servico;
 import com.petshop.banhoetosa.service.ServicoService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +19,8 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/servicos")
+@RequestMapping(value="/servicos")
+@Tag(name = "Serviços ofertados", description = "tudo sobre os serviços ofertados pelo estabelecimento")
 public class ServicoController {
 
 	private final ServicoService servicoService;
@@ -28,21 +33,37 @@ public class ServicoController {
 	}
 
 
-	@GetMapping
+	@Operation(summary = "Busca todos os serviços disponíveis")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Encontrados com sucesso"),
+			@ApiResponse(responseCode = "400", description = "Erro na requisição")
+	})
+	@GetMapping(produces="application/json")
 	public ResponseEntity<List<ServicoResponse>> listarAtivos() {
 		List<Servico> lista = servicoService.listarAtivos();
 		List<ServicoResponse> listaResp = servicoMapper.servicoListToServicoResponseList(lista);
 		return ResponseEntity.status(HttpStatus.OK).body(listaResp);
 	}
 
-	@GetMapping("/todos")
+	@Operation(summary = "Busca todos os serviços")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Encontrados com sucesso"),
+			@ApiResponse(responseCode = "400", description = "Erro na requisição")
+	})
+	@GetMapping(value = "/todos", produces="application/json")
 	public ResponseEntity<List<ServicoResponse>> listar() {
 		List<Servico> lista = servicoService.listar();
 		List<ServicoResponse> listaResp = servicoMapper.servicoListToServicoResponseList(lista);
 		return ResponseEntity.status(HttpStatus.OK).body(listaResp);
 	}
 
-	@PostMapping
+	@Operation(summary = "Cadastra um serviço")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "201", description = "Cadastrado com sucesso"),
+			@ApiResponse(responseCode = "400", description = "Erro na requisição"),
+			@ApiResponse(responseCode = "409", description = "Serviço já cadastrado")
+	})
+	@PostMapping(consumes="application/json")
 	public ResponseEntity<Object> cadastrar(@RequestBody @Valid ServicoRequest request) {
 		if (servicoService.existeDescricao(request.getDescricaoServico())) {
 			return ResponseEntity.status(HttpStatus.CONFLICT).body("Já existe um serviço com essa descrição");
@@ -52,7 +73,13 @@ public class ServicoController {
 		return ResponseEntity.status(HttpStatus.CREATED).body("Serviço cadastrado com sucesso");
 	}
 
-	@GetMapping("/{id}")
+	@Operation(summary = "Busca o serviço pelo seu id")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "201", description = "Encontrado com sucesso"),
+			@ApiResponse(responseCode = "400", description = "Erro na requisição. Id fornecido pode ser inválido"),
+			@ApiResponse(responseCode = "404", description = "Não encontrado")
+	})
+	@GetMapping(value="/{id}")
 	public ResponseEntity<ServicoDetalhesResponse> detalhar(@PathVariable Long id) {
 		if (servicoService.existeId(id) && servicoService.status(id)) {
 			Servico servico = servicoService.detalhar(id);
@@ -62,7 +89,13 @@ public class ServicoController {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 	}
 
-	@PutMapping("/{id}")
+	@Operation(summary = "Atualiza o serviço pelo seu id")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "201", description = "Cadastrado atualizado com sucesso"),
+			@ApiResponse(responseCode = "400", description = "Erro na requisição. Id fornecido pode ser inválido"),
+			@ApiResponse(responseCode = "404", description = "Não encontrado")
+	})
+	@PutMapping(value="/{id}")
 	public ResponseEntity<Object> atualizar(@PathVariable Long id, @RequestBody @Valid ServicoRequest request) {
 		if (servicoService.existeId(id) && servicoService.status(id)) {
 			Servico servico = servicoMapper.servicoRequestToServico(request);
@@ -75,7 +108,13 @@ public class ServicoController {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Serviço não encontrado");
 	}
 
-	@DeleteMapping("/desativar/{id}")
+	@Operation(summary = "Desativa o serviço pelo seu id")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Desativado com sucesso"),
+			@ApiResponse(responseCode = "400", description = "Erro na requisição. Id fornecido pode ser inválido"),
+			@ApiResponse(responseCode = "404", description = "Não encontrado")
+	})
+	@DeleteMapping("/{id}/desativar")
 	public ResponseEntity<Object> desativar(@PathVariable Long id) {
 		if (servicoService.existeId(id) && servicoService.status(id)) {
 			servicoService.desativar(id);
@@ -84,7 +123,13 @@ public class ServicoController {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Serviço não encontrado");
 	}
 
-	@PatchMapping("/ativar/{id}")
+	@Operation(summary = "Ativa o serviço pelo seu id")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Ativado com sucesso"),
+			@ApiResponse(responseCode = "400", description = "Erro na requisição. Id fornecido pode ser inválido"),
+			@ApiResponse(responseCode = "404", description = "Não encontrado")
+	})
+	@PatchMapping("/{id}/ativar")
 	public ResponseEntity<Object> ativar(@PathVariable Long id) {
 		if (servicoService.existeId(id)) {
 			servicoService.ativar(id);

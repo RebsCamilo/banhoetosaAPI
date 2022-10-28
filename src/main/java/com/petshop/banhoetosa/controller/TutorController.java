@@ -8,11 +8,11 @@ import com.petshop.banhoetosa.model.Endereco;
 import com.petshop.banhoetosa.model.Pet;
 import com.petshop.banhoetosa.model.Tutor;
 import com.petshop.banhoetosa.service.TutorService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +22,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/tutores")
+@RequestMapping(value="/tutores")
+@Tag(name = "Tutores", description = "tudo sobre os tutores")
 public class TutorController {
 
     private final TutorService tutorService;
@@ -35,21 +36,25 @@ public class TutorController {
     }
 
 
-    @GetMapping
+    @Operation(summary = "Busca todos os tutores")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Encontrados com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Erro na requisição")
+    })
+    @GetMapping(produces="application/json")
     public ResponseEntity<List<TutorResponse>> listar() {
         List<Tutor> lista = tutorService.listar();
         List<TutorResponse> listaResp = tutorMapper.tutorListToTutorResponseList(lista);
         return ResponseEntity.status(HttpStatus.OK).body(listaResp);
     }
-//    public ResponseEntity<Page<TutorResponse>> listar(//@RequestParam(required = false) String nomeTutor,
-//                                                      @PageableDefault(sort = "id", direction = Sort.Direction.DESC, page = 0, size = 1) Pageable paginacao) {
-//        Page<Tutor> lista = tutorService.listar(paginacao);
-//        Page<TutorResponse> listaResp = lista.map(tutor -> tutorMapper.tutorToTutorResponse(tutor));
-//        //tutorMapper.tutorListToTutorResponseList(lista);
-//        return ResponseEntity.status(HttpStatus.OK).body(listaResp);
-//    }
 
-    @PostMapping
+    @Operation(summary = "Cadastra um tutor")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Cadastrado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Erro na requisição"),
+            @ApiResponse(responseCode = "409", description = "Tutor já cadastrado")
+    })
+    @PostMapping(consumes="application/json")
     public ResponseEntity<Object> cadastrar(@RequestBody @Valid TutorRequest request) {
         if(tutorService.validarEmail(request.getEmail())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Já existe um tutor com este email");
@@ -60,7 +65,13 @@ public class TutorController {
         return ResponseEntity.status(HttpStatus.CREATED).body("Tutor cadastrado com sucesso");
     }
 
-    @GetMapping("/{id}")
+    @Operation(summary = "Busca o tutor pelo seu id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Encontrado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Erro na requisição. Id fornecido pode ser inválido"),
+            @ApiResponse(responseCode = "404", description = "Não encontrado")
+    })
+    @GetMapping(value="/{id}")
     public ResponseEntity<TutorDetalhesResponse> detalhar(@PathVariable Long id) {
         if (tutorService.existeId(id)) {
             Tutor tutor = (tutorService.detalhar(id)).get();     //detalhar devolve Optional<Tutor>
@@ -72,7 +83,13 @@ public class TutorController {
         return ResponseEntity.notFound().build();
     }
 
-    @PutMapping("/{id}")
+    @Operation(summary = "Atualiza o tutor pelo seu id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Cadastrado atualizado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Erro na requisição. Id fornecido pode ser inválido"),
+            @ApiResponse(responseCode = "404", description = "Não encontrado")
+    })
+    @PutMapping(value="/{id}")
     public ResponseEntity<Object> atualizar(@PathVariable Long id, @RequestBody @Valid TutorRequest request) {
         if(tutorService.existeId(id)) {
             Tutor tutor = tutorMapper.tutorRequestToTutor(request);
@@ -83,6 +100,12 @@ public class TutorController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Tutor não encontrado");
     }
 
+    @Operation(summary = "Deleta o tutor pelo seu id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Deletado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Erro na requisição. Id fornecido pode ser inválido"),
+            @ApiResponse(responseCode = "404", description = "Não encontrado")
+    })
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deletar(@PathVariable Long id) {
         if(tutorService.existeId(id)) {
