@@ -1,6 +1,6 @@
 package com.petshop.banhoetosa.repository;
 
-import com.petshop.banhoetosa.model.Servico;
+import com.petshop.banhoetosa.model.domain.Servico;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

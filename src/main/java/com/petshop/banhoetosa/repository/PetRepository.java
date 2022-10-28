@@ -1,6 +1,6 @@
 package com.petshop.banhoetosa.repository;
 
-import com.petshop.banhoetosa.model.Pet;
+import com.petshop.banhoetosa.model.domain.Pet;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

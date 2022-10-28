@@ -1,4 +1,4 @@
-package com.petshop.banhoetosa.controller.request;
+package com.petshop.banhoetosa.model.request;
 
 import lombok.Getter;
 import lombok.Setter;

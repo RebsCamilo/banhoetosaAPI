@@ -1,9 +1,9 @@
-package com.petshop.banhoetosa.controller.mapper;
+package com.petshop.banhoetosa.model.mapper;
 
-import com.petshop.banhoetosa.controller.request.PetServicoRequest;
-import com.petshop.banhoetosa.controller.request.PetServicoUpdateRequest;
-import com.petshop.banhoetosa.controller.response.PetServicoResponse;
-import com.petshop.banhoetosa.model.PetServico;
+import com.petshop.banhoetosa.model.request.PetServicoRequest;
+import com.petshop.banhoetosa.model.request.PetServicoUpdateRequest;
+import com.petshop.banhoetosa.model.response.PetServicoResponse;
+import com.petshop.banhoetosa.model.domain.PetServico;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;

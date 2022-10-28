@@ -1,4 +1,4 @@
-package com.petshop.banhoetosa.controller.request;
+package com.petshop.banhoetosa.model.request;
 
 import com.petshop.banhoetosa.enums.StatusPagamentoEnum;
 import com.petshop.banhoetosa.enums.StatusServicoEnum;
@@ -7,17 +7,14 @@ import lombok.Setter;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.math.BigDecimal;
 
 @Getter
 @Setter
-public class PetServicoRequest {
+public class PetServicoUpdateRequest {
 
     @NotNull
-    private Long idPet;
-    @NotNull
-    private Long idServico;
     private StatusServicoEnum statusServico;
+    @NotNull
     private StatusPagamentoEnum statusPagamento;
 
 }

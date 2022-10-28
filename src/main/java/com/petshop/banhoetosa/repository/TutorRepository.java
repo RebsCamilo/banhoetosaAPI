@@ -1,6 +1,6 @@
 package com.petshop.banhoetosa.repository;
 
-import com.petshop.banhoetosa.model.Tutor;
+import com.petshop.banhoetosa.model.domain.Tutor;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface TutorRepository extends JpaRepository<Tutor, Long> {

@@ -1,6 +1,6 @@
 package com.petshop.banhoetosa.service;
 
-import com.petshop.banhoetosa.model.Servico;
+import com.petshop.banhoetosa.model.domain.Servico;
 import com.petshop.banhoetosa.repository.ServicoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

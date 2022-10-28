@@ -1,12 +1,12 @@
 package com.petshop.banhoetosa.controller;
 
 
-import com.petshop.banhoetosa.controller.mapper.PetMapper;
-import com.petshop.banhoetosa.controller.request.PetRequest;
-import com.petshop.banhoetosa.controller.response.PetDetalhesResponse;
-import com.petshop.banhoetosa.controller.response.PetResponse;
-import com.petshop.banhoetosa.model.Pet;
-import com.petshop.banhoetosa.model.Tutor;
+import com.petshop.banhoetosa.model.mapper.PetMapper;
+import com.petshop.banhoetosa.model.request.PetRequest;
+import com.petshop.banhoetosa.model.response.PetDetalhesResponse;
+import com.petshop.banhoetosa.model.response.PetResponse;
+import com.petshop.banhoetosa.model.domain.Pet;
+import com.petshop.banhoetosa.model.domain.Tutor;
 import com.petshop.banhoetosa.service.PetService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

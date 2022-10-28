@@ -1,11 +1,11 @@
-package com.petshop.banhoetosa.controller.mapper;
+package com.petshop.banhoetosa.model.mapper;
 
-import com.petshop.banhoetosa.controller.request.PetRequest;
-import com.petshop.banhoetosa.controller.response.PetDetalhesResponse;
-import com.petshop.banhoetosa.controller.response.PetResponse;
-import com.petshop.banhoetosa.model.Endereco;
-import com.petshop.banhoetosa.model.Pet;
-import com.petshop.banhoetosa.model.Tutor;
+import com.petshop.banhoetosa.model.request.PetRequest;
+import com.petshop.banhoetosa.model.response.PetDetalhesResponse;
+import com.petshop.banhoetosa.model.response.PetResponse;
+import com.petshop.banhoetosa.model.domain.Endereco;
+import com.petshop.banhoetosa.model.domain.Pet;
+import com.petshop.banhoetosa.model.domain.Tutor;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;

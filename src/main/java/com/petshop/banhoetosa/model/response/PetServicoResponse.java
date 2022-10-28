@@ -1,4 +1,4 @@
-package com.petshop.banhoetosa.controller.response;
+package com.petshop.banhoetosa.model.response;
 
 import com.petshop.banhoetosa.enums.StatusPagamentoEnum;
 import com.petshop.banhoetosa.enums.StatusServicoEnum;

@@ -1,8 +1,8 @@
 package com.petshop.banhoetosa.service;
 
-import com.petshop.banhoetosa.model.Pet;
-import com.petshop.banhoetosa.model.PetServico;
-import com.petshop.banhoetosa.model.Servico;
+import com.petshop.banhoetosa.model.domain.Pet;
+import com.petshop.banhoetosa.model.domain.PetServico;
+import com.petshop.banhoetosa.model.domain.Servico;
 import com.petshop.banhoetosa.repository.PetRepository;
 import com.petshop.banhoetosa.repository.PetServicoRepository;
 import com.petshop.banhoetosa.repository.ServicoRepository;
