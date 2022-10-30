@@ -32,9 +32,14 @@ public class PetService {
 //        }
 //    }
 
-    public List<Pet> listar() {
+    public List<Pet> listarTodos() {
         return petRepository.findAll();
     }
+
+    public List<Pet> listarPetsDoTutor(Long tutorId) {
+        return petRepository.findByTutorId(tutorId).get();
+    }
+
 
     @Transactional //para comitar as alterações no banco de dados
     public Pet cadastrar(Pet pet, String email) {  //@RequestBody indica ao Spring que os parâmetros enviados no corpo da requisição devem ser atribuídos ao parâmetro do método
@@ -67,18 +72,14 @@ public class PetService {
 
 
     public boolean validarPet(String nome, String email) {
-        System.out.println("[service 1] " + existeEmailTutor(email));
 //        if (!petRepository.existsByTutor_Email(email)) { //valida se o pet já esta cadastrado neste tutor e se o tutor existe
 //            return true;
 //        }
         if (existeEmailTutor(email)) { //valida se o tutor existe
-            System.out.println("[service 2] ");
-            System.out.println("[service 2] " + petRepository.hasThisPetNameByEmailDoTutor(nome, email));
             if (!petRepository.hasThisPetNameByEmailDoTutor(nome, email)) { //valida se o tutor ja tem pet com mesmo nome
                 return true;
             }
         }
-        System.out.println("FAAAAAAAAALSE");
         return false;
     }
 
@@ -98,11 +99,15 @@ public class PetService {
         return tutorRepository.findByEmail(email);
     }
 
-    public List<Pet> buscaPetPorIdTutor(Long id) {
-        if (petRepository.findByTutorId(id).isPresent()) {
-            return petRepository.findByTutorId(id).get();
+    public List<Pet> buscaPetPorIdTutor(Long tutorId) {
+        if (petRepository.findByTutorId(tutorId).isPresent()) {
+            return petRepository.findByTutorId(tutorId).get();
         }
         return null;
+    }
+
+    public Optional<Pet> buscaPetPeloId(Long id) {
+        return petRepository.findById(id);
     }
 
 }

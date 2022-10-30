@@ -16,8 +16,8 @@ public class PetDetalhesResponse {
     private String raca;
     private Integer idade;
     private String detalhe;
-    private String nomeTutor;
+//    private String nomeTutor;
     private LocalDateTime dataCadastro;
-    private List<String> listaPetServicos;
+//    private List<String> listaPetServicos;
 
 }

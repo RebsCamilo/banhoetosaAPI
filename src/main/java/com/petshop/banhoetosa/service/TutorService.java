@@ -56,6 +56,8 @@ public class TutorService {
     public boolean existeId(Long id) {
         return tutorRepository.existsById(id);
     }
+
+    public Optional<Tutor> getTutorById(Long id) {
+        return tutorRepository.findById(id);
+    }
 }
-
-

@@ -20,7 +20,7 @@ public class PetRequest {
     private Integer idade;
     @Length(max = 255)
     private String detalhe;
-    @NotNull @NotEmpty
-    private String emailTutor;
+//    @NotNull @NotEmpty
+//    private String emailTutor;
 
 }

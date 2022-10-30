@@ -11,13 +11,15 @@ import java.util.Optional;
 public interface PetRepository extends JpaRepository<Pet, Long> {
     List<Pet> findByNome(String nomePet);
 
+//    List<Pet> findByTutorId(Long tutorId);
+
     @Query(value = "SELECT\tcount(p.nome) > 0 " +
             "FROM pets p\n" +
             "INNER JOIN tutores t ON p.tutor_id = t.id\n" +
             "WHERE t.email = :email AND p.nome = :nome", nativeQuery = true)
     boolean hasThisPetNameByEmailDoTutor(@Param("nome") String nome, @Param("email") String email);
 
-    Optional<List<Pet>> findByTutorId(Long id);
+    Optional<List<Pet>> findByTutorId(Long tutorId);
 
     //Da erro
 //    @Query(value = "SELECT\tp.nome" +

@@ -26,11 +26,11 @@ public interface PetMapper {
 
     Endereco petRequestToEndereco(PetRequest petRequest);
 
-    @Mapping(target="id", source="pet.id")
-    @Mapping(target="nome", source="pet.nome")
-    @Mapping(target="dataCadastro", source="pet.dataCadastro")
-    @Mapping(target="nomeTutor", source="tutor.nome")
-    PetDetalhesResponse petServicosToPetDetalhesResponse(Pet pet, Tutor tutor, List<String> listaPetServicos);
+//    @Mapping(target="id", source="pet.id")
+//    @Mapping(target="nome", source="pet.nome")
+//    @Mapping(target="dataCadastro", source="pet.dataCadastro")
+//    @Mapping(target="nomeTutor", source="tutor.nome")
+    PetDetalhesResponse petServicosToPetDetalhesResponse(Pet pet);//, Tutor tutor, List<String> listaPetServicos);
 
     List<String> map(List<Pet> pets);
     String map(Pet pet);
