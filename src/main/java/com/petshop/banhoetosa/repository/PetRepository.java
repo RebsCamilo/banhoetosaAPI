@@ -1,6 +1,7 @@
 package com.petshop.banhoetosa.repository;
 
 import com.petshop.banhoetosa.model.domain.Pet;
+import com.petshop.banhoetosa.model.domain.Tutor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -28,7 +29,13 @@ public interface PetRepository extends JpaRepository<Pet, Long> {
 //            "WHERE t.email = :email AND p.nome = :nome", nativeQuery = true)
 //    boolean existsPetByEmailDoTutor(@Param("nome") String nome, @Param("email") String email);
 
-    boolean existsByTutor_Email(String email);
+    boolean existsByTutor_Id(Long id);
+
+    @Query(value = "SELECT t.email\n" +
+            "FROM pets p\n" +
+            "INNER JOIN tutores t ON p.tutor_id = t.id\n" +
+            "WHERE t.id = :idTutor", nativeQuery = true)
+    String findTutorDoPetByTutorId(Long idTutor);
 
 }
 

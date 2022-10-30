@@ -110,4 +110,12 @@ public class PetService {
         return petRepository.findById(id);
     }
 
+    public boolean existeTutorPeloId(Long idTutor) {
+        return petRepository.existsByTutor_Id(idTutor);
+    }
+
+    public String findTutorDoPetByTutorId(Long idTutor) {
+        return petRepository.findTutorDoPetByTutorId(idTutor);
+    }
+
 }
