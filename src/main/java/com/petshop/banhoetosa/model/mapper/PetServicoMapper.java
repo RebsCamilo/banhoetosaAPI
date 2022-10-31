@@ -22,7 +22,8 @@ public interface PetServicoMapper {
     @Mapping(target="idServico", source="servico.id")
     PetServicoResponse petServicoToPetServicoResponse(PetServico petServico);
 
-
+//    @Mapping(target="idPet", source="pet.id")
+//    @Mapping(target="idServico", source="servico.id")
     List<PetServicoResponse> petServicoListToPetServicoResponseList(List<PetServico> petServico);
 
     PetServico petServicoRequestToPetServico(PetServicoRequest servicoRequest);

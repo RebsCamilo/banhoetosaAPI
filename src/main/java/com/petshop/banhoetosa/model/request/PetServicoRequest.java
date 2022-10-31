@@ -13,8 +13,8 @@ import java.math.BigDecimal;
 @Setter
 public class PetServicoRequest {
 
-    @NotNull
-    private Long idPet;
+//    @NotNull
+//    private Long idPet;
     @NotNull
     private Long idServico;
     private StatusServicoEnum statusServico;

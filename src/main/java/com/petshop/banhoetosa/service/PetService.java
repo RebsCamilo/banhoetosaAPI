@@ -1,6 +1,7 @@
 package com.petshop.banhoetosa.service;
 
 import com.petshop.banhoetosa.model.domain.Pet;
+import com.petshop.banhoetosa.model.domain.PetServico;
 import com.petshop.banhoetosa.model.domain.Tutor;
 import com.petshop.banhoetosa.repository.PetRepository;
 import com.petshop.banhoetosa.repository.TutorRepository;
@@ -115,7 +116,9 @@ public class PetService {
     }
 
     public String findTutorDoPetByTutorId(Long idTutor) {
-        return petRepository.findTutorDoPetByTutorId(idTutor);
+        return petRepository.findEmailTutorByTutorId(idTutor);
     }
+
+
 
 }

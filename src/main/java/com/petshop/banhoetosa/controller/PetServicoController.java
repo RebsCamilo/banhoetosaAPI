@@ -19,8 +19,8 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping(value="/servicos-ja-realizados")
-@Tag(name = "Serviços já realizados", description = "tudo sobre os serviços que já foram realizados")
+//@RequestMapping(value="/servicos")
+@Tag(name = "Serviços realizados", description = "tudo sobre os serviços que já foram realizados")
 public class PetServicoController {
 
     private final PetServicoService petServicoService;
@@ -38,9 +38,47 @@ public class PetServicoController {
             @ApiResponse(responseCode = "200", description = "Encontrados com sucesso"),
             @ApiResponse(responseCode = "400", description = "Erro na requisição")
     })
-    @GetMapping(produces="application/json")
-    public ResponseEntity<List<PetServicoResponse>> listar() {
-        List<PetServico> lista = petServicoService.listar();
+    @GetMapping(value ="tutores/pets/servicos", produces="application/json")
+    public ResponseEntity<List<PetServicoResponse>> listarTodos() {
+        List<PetServico> lista = petServicoService.listarTodos();
+        List<PetServicoResponse> listaResp = petServicoMapper.petServicoListToPetServicoResponseList(lista);
+        return ResponseEntity.status(HttpStatus.OK).body(listaResp);
+    }
+
+    @Operation(summary = "Busca serviços vinculados a pets de tutor especifico")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Encontrados com sucesso"), //, content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Pet.class))})
+            @ApiResponse(responseCode = "400", description = "Erro na requisição"),
+            @ApiResponse(responseCode = "409", description = "Tutor não encontrado")
+    })
+    @GetMapping(value = "tutores/{idTutor}/pets/servicos", produces="application/json")
+    public ResponseEntity<Object> listarServicosDosPetsDoTutor(@PathVariable Long idTutor) {
+//        if (!petServicoService.existeTutorPeloId(idTutor)) {
+//            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Id do tutor inválido");
+//        }
+        if (!petServicoService.existeServicoRealizadoPeloPetDesteTutor(idTutor)) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Ainda não foi realizado nenhum serviço relacionado aos pets deste tutor");
+        }
+        List<PetServico> lista = petServicoService.buscaServicosPeloTutorId(idTutor);
+        List<PetServicoResponse> listaResp = petServicoMapper.petServicoListToPetServicoResponseList(lista);
+        return ResponseEntity.status(HttpStatus.OK).body(listaResp);
+    }
+
+    @Operation(summary = "Busca serviços vinculados a pet especifico de tutor")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Encontrados com sucesso"), //, content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Pet.class))})
+            @ApiResponse(responseCode = "400", description = "Erro na requisição"),
+            @ApiResponse(responseCode = "409", description = "Tutor não encontrado")
+    })
+    @GetMapping(value = "tutores/{idTutor}/pets/{idPet}/servicos", produces="application/json")
+    public ResponseEntity<Object> listarServicosDoPet(@PathVariable Long idTutor, @PathVariable Long idPet) {
+        if(!petServicoService.existeEstePetNesteTutor(idTutor, idPet)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Id do pet ou tutor inválido");
+        }
+        if (!petServicoService.existeServicoRealizadoNestePet(idPet)) { //validar se id do serviço existe
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Nenhum serviço realizado por este pet");
+        }
+        List<PetServico> lista = petServicoService.buscaServicosPeloPet(idPet);
         List<PetServicoResponse> listaResp = petServicoMapper.petServicoListToPetServicoResponseList(lista);
         return ResponseEntity.status(HttpStatus.OK).body(listaResp);
     }
@@ -51,19 +89,16 @@ public class PetServicoController {
             @ApiResponse(responseCode = "400", description = "Erro na requisição"),
             @ApiResponse(responseCode = "409", description = "Serviço indisponível ou Id referente ao Pet ou Serviço não encontrado")
     })
-    @PostMapping(consumes="application/json")
-    public ResponseEntity<Object> cadastrar(@RequestBody @Valid PetServicoRequest request) {
-        if (!petServicoService.validarIdPet(request.getIdPet())) { //validar se id do pet existe
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Id referente ao Pet não encontrado");
+    @PostMapping(value = "tutores/{idTutor}/pets/{idPet}/servicos", consumes="application/json")
+    public ResponseEntity<Object> cadastrar(@PathVariable Long idTutor, @PathVariable Long idPet, @RequestBody @Valid PetServicoRequest request) {
+        if(!petServicoService.existeEstePetNesteTutor(idTutor, idPet)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Id do pet ou tutor inválido");
         }
-        if (!petServicoService.validarIdServico(request.getIdServico())) { //validar se id do serviço existe
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Id referente ao Serviço não encontrado");
-        }
-        if (!petServicoService.validarStatusServico(request.getIdServico())) { //validar se serviço esta ativo
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Serviço indisponível");
+        if (!petServicoService.existsServicoByServico_Id(request.getIdServico()) || !petServicoService.StatusServico(request.getIdServico())) { //validar se id do serviço existe
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Serviço não encontrado");
         }
         PetServico petServico = petServicoMapper.petServicoRequestToPetServico(request);
-        petServicoService.cadastrar(petServico, request.getIdPet(), request.getIdServico());
+        petServicoService.cadastrar(petServico, idPet, request.getIdServico());
         return ResponseEntity.status(HttpStatus.CREATED).body("Serviço relacionado ao pet cadastrado com sucesso");
     }
 
@@ -73,14 +108,17 @@ public class PetServicoController {
             @ApiResponse(responseCode = "400", description = "Erro na requisição. Id fornecido pode ser inválido"),
             @ApiResponse(responseCode = "404", description = "Não encontrado")
     })
-    @GetMapping(value="/{id}")
-    public ResponseEntity<Object> detalhar(@PathVariable Long id) {
-        if (petServicoService.existeId(id)) {
-            PetServico petServico = (petServicoService.detalhar(id)).get();
-            PetServicoResponse petServicoDetalhe = petServicoMapper.petServicoToPetServicoResponse(petServico);
-            return ResponseEntity.status(HttpStatus.OK).body(petServicoDetalhe);
+    @GetMapping(value = "tutores/{idTutor}/pets/{idPet}/servicos/{id}")
+    public ResponseEntity<Object> detalhar(@PathVariable Long idTutor, @PathVariable Long idPet, @PathVariable Long id) {
+        if(!petServicoService.existeEstePetNesteTutor(idTutor, idPet)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Id do pet ou tutor inválido");
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Serviço relacionado ao pet não encontrado");
+        if(!petServicoService.existeEsteServicoRealizadoNestePet(id, idPet)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Serviço realizado relacionado ao pet não encontrado");
+        }
+        PetServico petServico = (petServicoService.detalhar(id)).get();
+        PetServicoResponse petServicoDetalhe = petServicoMapper.petServicoToPetServicoResponse(petServico);
+        return ResponseEntity.status(HttpStatus.OK).body(petServicoDetalhe);
     }
 
     @Operation(summary = "Atualiza o serviço realizado pelo seu id")
@@ -89,14 +127,17 @@ public class PetServicoController {
             @ApiResponse(responseCode = "400", description = "Erro na requisição. Id fornecido pode ser inválido"),
             @ApiResponse(responseCode = "404", description = "Não encontrado")
     })
-    @PutMapping(value="/{id}")
-    public ResponseEntity<Object> atualizar(@PathVariable Long id, @RequestBody @Valid PetServicoUpdateRequest request) {
-        if (petServicoService.existeId(id)) {
-            PetServico petServicoAtt = petServicoMapper.petServicoUpdateRequestToPetServico(request);
-            petServicoService.atualizar(id, petServicoAtt);
-            return ResponseEntity.status(HttpStatus.OK).body("Serviço relacionado ao pet atualizado com sucesso");
+    @PutMapping(value="tutores/{idTutor}/pets/{idPet}/servicos/{id}")
+    public ResponseEntity<Object> atualizar(@PathVariable Long idTutor, @PathVariable Long idPet, @PathVariable Long id, @RequestBody @Valid PetServicoUpdateRequest request) {
+        if(!petServicoService.existeEstePetNesteTutor(idTutor, idPet)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Id do pet ou tutor inválido");
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Serviço relacionado ao pet não encontrado");
+        if(!petServicoService.existeEsteServicoRealizadoNestePet(id, idPet)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Serviço realizado relacionado ao pet não encontrado");
+        }
+        PetServico petServicoAtt = petServicoMapper.petServicoUpdateRequestToPetServico(request);
+        petServicoService.atualizar(id, petServicoAtt);
+        return ResponseEntity.status(HttpStatus.OK).body("Serviço relacionado ao pet atualizado com sucesso");
     }
 
     @Operation(summary = "Deleta o serviço realizado pelo seu id")
@@ -105,13 +146,16 @@ public class PetServicoController {
             @ApiResponse(responseCode = "400", description = "Erro na requisição. Id fornecido pode ser inválido"),
             @ApiResponse(responseCode = "404", description = "Não encontrado")
     })
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deletar(@PathVariable Long id) {
-        if (petServicoService.existeId(id)) {
-            petServicoService.deletar(id);
-            return ResponseEntity.status(HttpStatus.OK).body("Serviço relacionado ao pet excluído com sucesso");
+    @DeleteMapping(value="tutores/{idTutor}/pets/{idPet}/servicos/{id}")
+    public ResponseEntity<?> deletar(@PathVariable Long idTutor, @PathVariable Long idPet, @PathVariable Long id) {
+        if(!petServicoService.existeEstePetNesteTutor(idTutor, idPet)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Id do pet ou tutor inválido");
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Serviço relacionado ao pet não encontrado");
+        if(!petServicoService.existeEsteServicoRealizadoNestePet(id, idPet)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Serviço realizado relacionado ao pet não encontrado");
+        }
+        petServicoService.deletar(id);
+        return ResponseEntity.status(HttpStatus.OK).body("Serviço realizado excluído com sucesso");
     }
 
 }

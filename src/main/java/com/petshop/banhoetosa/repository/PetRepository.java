@@ -35,7 +35,7 @@ public interface PetRepository extends JpaRepository<Pet, Long> {
             "FROM pets p\n" +
             "INNER JOIN tutores t ON p.tutor_id = t.id\n" +
             "WHERE t.id = :idTutor", nativeQuery = true)
-    String findTutorDoPetByTutorId(Long idTutor);
+    String findEmailTutorByTutorId(Long idTutor);
 
 }
 

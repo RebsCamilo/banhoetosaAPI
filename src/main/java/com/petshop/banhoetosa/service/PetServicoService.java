@@ -3,9 +3,7 @@ package com.petshop.banhoetosa.service;
 import com.petshop.banhoetosa.model.domain.Pet;
 import com.petshop.banhoetosa.model.domain.PetServico;
 import com.petshop.banhoetosa.model.domain.Servico;
-import com.petshop.banhoetosa.repository.PetRepository;
 import com.petshop.banhoetosa.repository.PetServicoRepository;
-import com.petshop.banhoetosa.repository.ServicoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,19 +14,19 @@ import java.util.Optional;
 @Service
 public class PetServicoService {
 
-    private final PetRepository petRepository;
-    private final ServicoRepository servicoRepository;
+//    private final PetRepository petRepository;
+//    private final ServicoRepository servicoRepository;
     private final PetServicoRepository petServicoRepository;
 
     @Autowired
-    public PetServicoService(PetRepository petRepository, ServicoRepository servicoRepository, PetServicoRepository petServicoRepository) {
-        this.petRepository = petRepository;
-        this.servicoRepository = servicoRepository;
+    public PetServicoService(PetServicoRepository petServicoRepository) { //PetRepository petRepository, ServicoRepository servicoRepository) {
+//        this.petRepository = petRepository;
+//        this.servicoRepository = servicoRepository;
         this.petServicoRepository = petServicoRepository;
     }
 
 
-    public List<PetServico> listar() {
+    public List<PetServico> listarTodos() {
         return petServicoRepository.findAll();
     }
 
@@ -64,25 +62,47 @@ public class PetServicoService {
         return petServicoRepository.existsById(id);
     }
 
-    public boolean validarIdPet(Long id) {
-        return petRepository.existsById(id);
+    public Pet buscaPet(Long idPet) {
+        return petServicoRepository.findPetByPet_Id(idPet).get();
+//        return petRepository.findById(idPet).get();
     }
 
-    public boolean validarIdServico(Long id) {
-        return servicoRepository.existsById(id);
+    public Servico buscaServico(Long idServico) {
+        return petServicoRepository.findServicoByServico_Id(idServico).get();
+//        return servicoRepository.findById(idServico).get();
     }
 
-    public boolean validarStatusServico(Long id) {
-        return servicoRepository.getReferenceById(id).getStatus();
+    public List<PetServico> buscaServicosPeloPet(Long idPet) {
+        return petServicoRepository.findByPet_Id(idPet);
     }
 
-    public Pet buscaPet(Long id) {
-        return petRepository.findById(id).get();
+    public boolean existeEsteServicoRealizadoNestePet(Long idServicoRealizado, Long idPet) {
+        return petServicoRepository.hasServicoRealizadoByIdPet(idServicoRealizado, idPet);
     }
-    public Servico buscaServico(Long id) {
-        return servicoRepository.findById(id).get();
+
+    public boolean existeServicoRealizadoPeloPetDesteTutor(Long idTutor) {
+        return petServicoRepository.existsByPetId_TutorId(idTutor);
+    }
+
+    public boolean existeEstePetNesteTutor(Long idTutor, Long idPet) {
+        return petServicoRepository.hasPetByIdTutor(idTutor, idPet);
+    }
+
+    public boolean StatusServico(Long idServicoOfertado) {
+        return petServicoRepository.StatusServico(idServicoOfertado);
     }
 
 
+    public boolean existsServicoByServico_Id(Long idServicoOfertado) {
+        return petServicoRepository.existsServicoByServico_Id(idServicoOfertado);
+    }
+
+    public boolean existeServicoRealizadoNestePet(Long idPet) {
+        return petServicoRepository.existsByPetId(idPet);
+    }
+
+    public List<PetServico> buscaServicosPeloTutorId(Long idTutor) {
+        return petServicoRepository.findByPet_TutorId(idTutor);
+    }
 
 }
