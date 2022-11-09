@@ -2,7 +2,6 @@ package com.petshop.banhoetosa.controller;
 
 
 import com.petshop.banhoetosa.model.domain.Pet;
-import com.petshop.banhoetosa.model.domain.Tutor;
 import com.petshop.banhoetosa.model.mapper.PetMapper;
 import com.petshop.banhoetosa.model.request.PetRequest;
 import com.petshop.banhoetosa.model.response.PetDetalhesResponse;
@@ -78,6 +77,7 @@ public class PetController {
 	})
 	@PostMapping(value = "tutores/{idTutor}/pets", consumes="application/json")
 	public ResponseEntity<Object> cadastrar(@PathVariable Long idTutor, @RequestBody @Valid PetRequest request) {  //@RequestBody indica ao Spring que os parâmetros enviados no corpo da requisição devem ser atribuídos ao parâmetro do método
+		//deveria estar na service
 		if(!petService.existeTutorPeloId(idTutor)) {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Tutor não encontrado");
 		}

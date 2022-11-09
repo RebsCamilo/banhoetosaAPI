@@ -3,6 +3,7 @@ package com.petshop.banhoetosa.service;
 import com.petshop.banhoetosa.model.domain.Endereco;
 import com.petshop.banhoetosa.model.domain.Tutor;
 import com.petshop.banhoetosa.repository.TutorRepository;
+import com.petshop.banhoetosa.service.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,8 +32,9 @@ public class TutorService {
         return tutorRepository.save(tutor);
     }
 
-    public Optional<Tutor> detalhar(Long id) {
-        return tutorRepository.findById(id);
+    public Tutor detalhar(Long id) {
+        Optional<Tutor> tutor = tutorRepository.findById(id);
+        return tutor.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado"));
     }
 
     @Transactional
@@ -57,7 +59,7 @@ public class TutorService {
         return tutorRepository.existsById(id);
     }
 
-    public Optional<Tutor> getTutorById(Long id) {
-        return tutorRepository.findById(id);
-    }
+//    public Optional<Tutor> getTutorById(Long id) {
+//        return tutorRepository.findById(id);
+//    }
 }

@@ -1,10 +1,7 @@
 package com.petshop.banhoetosa.model.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -17,6 +14,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Pet {
 
     @Id
@@ -44,6 +42,8 @@ public class Pet {
     @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
     List<PetServico> petServicos;
 
+
+
     @Override
     public String toString() {
         return "Pet{" +
@@ -53,21 +53,28 @@ public class Pet {
                 '}';
     }
 
+    public Pet(Long id, String nome, String raca, Integer idade) {
+        this.id = id;
+        this.nome = nome;
+        this.raca = raca;
+        this.idade = idade;
+    }
 
     public Pet cadastrar(Tutor tutor) {
         this.setTutor(tutor);
         return this;
     }
 
-    public Pet atualizar(Pet petAtt, Tutor tutorAtt) {
+    public Pet atualizar(Pet petAtt) { //, Tutor tutorAtt) {
         this.setNome(petAtt.getNome());
         this.setRaca(petAtt.getRaca());
         this.setEspecie(petAtt.getEspecie());
         this.setIdade(petAtt.getIdade());
         this.setDetalhe(petAtt.getDetalhe());
-        this.setTutor(tutor);
+//        this.setTutor(tutor);
         return this;
     }
+    
 
     //    Não resolveu pois preciso do id das relações pet-servico
 //    @ManyToMany

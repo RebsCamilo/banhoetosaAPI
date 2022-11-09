@@ -2,8 +2,9 @@ package com.petshop.banhoetosa.model.domain;
 
 import com.petshop.banhoetosa.enums.StatusPagamentoEnum;
 import com.petshop.banhoetosa.enums.StatusServicoEnum;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+//import lombok.Data;
+//import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -14,6 +15,8 @@ import java.time.LocalDateTime;
 @Table(name = "pet_servico")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class PetServico {
 
     @Id

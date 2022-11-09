@@ -1,6 +1,7 @@
 package com.petshop.banhoetosa.model.domain;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -16,6 +17,7 @@ import java.util.List;
 //@ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Tutor {
 
     @Id
@@ -38,6 +40,13 @@ public class Tutor {
     @OneToMany(mappedBy = "tutor", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Pet> pets;
 
+
+    public Tutor(Long id, String nome, String telefone1, String email) {
+        this.id = id;
+        this.nome = nome;
+        this.telefone1 = telefone1;
+        this.email = email;
+    }
 
     public Tutor cadastrar(Endereco endereco) {
         this.setEndereco(endereco);

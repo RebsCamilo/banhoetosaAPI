@@ -1,10 +1,10 @@
 package com.petshop.banhoetosa.controller;
 
+import com.petshop.banhoetosa.model.domain.Servico;
 import com.petshop.banhoetosa.model.mapper.ServicoMapper;
 import com.petshop.banhoetosa.model.request.ServicoRequest;
 import com.petshop.banhoetosa.model.response.ServicoDetalhesResponse;
 import com.petshop.banhoetosa.model.response.ServicoResponse;
-import com.petshop.banhoetosa.model.domain.Servico;
 import com.petshop.banhoetosa.service.ServicoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -32,6 +32,12 @@ public class ServicoController {
 		this.servicoMapper = servicoMapper;
 	}
 
+
+//	@GetMapping("/teste")
+//	public ResponseEntity<Object> teste() {
+////		Servico servico = new Servico();
+//		return ResponseEntity.status(HttpStatus.OK).build();
+//	}
 
 	@Operation(summary = "Busca todos os serviços disponíveis")
 	@ApiResponses(value = {
@@ -93,7 +99,8 @@ public class ServicoController {
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "201", description = "Cadastrado atualizado com sucesso"),
 			@ApiResponse(responseCode = "400", description = "Erro na requisição. Id fornecido pode ser inválido"),
-			@ApiResponse(responseCode = "404", description = "Não encontrado")
+			@ApiResponse(responseCode = "404", description = "Não encontrado"),
+			@ApiResponse(responseCode = "409", description = "Serviço com essa descrição já existe")
 	})
 	@PutMapping(value="/{id}")
 	public ResponseEntity<Object> atualizar(@PathVariable Long id, @RequestBody @Valid ServicoRequest request) {
@@ -103,7 +110,7 @@ public class ServicoController {
 				servicoService.atualizar(id, servico);
 				return ResponseEntity.status(HttpStatus.CREATED).body("Serviço atualizado com sucesso");
 			}
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Serviço com mesma descrição já existente");
+			return ResponseEntity.status(HttpStatus.CONFLICT).body("Serviço com mesma descrição já existente");
 		}
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Serviço não encontrado");
 	}

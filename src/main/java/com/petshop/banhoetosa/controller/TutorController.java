@@ -73,14 +73,11 @@ public class TutorController {
     })
     @GetMapping(value="/{id}")
     public ResponseEntity<TutorDetalhesResponse> detalhar(@PathVariable Long id) {
-        if (tutorService.existeId(id)) {
-            Tutor tutor = (tutorService.detalhar(id)).get();     //detalhar devolve Optional<Tutor>
-            Endereco endereco = tutor.getEndereco();
-            List<String> listaPets = tutor.getPets().stream().map(Pet::getNome).collect(Collectors.toList());
-            TutorDetalhesResponse tutorDetalhe = tutorMapper.tutorEnderecoPetToTutorDetalhesResponse(tutor, endereco, listaPets);
-            return ResponseEntity.status(HttpStatus.OK).body(tutorDetalhe);
-        }
-        return ResponseEntity.notFound().build();
+        Tutor tutor = (tutorService.detalhar(id));
+        Endereco endereco = tutor.getEndereco();
+        List<String> listaPets = tutor.getPets().stream().map(Pet::getNome).collect(Collectors.toList());
+        TutorDetalhesResponse tutorDetalhe = tutorMapper.tutorEnderecoPetToTutorDetalhesResponse(tutor, endereco, listaPets);
+        return ResponseEntity.status(HttpStatus.OK).body(tutorDetalhe);
     }
 
     @Operation(summary = "Atualiza o tutor pelo seu id")

@@ -1,5 +1,7 @@
 package com.petshop.banhoetosa.model.request;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,7 +11,11 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 public class TutorRequest {
-
+    
+    //usando a anotação @JsonIgnore e @JsonProperty podemos usar o mesmo DTO para request e response (Validar com Florian)
+//    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+//    private Long id;
+    
     @NotNull
     @NotEmpty
     private String nome;

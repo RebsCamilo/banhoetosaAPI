@@ -1,9 +1,6 @@
 package com.petshop.banhoetosa.model.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -17,6 +14,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Servico {
 
     @Id
@@ -34,6 +32,13 @@ public class Servico {
     @OneToMany(mappedBy = "servico")//, cascade = CascadeType.ALL, orphanRemoval = true)
     List<PetServico> petServicos;
 
+
+    public Servico(Long id, String descricaoServico, BigDecimal preco) {
+        this.id = id;
+        this.descricaoServico = descricaoServico;
+        this.preco = preco;
+        this.status = true;
+    }
 
     public Servico ativar() {
         this.setStatus(true);

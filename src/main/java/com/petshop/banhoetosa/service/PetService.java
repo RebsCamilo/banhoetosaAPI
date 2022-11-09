@@ -1,7 +1,6 @@
 package com.petshop.banhoetosa.service;
 
 import com.petshop.banhoetosa.model.domain.Pet;
-import com.petshop.banhoetosa.model.domain.PetServico;
 import com.petshop.banhoetosa.model.domain.Tutor;
 import com.petshop.banhoetosa.repository.PetRepository;
 import com.petshop.banhoetosa.repository.TutorRepository;
@@ -60,7 +59,7 @@ public class PetService {
     public Pet atualizar(Long id, Pet petAtt, String email) {
         Pet pet = petRepository.getReferenceById(id);
         Tutor tutorAtt = buscaTutor(email);
-        pet.atualizar(petAtt, tutorAtt);
+        pet.atualizar(petAtt); //, tutorAtt);
         return petRepository.save(pet);
     }
 

@@ -29,7 +29,9 @@ public interface TutorMapper {
     @Mapping(target="id", source="tutor.id")
     @Mapping(target="dataCadastro", source="tutor.dataCadastro")
     TutorDetalhesResponse tutorEnderecoPetToTutorDetalhesResponse(Tutor tutor, Endereco endereco, List<String> petsNome);
+
     List<String> map(List<Pet> pets);
+
     String map(Pet pet);
 
 

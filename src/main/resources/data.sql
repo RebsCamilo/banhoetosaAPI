@@ -14,4 +14,3 @@ INSERT INTO pets(nome, raca, idade, data_cadastro, tutor_id) VALUES ('khadija', 
 INSERT INTO pet_servico(id_pet, id_servico, data_cadastro) VALUES (1, 2, '2022-09-25 19:00:00')
 INSERT INTO pet_servico(id_pet, id_servico, data_cadastro) VALUES (2, 1, '2022-09-25 19:00:00')
 
-
