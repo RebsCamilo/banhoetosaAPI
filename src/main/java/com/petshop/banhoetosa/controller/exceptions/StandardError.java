@@ -1,4 +1,4 @@
-package com.petshop.banhoetosa.service.exceptions;
+package com.petshop.banhoetosa.controller.exceptions;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

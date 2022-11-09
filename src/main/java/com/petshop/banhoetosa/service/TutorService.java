@@ -3,6 +3,7 @@ package com.petshop.banhoetosa.service;
 import com.petshop.banhoetosa.model.domain.Endereco;
 import com.petshop.banhoetosa.model.domain.Tutor;
 import com.petshop.banhoetosa.repository.TutorRepository;
+import com.petshop.banhoetosa.service.exceptions.DataIntegratyViolationException;
 import com.petshop.banhoetosa.service.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,7 @@ public class TutorService {
 
     @Transactional
     public Tutor cadastrar(Tutor tutor, Endereco endereco) {
+        validarEmail(tutor.getEmail());
         tutor.cadastrar(endereco);
         return tutorRepository.save(tutor);
     }
@@ -49,11 +51,16 @@ public class TutorService {
         Tutor tutor = tutorRepository.getReferenceById(id);
         tutorRepository.delete(tutor);
     }
-
-
-    public boolean validarEmail(String email) {
-        return tutorRepository.existsByEmail(email);
+    
+    
+    public void validarEmail(String email) {
+        if (tutorRepository.existsByEmail(email)) {
+            throw new DataIntegratyViolationException("E-mail já cadastrado");
+        }
     }
+//    public boolean validarEmail(String email) {
+//        return tutorRepository.existsByEmail(email);
+//    }
 
     public boolean existeId(Long id) {
         return tutorRepository.existsById(id);
@@ -62,4 +69,7 @@ public class TutorService {
 //    public Optional<Tutor> getTutorById(Long id) {
 //        return tutorRepository.findById(id);
 //    }
+
+
+
 }

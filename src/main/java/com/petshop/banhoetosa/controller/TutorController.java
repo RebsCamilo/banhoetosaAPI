@@ -51,14 +51,11 @@ public class TutorController {
     @Operation(summary = "Cadastra um tutor")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Cadastrado com sucesso"),
-            @ApiResponse(responseCode = "400", description = "Erro na requisição"),
-            @ApiResponse(responseCode = "409", description = "Tutor já cadastrado")
+            @ApiResponse(responseCode = "400", description = "Erro na requisição")
+//            @ApiResponse(responseCode = "409", description = "Tutor já cadastrado")
     })
     @PostMapping(consumes="application/json")
     public ResponseEntity<Object> cadastrar(@RequestBody @Valid TutorRequest request) {
-        if(tutorService.validarEmail(request.getEmail())) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Já existe um tutor com este email");
-        }
         Tutor tutor = tutorMapper.tutorRequestToTutor(request);
         Endereco endereco = tutorMapper.tutorRequestToEndereco(request);
         tutorService.cadastrar(tutor, endereco);
