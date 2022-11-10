@@ -25,7 +25,8 @@ import java.util.stream.Collectors;
 @RequestMapping(value="/tutores")
 @Tag(name = "Tutores", description = "tudo sobre os tutores")
 public class TutorController {
-
+    
+    public static final String ID = "/{id}";
     private final TutorService tutorService;
     private final TutorMapper tutorMapper;
 
@@ -68,7 +69,7 @@ public class TutorController {
             @ApiResponse(responseCode = "400", description = "Erro na requisição. Id fornecido pode ser inválido"),
             @ApiResponse(responseCode = "404", description = "Não encontrado")
     })
-    @GetMapping(value="/{id}")
+    @GetMapping(value= ID)
     public ResponseEntity<TutorDetalhesResponse> detalhar(@PathVariable Long id) {
         Tutor tutor = (tutorService.detalhar(id));
         Endereco endereco = tutor.getEndereco();
@@ -83,7 +84,7 @@ public class TutorController {
             @ApiResponse(responseCode = "400", description = "Erro na requisição. Id fornecido pode ser inválido"),
             @ApiResponse(responseCode = "404", description = "Não encontrado")
     })
-    @PutMapping(value="/{id}")
+    @PutMapping(value= ID)
     public ResponseEntity<Object> atualizar(@PathVariable Long id, @RequestBody @Valid TutorRequest request) {
 //        if(tutorService.existeId(id)) {
             Tutor tutor = tutorMapper.tutorRequestToTutor(request);
@@ -100,12 +101,14 @@ public class TutorController {
             @ApiResponse(responseCode = "400", description = "Erro na requisição. Id fornecido pode ser inválido"),
             @ApiResponse(responseCode = "404", description = "Não encontrado")
     })
-    @DeleteMapping("/{id}")
+    @DeleteMapping(ID)
     public ResponseEntity<?> deletar(@PathVariable Long id) {
-        if(tutorService.existeId(id)) {
-            tutorService.deletar(id);
-            return ResponseEntity.status(HttpStatus.OK).body("Tutor excluído com sucesso");
-        }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Tutor não encontrado");
+        tutorService.deletar(id);
+        return ResponseEntity.status(HttpStatus.OK).body("Tutor excluído com sucesso");
+//        if(tutorService.existeId(id)) {
+//            tutorService.deletar(id);
+//            return ResponseEntity.status(HttpStatus.OK).body("Tutor excluído com sucesso");
+//        }
+//        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Tutor não encontrado");
     }
 }

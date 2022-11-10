@@ -41,37 +41,27 @@ public class TutorService {
 
     @Transactional
     public Tutor atualizar(Long id, Tutor tutorAtt, Endereco enderecoAtt) {
-        Tutor tutor = tutorRepository.getReferenceById(id);
+        Tutor tutor = detalhar(id);
         validarEmail(id, tutorAtt.getEmail());
         tutor.atualizar(tutorAtt, enderecoAtt);
         return tutorRepository.save(tutor);
     }
-
+    
     @Transactional
     public void deletar(Long id) {
-        Tutor tutor = tutorRepository.getReferenceById(id);
-        tutorRepository.delete(tutor);
+        detalhar(id);
+        tutorRepository.deleteById(id);
     }
-    
-    
+
     public void validarEmail(Long id, String email) {
         Optional<Tutor> tutor = tutorRepository.findByEmail(email);
         if (tutor.isPresent() && !tutor.get().getId().equals(id) ) {
             throw new DataIntegratyViolationException("E-mail já cadastrado");
         }
     }
-//    public boolean validarEmail(String email) {
-//        return tutorRepository.existsByEmail(email);
-//    }
 
     public boolean existeId(Long id) {
         return tutorRepository.existsById(id);
     }
-
-//    public Optional<Tutor> getTutorById(Long id) {
-//        return tutorRepository.findById(id);
-//    }
-
-
 
 }
