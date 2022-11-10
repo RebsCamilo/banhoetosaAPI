@@ -29,7 +29,7 @@ public class TutorService {
 
     @Transactional
     public Tutor cadastrar(Tutor tutor, Endereco endereco) {
-        validarEmail(tutor.getEmail());
+        validarEmail(tutor.getId(), tutor.getEmail());
         tutor.cadastrar(endereco);
         return tutorRepository.save(tutor);
     }
@@ -41,9 +41,10 @@ public class TutorService {
 
     @Transactional
     public Tutor atualizar(Long id, Tutor tutorAtt, Endereco enderecoAtt) {
-            Tutor tutor = tutorRepository.getReferenceById(id);
-            tutor.atualizar(tutorAtt, enderecoAtt);
-            return tutorRepository.save(tutor);
+        Tutor tutor = tutorRepository.getReferenceById(id);
+        validarEmail(id, tutorAtt.getEmail());
+        tutor.atualizar(tutorAtt, enderecoAtt);
+        return tutorRepository.save(tutor);
     }
 
     @Transactional
@@ -53,8 +54,9 @@ public class TutorService {
     }
     
     
-    public void validarEmail(String email) {
-        if (tutorRepository.existsByEmail(email)) {
+    public void validarEmail(Long id, String email) {
+        Optional<Tutor> tutor = tutorRepository.findByEmail(email);
+        if (tutor.isPresent() && !tutor.get().getId().equals(id) ) {
             throw new DataIntegratyViolationException("E-mail já cadastrado");
         }
     }

@@ -4,6 +4,7 @@ import com.petshop.banhoetosa.model.domain.Pet;
 import com.petshop.banhoetosa.model.domain.Tutor;
 import com.petshop.banhoetosa.repository.PetRepository;
 import com.petshop.banhoetosa.repository.TutorRepository;
+import com.petshop.banhoetosa.service.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -96,7 +97,10 @@ public class PetService {
     }
 
     public Tutor buscaTutor(String email) {
-        return tutorRepository.findByEmail(email);
+        if (tutorRepository.findByEmail(email).isPresent()) {
+            return tutorRepository.findByEmail(email).get();
+        }
+        throw new ObjectNotFoundException("E-mail do tutor não encontrado");
     }
 
     public List<Pet> buscaPetPorIdTutor(Long tutorId) {
