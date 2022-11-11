@@ -24,7 +24,7 @@ public class Servico {
     private String descricaoServico;
     @Column(nullable = false)
     private BigDecimal preco;
-    private LocalDateTime dataCadastro = LocalDateTime.now(); //tem alguma forma do spring manter as alterações no banco (guardar os logs?)
+    private LocalDateTime dataCadastro; // = LocalDateTime.now(); //tem alguma forma do spring manter as alterações no banco (guardar os logs?)
 
     @Column(columnDefinition = "Boolean default true")
     private Boolean status;
@@ -38,6 +38,12 @@ public class Servico {
         this.descricaoServico = descricaoServico;
         this.preco = preco;
         this.status = true;
+    }
+    
+    public Servico cadastrar() {
+        this.status = true;
+        this.setDataCadastro(LocalDateTime.now());
+        return this;
     }
 
     public Servico ativar() {

@@ -39,8 +39,8 @@ public class PetServicoController {
             @ApiResponse(responseCode = "400", description = "Erro na requisição")
     })
     @GetMapping(value ="tutores/pets/servicos", produces="application/json")
-    public ResponseEntity<List<PetServicoResponse>> listarTodos() {
-        List<PetServico> lista = petServicoService.listarTodos();
+    public ResponseEntity<List<PetServicoResponse>> listar() {
+        List<PetServico> lista = petServicoService.listar();
         List<PetServicoResponse> listaResp = petServicoMapper.petServicoListToPetServicoResponseList(lista);
         return ResponseEntity.status(HttpStatus.OK).body(listaResp);
     }

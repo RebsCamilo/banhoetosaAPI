@@ -33,12 +33,6 @@ public class ServicoController {
 	}
 
 
-//	@GetMapping("/teste")
-//	public ResponseEntity<Object> teste() {
-////		Servico servico = new Servico();
-//		return ResponseEntity.status(HttpStatus.OK).build();
-//	}
-
 	@Operation(summary = "Busca todos os serviços disponíveis")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Encontrados com sucesso"),
@@ -71,9 +65,6 @@ public class ServicoController {
 	})
 	@PostMapping(consumes="application/json")
 	public ResponseEntity<Object> cadastrar(@RequestBody @Valid ServicoRequest request) {
-		if (servicoService.existeDescricao(request.getDescricaoServico())) {
-			return ResponseEntity.status(HttpStatus.CONFLICT).body("Já existe um serviço com essa descrição");
-		}
 		Servico servico = servicoMapper.servicoRequestToServico(request);
 		servicoService.cadastrar(servico);
 		return ResponseEntity.status(HttpStatus.CREATED).body("Serviço cadastrado com sucesso");
@@ -87,12 +78,9 @@ public class ServicoController {
 	})
 	@GetMapping(value="/{id}")
 	public ResponseEntity<ServicoDetalhesResponse> detalhar(@PathVariable Long id) {
-		if (servicoService.existeId(id) && servicoService.status(id)) {
-			Servico servico = servicoService.detalhar(id);
-			ServicoDetalhesResponse servicoDetalhe = servicoMapper.servicoToServicoDetalhesResponse(servico);
-			return ResponseEntity.status(HttpStatus.OK).body(servicoDetalhe);
-		}
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		Servico servico = servicoService.detalhar(id);
+		ServicoDetalhesResponse servicoDetalhe = servicoMapper.servicoToServicoDetalhesResponse(servico);
+		return ResponseEntity.status(HttpStatus.OK).body(servicoDetalhe);
 	}
 
 	@Operation(summary = "Atualiza o serviço pelo seu id")
@@ -104,15 +92,9 @@ public class ServicoController {
 	})
 	@PutMapping(value="/{id}")
 	public ResponseEntity<Object> atualizar(@PathVariable Long id, @RequestBody @Valid ServicoRequest request) {
-		if (servicoService.existeId(id) && servicoService.status(id)) {
-			Servico servico = servicoMapper.servicoRequestToServico(request);
-			if (!servicoService.existeDescricao(servico.getDescricaoServico()) || servicoService.descricaoIgualIdDescricao(id, request.getDescricaoServico())) {
-				servicoService.atualizar(id, servico);
-				return ResponseEntity.status(HttpStatus.CREATED).body("Serviço atualizado com sucesso");
-			}
-			return ResponseEntity.status(HttpStatus.CONFLICT).body("Serviço com mesma descrição já existente");
-		}
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Serviço não encontrado");
+		Servico servico = servicoMapper.servicoRequestToServico(request);
+		servicoService.atualizar(id, servico);
+		return ResponseEntity.status(HttpStatus.CREATED).body("Serviço atualizado com sucesso");
 	}
 
 	@Operation(summary = "Desativa o serviço pelo seu id")
@@ -123,11 +105,8 @@ public class ServicoController {
 	})
 	@DeleteMapping("/{id}/desativar")
 	public ResponseEntity<Object> desativar(@PathVariable Long id) {
-		if (servicoService.existeId(id) && servicoService.status(id)) {
-			servicoService.desativar(id);
-			return ResponseEntity.status(HttpStatus.OK).body("Serviço desativado com sucesso");
-		}
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Serviço não encontrado");
+		servicoService.desativar(id);
+		return ResponseEntity.status(HttpStatus.OK).body("Serviço desativado com sucesso");
 	}
 
 	@Operation(summary = "Ativa o serviço pelo seu id")
@@ -138,11 +117,8 @@ public class ServicoController {
 	})
 	@PatchMapping("/{id}/ativar")
 	public ResponseEntity<Object> ativar(@PathVariable Long id) {
-		if (servicoService.existeId(id)) {
-			servicoService.ativar(id);
-			return ResponseEntity.status(HttpStatus.OK).body("Serviço reativado com sucesso");
-		}
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Serviço não encontrado");
+		servicoService.ativar(id);
+		return ResponseEntity.status(HttpStatus.OK).body("Serviço reativado com sucesso");
 	}
 
 }

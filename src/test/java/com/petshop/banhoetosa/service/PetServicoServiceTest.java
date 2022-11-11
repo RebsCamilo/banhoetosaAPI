@@ -53,7 +53,7 @@ class PetServicoServiceTest {
 		
 		//when
 		Mockito.when(repository.findAll()).thenReturn(List.of(petServico));
-		List<PetServico> result = service.listarTodos();
+		List<PetServico> result = service.listar();
 		//then
 		Assertions.assertThat(result).isNotNull();
 		Assertions.assertThat(result.size()).isEqualTo(1);
@@ -71,7 +71,7 @@ class PetServicoServiceTest {
 	public void deveRetornarNull() {
 		//when
 		Mockito.when(repository.findAll()).thenReturn(List.of());
-		List<PetServico> result = service.listarTodos();
+		List<PetServico> result = service.listar();
 		//then
 		Assertions.assertThat(result).isEmpty();
 	}

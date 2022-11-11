@@ -29,7 +29,7 @@ public class Pet {
 //    @Column(nullable = false)
     private Integer idade;
     private String detalhe;
-    private LocalDateTime dataCadastro = LocalDateTime.now(); //tem alguma forma do spring manter as alterações no banco (guardar os logs?)
+    private LocalDateTime dataCadastro; // = LocalDateTime.now(); //tem alguma forma do spring manter as alterações no banco (guardar os logs?)
 //    @Column(columnDefinition = "Boolean default true")
 //    private Boolean status;
 
@@ -62,6 +62,7 @@ public class Pet {
 
     public Pet cadastrar(Tutor tutor) {
         this.setTutor(tutor);
+        this.setDataCadastro(LocalDateTime.now());
         return this;
     }
 

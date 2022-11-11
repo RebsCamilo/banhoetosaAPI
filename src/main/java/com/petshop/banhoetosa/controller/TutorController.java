@@ -53,7 +53,6 @@ public class TutorController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Cadastrado com sucesso"),
             @ApiResponse(responseCode = "400", description = "Erro na requisição")
-//            @ApiResponse(responseCode = "409", description = "Tutor já cadastrado")
     })
     @PostMapping(consumes="application/json")
     public ResponseEntity<Object> cadastrar(@RequestBody @Valid TutorRequest request) {
@@ -71,7 +70,7 @@ public class TutorController {
     })
     @GetMapping(value= ID)
     public ResponseEntity<TutorDetalhesResponse> detalhar(@PathVariable Long id) {
-        Tutor tutor = (tutorService.detalhar(id));
+        Tutor tutor = tutorService.detalhar(id);
         Endereco endereco = tutor.getEndereco();
         List<String> listaPets = tutor.getPets().stream().map(Pet::getNome).collect(Collectors.toList());
         TutorDetalhesResponse tutorDetalhe = tutorMapper.tutorEnderecoPetToTutorDetalhesResponse(tutor, endereco, listaPets);
@@ -86,29 +85,21 @@ public class TutorController {
     })
     @PutMapping(value= ID)
     public ResponseEntity<Object> atualizar(@PathVariable Long id, @RequestBody @Valid TutorRequest request) {
-//        if(tutorService.existeId(id)) {
-            Tutor tutor = tutorMapper.tutorRequestToTutor(request);
-            Endereco endereco = tutorMapper.tutorRequestToEndereco(request);
-            tutorService.atualizar(id, tutor, endereco);
-            return ResponseEntity.status(HttpStatus.CREATED).body("Cadastro do tutor atualizado com sucesso");
-//        }
-//        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Tutor não encontrado");
+        Tutor tutor = tutorMapper.tutorRequestToTutor(request);
+        Endereco endereco = tutorMapper.tutorRequestToEndereco(request);
+        tutorService.atualizar(id, tutor, endereco);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Cadastro do tutor atualizado com sucesso");
     }
 
     @Operation(summary = "Deleta o tutor pelo seu id")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Deletado com sucesso"),
-            @ApiResponse(responseCode = "400", description = "Erro na requisição. Id fornecido pode ser inválido"),
-            @ApiResponse(responseCode = "404", description = "Não encontrado")
+        @ApiResponse(responseCode = "200", description = "Deletado com sucesso"),
+        @ApiResponse(responseCode = "400", description = "Erro na requisição. Id fornecido pode ser inválido"),
+        @ApiResponse(responseCode = "404", description = "Não encontrado")
     })
     @DeleteMapping(ID)
     public ResponseEntity<?> deletar(@PathVariable Long id) {
         tutorService.deletar(id);
         return ResponseEntity.status(HttpStatus.OK).body("Tutor excluído com sucesso");
-//        if(tutorService.existeId(id)) {
-//            tutorService.deletar(id);
-//            return ResponseEntity.status(HttpStatus.OK).body("Tutor excluído com sucesso");
-//        }
-//        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Tutor não encontrado");
     }
 }

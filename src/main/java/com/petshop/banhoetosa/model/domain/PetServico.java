@@ -44,6 +44,7 @@ public class PetServico {
         this.setStatusPagamento(StatusPagamentoEnum.EM_ABERTO);
         this.setPet(pet);
         this.setServico(servico);
+        this.dataCadastro = LocalDateTime.now();
         return this;
     }
 

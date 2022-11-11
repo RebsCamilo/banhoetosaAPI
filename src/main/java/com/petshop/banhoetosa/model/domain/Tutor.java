@@ -31,7 +31,7 @@ public class Tutor {
     private String telefone2;
     @Column(length = 100)
     private String email;
-    private LocalDateTime dataCadastro = LocalDateTime.now(); //tem alguma forma do spring manter as alterações no banco (guardar os logs?)
+    private LocalDateTime dataCadastro; // = LocalDateTime.now(); //tem alguma forma do spring manter as alterações no banco (guardar os logs?)
 
     @OneToOne(cascade = CascadeType.ALL) //mappedBy = "tutor", cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "endereco_id", referencedColumnName = "id")
@@ -50,6 +50,7 @@ public class Tutor {
 
     public Tutor cadastrar(Endereco endereco) {
         this.setEndereco(endereco);
+        this.setDataCadastro(LocalDateTime.now());
         return this;
     }
 

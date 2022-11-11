@@ -10,7 +10,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PetRepository extends JpaRepository<Pet, Long> {
-    List<Pet> findByNome(String nomePet);
+    @Query(value = "SELECT p FROM Pet p WHERE p.nome = ?1 AND p.tutor.id = ?2")
+    Optional<Pet> findByNomeEIdTutor(String nomePet, Long id);
 
 //    List<Pet> findByTutorId(Long tutorId);
 
@@ -19,8 +20,13 @@ public interface PetRepository extends JpaRepository<Pet, Long> {
             "INNER JOIN tutores t ON p.tutor_id = t.id\n" +
             "WHERE t.email = :email AND p.nome = :nome", nativeQuery = true)
     boolean hasThisPetNameByEmailDoTutor(@Param("nome") String nome, @Param("email") String email);
+    
+//    @Query(value = "SELECT p FROM Pet p WHERE p.id = ?1 AND p.tutor.id = ?2")
+    @Query(value = "SELECT count(p.nome) > 0 FROM Pet p WHERE p.nome = ?1 AND p.tutor.id = ?2")
+    boolean jaExisteNomePetCadastradoNesteTutor(String nome, Long idTutor);
 
-    Optional<List<Pet>> findByTutorId(Long tutorId);
+//    Optional<List<Pet>> findByTutor(Tutor tutor);
+    List<Pet> findByTutor(Tutor tutor);
 
     //Da erro
 //    @Query(value = "SELECT\tp.nome" +
@@ -36,6 +42,10 @@ public interface PetRepository extends JpaRepository<Pet, Long> {
             "INNER JOIN tutores t ON p.tutor_id = t.id\n" +
             "WHERE t.id = :idTutor", nativeQuery = true)
     String findEmailTutorByTutorId(Long idTutor);
+    
+    @Query(value = "SELECT p FROM Pet p WHERE p.id = ?1 AND p.tutor.id = ?2")
+    Optional<Pet> findByPetAndTutor(Long idPet, Long idTutor);
+    
 
 }
 

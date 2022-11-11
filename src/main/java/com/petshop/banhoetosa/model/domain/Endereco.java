@@ -38,7 +38,11 @@ public class Endereco {
         this.bairro = bairro;
         this.complemento = complemento;
         this.cep = cep;
-
+    }
+    
+    public Endereco cadastrar() {
+        this.setDataCadastro(LocalDateTime.now());
+        return this;
     }
 
     public Endereco atualizar(Endereco enderecoAtt) {

@@ -26,7 +26,7 @@ public class PetServicoService {
     }
 
 
-    public List<PetServico> listarTodos() {
+    public List<PetServico> listar() {
         return petServicoRepository.findAll();
     }
 

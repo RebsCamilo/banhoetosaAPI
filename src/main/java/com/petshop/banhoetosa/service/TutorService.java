@@ -23,14 +23,14 @@ public class TutorService {
     }
 
 
-    public List<Tutor> listar() { //(Pageable paginacao) {
-        return tutorRepository.findAll(); //(paginacao);
+    public List<Tutor> listar() {
+        return tutorRepository.findAll();
     }
 
     @Transactional
     public Tutor cadastrar(Tutor tutor, Endereco endereco) {
         validarEmail(tutor.getId(), tutor.getEmail());
-        tutor.cadastrar(endereco);
+        tutor.cadastrar(endereco.cadastrar());
         return tutorRepository.save(tutor);
     }
 
@@ -55,7 +55,7 @@ public class TutorService {
 
     public void validarEmail(Long id, String email) {
         Optional<Tutor> tutor = tutorRepository.findByEmail(email);
-        if (tutor.isPresent() && !tutor.get().getId().equals(id) ) {
+        if (tutor.isPresent() && !tutor.get().getId().equals(id) ) { // e se o id do tutor buscado pelo email for igual ao passado na url
             throw new DataIntegratyViolationException("E-mail já cadastrado");
         }
     }
@@ -63,5 +63,15 @@ public class TutorService {
     public boolean existeId(Long id) {
         return tutorRepository.existsById(id);
     }
+    
+    public Tutor buscaTutor(Long id) {
+        Optional<Tutor> tutor = tutorRepository.findById(id);
+        try {
+            return tutor.get();
+        } catch (Exception ex) {
+            throw new ObjectNotFoundException("Objeto não encontrado");
+        }
+    }
+    
 
 }
