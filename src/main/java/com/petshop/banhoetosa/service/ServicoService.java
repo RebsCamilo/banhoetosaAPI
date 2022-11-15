@@ -69,7 +69,7 @@ public class ServicoService {
             throw new ObjectNotFoundException("Objeto não encontrado");
         }
         if (!servico.get().getStatus()) {
-            throw new DataIntegratyViolationException("Servico já inativo");
+            throw new DataIntegratyViolationException("Servico inativo");
         }
     }
     
@@ -79,12 +79,18 @@ public class ServicoService {
             throw new ObjectNotFoundException("Objeto não encontrado");
         }
         if (servico.get().getStatus()) {
-            throw new DataIntegratyViolationException("Servico já ativo");
+            throw new DataIntegratyViolationException("Servico ativo");
         }
     }
 
     public boolean existeDescricao(String descricaoServico) {
         return servicoRepository.existsByDescricaoServico(descricaoServico);
+    }
+    
+    public void existePeloId(Long id) {
+        if (!servicoRepository.existsById(id)) {
+            throw new ObjectNotFoundException("Objeto não encontrado");
+        }
     }
     
     public void validarDescricao(Long id, String descricao) {
