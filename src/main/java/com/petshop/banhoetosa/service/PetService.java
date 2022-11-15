@@ -130,6 +130,7 @@ public class PetService {
             if (!pet.get().getId().equals(id) || (!pet.get().getNome().equals(nome) && jaExisteNomePet(nome, idTutor))) {
                 throw new DataIntegratyViolationException("Pet já cadastrado");
             }
+            throw new DataIntegratyViolationException("Pet já cadastrado");
         }
     }
 

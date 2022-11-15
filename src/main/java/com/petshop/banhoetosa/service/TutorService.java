@@ -73,5 +73,8 @@ public class TutorService {
         }
     }
     
+    public boolean existeTutorPeloId(Long id) {
+        return tutorRepository.existsById(id);
+    }
 
 }
