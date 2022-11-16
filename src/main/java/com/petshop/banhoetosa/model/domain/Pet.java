@@ -59,6 +59,14 @@ public class Pet {
         this.raca = raca;
         this.idade = idade;
     }
+    
+//    public Pet(Long id, String nome, String raca, Integer idade, Tutor tutor) {
+//        this.id = id;
+//        this.nome = nome;
+//        this.raca = raca;
+//        this.idade = idade;
+//        this.tutor = tutor;
+//    }
 
     public Pet cadastrar(Tutor tutor) {
         this.setTutor(tutor);

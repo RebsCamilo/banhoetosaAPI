@@ -43,7 +43,6 @@ public class PetService {
 
     @Transactional //para comitar as alterações no banco de dados
     public Pet cadastrar(Pet pet, Long idTutor) {
-        ////////////////////////
         validarNomePet(pet.getId(), pet.getNome(), idTutor);
         Tutor tutor = tutorService.buscaTutor(idTutor);
         pet.cadastrar(tutor);
@@ -117,11 +116,14 @@ public class PetService {
 //        return petRepository.findEmailTutorByTutorId(idTutor);
 //    }
 
-    public void existePeloIdPetEIdTutor(Long idPet, Long idTutor) {
-        Optional<Pet> pet = petRepository.findByPetAndTutor(idPet, idTutor);
-        if (pet.isEmpty()) {
+    public boolean existePeloIdPetEIdTutor(Long idPet, Long idTutor) {
+//        Optional<Pet> pet = petRepository.findByPetAndTutor(idPet, idTutor);
+//        System.out.println("ESTA AQUI -> " + pet);
+//        if (pet.isEmpty()) {
+        if (!petRepository.existsByPetAndTutor(idPet, idTutor)) {
             throw new ObjectNotFoundException("Objeto não encontrado");
         }
+        return true;
     }
     
     public void validarNomePet(Long id, String nome, Long idTutor) {

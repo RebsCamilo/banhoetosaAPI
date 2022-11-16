@@ -46,6 +46,9 @@ public interface PetRepository extends JpaRepository<Pet, Long> {
     @Query(value = "SELECT p FROM Pet p WHERE p.id = ?1 AND p.tutor.id = ?2")
     Optional<Pet> findByPetAndTutor(Long idPet, Long idTutor);
     
+    @Query(value = "SELECT count(p) > 0 FROM Pet p WHERE p.id = ?1 AND p.tutor.id = ?2")
+    boolean existsByPetAndTutor(Long idPet, Long idTutor);
+    
 
 }
 

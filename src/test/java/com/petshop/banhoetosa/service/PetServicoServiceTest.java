@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class PetServicoServiceTest {
 	
-	@InjectMocks
+/*	@InjectMocks
 	private PetServicoService service;
 	@Mock
 	private PetServicoRepository repository;
@@ -182,6 +182,6 @@ class PetServicoServiceTest {
 		//then
 		service.deletar(ID);
 		Mockito.verify(repository, Mockito.times(1)).delete(petServico);
-	}
+	}*/
 
 }

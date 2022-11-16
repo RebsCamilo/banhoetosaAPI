@@ -9,7 +9,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 class BanhoetosaApplicationTests {
 
 	@Test
-	void contextLoads() {
+	void main() {
+		BanhoetosaApplication.main(new String[] {});
 	}
 
 }
