@@ -59,7 +59,7 @@ public class PetService {
     @Transactional //para comitar as alterações no banco de dados
     public Pet atualizar(Long id, Pet petAtualizacao, Long idTutor) {
         Pet pet = detalhar(id, idTutor);
-        validarNomePet(id, pet.getNome(), idTutor);
+        validarNomePet(id, petAtualizacao.getNome(), idTutor);
         pet.atualizar(petAtualizacao);
         return petRepository.save(pet);
     }
@@ -75,7 +75,7 @@ public class PetService {
 
 
     public boolean jaExisteNomePet(String nome, Long idTutor) {
-        return !petRepository.jaExisteNomePetCadastradoNesteTutor(nome, idTutor);
+        return petRepository.jaExisteNomePetCadastradoNesteTutor(nome, idTutor);
     }
 
 //    public Tutor getTutorDoPet(String email) {
@@ -126,14 +126,14 @@ public class PetService {
         return true;
     }
     
-    public void validarNomePet(Long id, String nome, Long idTutor) {
+    public boolean validarNomePet(Long id, String nome, Long idTutor) { //rever
         Optional<Pet> pet = petRepository.findByNomeEIdTutor(nome, idTutor);
         if (pet.isPresent()) { //pet tem que existir E ter o id diferente do passado na url E possuir nome diferente os demais pets deste tutor (exceto se for o proprio nome)
             if (!pet.get().getId().equals(id) || (!pet.get().getNome().equals(nome) && jaExisteNomePet(nome, idTutor))) {
                 throw new DataIntegratyViolationException("Pet já cadastrado");
             }
-            throw new DataIntegratyViolationException("Pet já cadastrado");
         }
+        return true;
     }
-
+    
 }
