@@ -122,29 +122,9 @@ public class PetController {
 	})
 	@PutMapping(value="tutores/{idTutor}/pets/{id}")
 	public ResponseEntity<Object> atualizar(@PathVariable Long idTutor, @PathVariable Long id, @RequestBody @Valid PetRequest request) {
-//		if(!petService.existeTutorPeloId(idTutor)) {
-//			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Tutor não encontrado");
-//		}
-//		if (!petService.existeId(id)) {
-//			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pet não encontrado");
-//		}
-//		String tutorEmail = petService.findTutorDoPetByTutorId(idTutor);
-//		String petNome = petService.buscaPetPeloId(id).get().getNome();
-//		if (petService.validarPet(petNome, tutorEmail)) { //retorna true caso o pet não esteja vinculado
-//			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pet não está vinculado ao tutor");
-//		}
 		Pet petAtualizacao = petMapper.petRequestToPet(request);
 		petService.atualizar(id, petAtualizacao, idTutor);
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cadastro do pet atualizado com sucesso");
-//		if (petService.existeId(id)) {
-//			if(!petService.existeEmailTutor(request.getEmailTutor())) {
-//				return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Tutor não encontrado");
-//			}
-//			Pet pet = petMapper.petRequestToPet(request);
-//			petService.atualizar(id, pet, tutorEmail);
-//			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cadastro do pet atualizado com sucesso");
-//		}
-//		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pet não encontrado");
+		return ResponseEntity.status(HttpStatus.OK).body("Cadastro do pet atualizado com sucesso");
 	}
 
 	@Operation(summary = "Deleta o pet pelo seu id")

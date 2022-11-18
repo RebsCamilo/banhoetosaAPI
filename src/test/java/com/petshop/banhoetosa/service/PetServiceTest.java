@@ -1,8 +1,10 @@
 package com.petshop.banhoetosa.service;
 
 import com.petshop.banhoetosa.model.domain.Pet;
+import com.petshop.banhoetosa.model.domain.Tutor;
 import com.petshop.banhoetosa.repository.PetRepository;
 import com.petshop.banhoetosa.repository.TutorRepository;
+import com.petshop.banhoetosa.service.exceptions.DataIntegratyViolationException;
 import com.petshop.banhoetosa.service.exceptions.ObjectNotFoundException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -15,9 +17,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.List;
 import java.util.Optional;
 
-import static com.petshop.banhoetosa.service.PetFactory.createPet;
+import static com.petshop.banhoetosa.service.PetFactory.*;
+import static com.petshop.banhoetosa.service.TutorFactory.*;
 
 @SpringBootTest
+//@ExtendWith(MockitoExtension.class) //funcionando mesmo sem essa anotação
 class PetServiceTest {
 	
 	@InjectMocks
@@ -32,41 +36,22 @@ class PetServiceTest {
 	private TutorService tutorService;
 	
 	private static final Long ID = 1L;
-	private static final String NOME = "Mel";
+	private static final String NOME_MEL = "Mel";
 	private static final String ESPECIE = "cao";
 	private static final String RACA = "pinscher";
 	private static final int IDADE = 10;
 	private static final String DETALHE = "Nenhum";
 	private static final int INDEX = 0;
-
 	
-	@Test
-	@DisplayName("Deve retornar um Pet - Detalhar")
-	public void deveRetornarUmPet_detalhar() {
-		Pet pet = createPet();
-		//when
-		Mockito.when(petRepository.existsByPetAndTutor(ID, ID)).thenReturn(Boolean.TRUE);
-		Mockito.when(service.existePeloIdPetEIdTutor(ID, ID)).thenReturn(Boolean.TRUE);
-		Mockito.when(petRepository.getReferenceById(ID)).thenReturn(pet);
-		Pet result = service.detalhar(ID, ID);
-//		//then
-		Assertions.assertThat(result).isEqualTo(pet);
-	}
-	
-	@Test
-	@DisplayName("Deve retornar uma Exceção - Detalhar")
-	public void deveRetornarUmaExcecao_detalhar() {
-		//when
-		Mockito.when(petRepository.existsByPetAndTutor(ID, ID)).thenReturn(Boolean.FALSE);
-		//then
-		Assertions.assertThatThrownBy(() -> service.existePeloIdPetEIdTutor(ID, ID)).isExactlyInstanceOf(ObjectNotFoundException.class);
-	}
 	
 	@Test
 	@DisplayName("Deve retornar uma lista com um Pet - Listar")
 	public void deveRetornarUmaListaDePet_listar() {
 		//given
-		Pet pet = createPet();
+		Tutor tutor = createTutorComId();
+		Pet pet = createPetComId();
+		tutor.setPets(List.of(pet));
+		pet.setTutor(tutor);
 		//when
 		Mockito.when(petRepository.findAll()).thenReturn(List.of(pet));
 		List<Pet> result = service.listar();
@@ -75,12 +60,12 @@ class PetServiceTest {
 		Assertions.assertThat(result.size()).isEqualTo(1);
 		Assertions.assertThat(result.get(INDEX).getClass()).isEqualTo(Pet.class);
 
-		Assertions.assertThat(result.get(INDEX).getId()).isEqualTo(ID);
-		Assertions.assertThat(result.get(INDEX).getNome()).isEqualTo(NOME);
-		Assertions.assertThat(result.get(INDEX).getEspecie()).isEqualTo(ESPECIE);
-		Assertions.assertThat(result.get(INDEX).getRaca()).isEqualTo(RACA);
-		Assertions.assertThat(result.get(INDEX).getIdade()).isEqualTo(IDADE);
-		Assertions.assertThat(result.get(INDEX).getDetalhe()).isEqualTo(DETALHE);
+		Assertions.assertThat(result.get(INDEX).getId()).isEqualTo(pet.getId());
+		Assertions.assertThat(result.get(INDEX).getNome()).isEqualTo(pet.getNome());
+		Assertions.assertThat(result.get(INDEX).getEspecie()).isEqualTo(pet.getEspecie());
+		Assertions.assertThat(result.get(INDEX).getRaca()).isEqualTo(pet.getRaca());
+		Assertions.assertThat(result.get(INDEX).getIdade()).isEqualTo(pet.getIdade());
+		Assertions.assertThat(result.get(INDEX).getDetalhe()).isEqualTo(pet.getDetalhe());
 	}
 
 	@Test
@@ -97,83 +82,173 @@ class PetServiceTest {
 	@DisplayName("Deve retornar uma lista com um Pet do Tutor Especifico - ListarPetsDoTutor")
 	public void deveRetornarUmaListaDePetDoTutorEspecifico_listarPetsDoTutor() {
 		//given
-		Pet pet = createPet();
+		Tutor tutor = createTutorComId();
+		Pet pet = createPetComId();
+		tutor.setPets(List.of(pet));
+		pet.setTutor(tutor);
 		//when
-		Mockito.when(tutorService.buscaTutor(ID)).thenReturn(pet.getTutor());
-		Mockito.when(petRepository.findByTutor(pet.getTutor())).thenReturn(List.of(pet));
-		List<Pet> result = service.listarPetsDoTutor(ID);
+		Mockito.when(tutorService.buscaTutor(tutor.getId())).thenReturn(tutor);
+		Mockito.when(petRepository.findByTutor(tutor)).thenReturn(List.of(pet));
+		List<Pet> result = service.listarPetsDoTutor(tutor.getId());
 		//then
 		Assertions.assertThat(result).isNotNull();
 		Assertions.assertThat(result.size()).isEqualTo(1);
 		Assertions.assertThat(result.get(INDEX).getClass()).isEqualTo(Pet.class);
 		
-		Assertions.assertThat(result.get(INDEX).getId()).isEqualTo(ID);
-		Assertions.assertThat(result.get(INDEX).getNome()).isEqualTo(NOME);
-		Assertions.assertThat(result.get(INDEX).getEspecie()).isEqualTo(ESPECIE);
-		Assertions.assertThat(result.get(INDEX).getRaca()).isEqualTo(RACA);
-		Assertions.assertThat(result.get(INDEX).getIdade()).isEqualTo(IDADE);
-		Assertions.assertThat(result.get(INDEX).getDetalhe()).isEqualTo(DETALHE);
+		Assertions.assertThat(result.get(INDEX).getId()).isEqualTo(pet.getId());
+		Assertions.assertThat(result.get(INDEX).getNome()).isEqualTo(pet.getNome());
+		Assertions.assertThat(result.get(INDEX).getEspecie()).isEqualTo(pet.getEspecie());
+		Assertions.assertThat(result.get(INDEX).getRaca()).isEqualTo(pet.getRaca());
+		Assertions.assertThat(result.get(INDEX).getIdade()).isEqualTo(pet.getIdade());
+		Assertions.assertThat(result.get(INDEX).getDetalhe()).isEqualTo(pet.getDetalhe());
 	}
 	
 	@Test
 	@DisplayName("Deve retornar Lista Vazia - ListarPetsDoTutor")
 	public void deveRetornarListaVazia_listarPetsDoTutor() {
 		//given
-		Pet pet = createPet();
+		Tutor tutor = createTutorComId();
+		//variaveis
+		Long tutorId = tutor.getId();
 		//when
-		Mockito.when(tutorService.buscaTutor(ID)).thenReturn(pet.getTutor());
-		Mockito.when(petRepository.findByTutor(pet.getTutor())).thenReturn(List.of());
-		List<Pet> result = service.listarPetsDoTutor(ID);
+		Mockito.when(tutorRepository.findById(tutorId)).thenReturn(Optional.of(tutor));
+		Mockito.when(petRepository.findByTutor(tutor)).thenReturn(List.of());
+		List<Pet> result = service.listarPetsDoTutor(tutorId);
 		//then
 		Assertions.assertThat(result).isNotNull();
 		Assertions.assertThat(result.isEmpty());
 	}
 	
 	@Test
-	@DisplayName("Deve retornar Uma Exceção - ListarPetsDoTutor")
-	public void deveRetornarUmaExcecao_listarPetsDoTutor() { //testa caso tutor não exista
+	@DisplayName("Deve retornar Uma Exceção ObjectNotFound - ListarPetsDoTutor")
+	public void deveRetornarUmaExcecaoObjectNotFound_listarPetsDoTutor() { //testa caso tutor não exista
 		//when
-		Mockito.when(tutorRepository.findById(ID)).thenReturn(Optional.empty());
-//		Assertions.assertThatThrownBy(() -> service.listarPetsDoTutor(ID)).isExactlyInstanceOf(ObjectNotFoundException.class);
-		Assertions.assertThatThrownBy(() -> tutorService.buscaTutor(ID)).isExactlyInstanceOf(ObjectNotFoundException.class);
+		Mockito.when(tutorService.buscaTutor(ID)).thenThrow(ObjectNotFoundException.class);
+		//then
+		Assertions.assertThatThrownBy(() -> service.listarPetsDoTutor(ID)).isExactlyInstanceOf(ObjectNotFoundException.class);
 	}
 
-//	@Test
-//	@DisplayName("Deve retornar um Pet cadastrado")
-//	public void deveRetornarUmPetCadastrado() {
-//		//given
-//		Pet pet = Pet.builder()
-//		             .id(ID)
-//		             .nome("Mel")
-//		             .especie("cao")
-//		             .raca("pinscher")
-//		             .idade(10)
-//		             .detalhe("Nenhum")
-//		             .build();
-//
-//		Tutor tutor = Tutor.builder()
-//		                   .id(ID)
-//		                   .nome("Ana")
-//		                   .telefone1("98888-0000")
-//		                   .email("ana@mail")
-//		                   .pets(new ArrayList())
-//		                   .build();
-//
-//		//when
-//		Mockito.when(petRepository.save(pet)).thenReturn(pet);
-//		Pet result = service.cadastrar(pet, ID);
-//		//then
-//		Assertions.assertThat(result).isNotNull();
-//		Assertions.assertThat(result.getClass()).isEqualTo(Pet.class);
-//
-//		Assertions.assertThat(result.getId()).isEqualTo(ID);
-//		Assertions.assertThat(result.getNome()).isEqualTo(NOME);
-//		Assertions.assertThat(result.getEspecie()).isEqualTo(ESPECIE);
-//		Assertions.assertThat(result.getRaca()).isEqualTo(RACA);
-//		Assertions.assertThat(result.getIdade()).isEqualTo(IDADE);
-//		Assertions.assertThat(result.getDetalhe()).isEqualTo(DETALHE);
-//	}
-//
+	@Test
+	@DisplayName("Deve retornar um Pet - Cadastrar")
+	public void deveRetornarUmPet_cadastrar() {
+		//given
+		Tutor tutor = createTutorComId();
+		Pet petSemId = createPetSemId();
+		Pet petComId = createPetComId();
+		tutor.setPets(List.of(petSemId));
+		petSemId.setTutor(tutor);
+		//variaveis
+		Long tutorId = tutor.getId();
+		
+		//when
+		Mockito.when(petRepository.findByNomeEIdTutor(petSemId.getNome(), tutorId)).thenReturn(Optional.empty());
+		Mockito.when(tutorService.buscaTutor(tutorId)).thenReturn(tutor);
+		Mockito.when(petRepository.save(petSemId)).thenReturn(petComId);
+		Pet result = service.cadastrar(petSemId, tutorId);
+		
+		//then
+		Assertions.assertThat(result).isNotNull();
+		Assertions.assertThat(result).isEqualTo(petComId);
+		Assertions.assertThat(result.getId()).isEqualTo(petComId.getId());
+		Assertions.assertThat(result.getNome()).isEqualTo(petComId.getNome());
+		Assertions.assertThat(result.getEspecie()).isEqualTo(petComId.getEspecie());
+		Assertions.assertThat(result.getRaca()).isEqualTo(petComId.getRaca());
+		Assertions.assertThat(result.getIdade()).isEqualTo(petComId.getIdade());
+		Assertions.assertThat(result.getTutor()).isEqualTo(petComId.getTutor());
+		Assertions.assertThat(result.getDetalhe()).isEqualTo(petComId.getDetalhe());
+	}
+	
+	@Test
+	@DisplayName("Deve retornar uma Excecao DataIntegratyViolation - Cadastrar")
+	public void deveRetornarUmaExcecaoDataIntegratyViolation_cadastrar() {
+		//given //pet ja cadastrado neste tutor
+		Tutor tutor = createTutorComId();
+		Pet pet = createPetComId();
+		tutor.setPets(List.of(pet));
+		pet.setTutor(tutor);
+		
+		//when
+		Mockito.when(service.validarNomePet(pet.getId(), pet.getNome(), tutor.getId())).thenThrow(DataIntegratyViolationException.class);
+		
+		//then
+		Assertions.assertThatThrownBy(() -> service.cadastrar(pet, tutor.getId()))
+		          .isExactlyInstanceOf(DataIntegratyViolationException.class);
+	}
+	
+	@Test
+	@DisplayName("Deve retornar uma Excecao ObjectNotFound - Cadastrar")
+	public void deveRetornarUmaExcecaoObjectNotFound_cadastrar() {
+		//given
+		Tutor tutor = createTutorComId();
+		Pet petSemId = createPetSemId();
+		
+		//when
+		Mockito.when(petRepository.findByNomeEIdTutor(petSemId.getNome(), tutor.getId()))
+		       .thenReturn(Optional.empty());
+		Mockito.when(tutorService.buscaTutor(tutor.getId())).thenThrow(ObjectNotFoundException.class);
+		
+		//then
+		Assertions.assertThatThrownBy(() -> service.cadastrar(petSemId, tutor.getId()))
+		          .isExactlyInstanceOf(ObjectNotFoundException.class);
+	}
+	
+	@Test
+	@DisplayName("Deve retornar um Pet - Detalhar")
+	public void deveRetornarUmPet_detalhar() {
+		//given
+		Tutor tutor = createTutorComId();
+		Pet pet = createPetComId();
+		tutor.setPets(List.of(pet));
+		pet.setTutor(tutor);
+		//variaveis
+		Long petId = pet.getId();
+		Long tutorId = tutor.getId();
+		
+		//when
+		Mockito.when(petRepository.existsByPetAndTutor(petId, tutorId)).thenReturn(Boolean.TRUE);
+		Mockito.when(service.existePeloIdPetEIdTutor(petId, tutorId)).thenReturn(Boolean.TRUE);
+		Mockito.when(petRepository.getReferenceById(petId)).thenReturn(pet);
+		Pet result = service.detalhar(petId, pet.getId());
+		//then
+		Assertions.assertThat(result).isEqualTo(pet);
+	}
+	
+	@Test
+	@DisplayName("Deve retornar uma Exceção ObjectNotFound - Detalhar")
+	public void deveRetornarUmaExcecaoObjectNotFound_detalhar() {
+		//when
+		Mockito.when(petRepository.existsByPetAndTutor(ID, ID)).thenReturn(Boolean.FALSE);
+		//then
+		Assertions.assertThatThrownBy(() -> service.existePeloIdPetEIdTutor(ID, ID)).isExactlyInstanceOf(ObjectNotFoundException.class);
+	}
+	
+	@Test
+	@DisplayName("Deve retornar um Pet - Atualizar")
+	public void deveRetornarUmPet_atualizar() {
+		//given
+		Tutor tutor = createTutorComId();
+		Pet pet = createPetComId();
+		tutor.setPets(List.of(pet));
+		pet.setTutor(tutor);
+		Pet petAtt = createPetComIdAtualizacao();
+		//variaveis
+		Long tutorId = tutor.getId();
+		Long petId = pet.getId();
+		String petAttNome = petAtt.getNome();
+		//when
+		Mockito.when(petRepository.existsByPetAndTutor(petId, tutorId)).thenReturn(Boolean.TRUE);
+		Mockito.when(service.existePeloIdPetEIdTutor(petId, tutorId)).thenReturn(Boolean.TRUE);
+		Mockito.when(petRepository.getReferenceById(petId)).thenReturn(pet);
+		Mockito.when(petRepository.findByNomeEIdTutor(petAttNome, tutorId)).thenReturn(Optional.of(pet));
+		Mockito.when(petRepository.jaExisteNomePetCadastradoNesteTutor(petAttNome, tutorId)).thenReturn(Boolean.TRUE);
+//		Mockito.when(petRepository.save(Mockito.any(Pet.class))).thenReturn(petAtt);
+		Mockito.when(petRepository.save(pet)).thenReturn(petAtt);
+		Pet result = service.atualizar(petId, petAtt, tutorId);
+		//then
+		Assertions.assertThat(result).isEqualTo(petAtt);
+	}
+	
+
 //	@Test
 //	@DisplayName("Deve retornar Lista de Pets do Tutor Especifico")
 //	public void deveRetornarListaDePetsDoTutorEspecifico() {
@@ -285,5 +360,71 @@ class PetServiceTest {
 //		Mockito.verify(petRepository, Mockito.times(1)).delete(pet);
 //
 //	}
+	
+	@Test
+	@DisplayName("Deve retornar True sem Pet Presente - ValidarNomePet")
+	public void deveRetornarTrueSemPetPresente_validarNomePet() {
+		//given
+		Tutor tutor = createTutorComId();
+		Pet pet = createPetComId(); //pet não pertence a tutor
+		//when
+		Mockito.when(petRepository.findByNomeEIdTutor(pet.getNome(), tutor.getId())).thenReturn(Optional.empty());
+		boolean result = service.validarNomePet(pet.getId(), pet.getNome(), tutor.getId());
+		//then
+		Assertions.assertThat(result).isEqualTo(true);
+	}
+	
+	@Test
+	@DisplayName("Deve retornar True com Pet Presente - ValidarNomePet")
+	public void deveRetornarTrueComPetPresente_validarNomePet() {
+		//given
+		Tutor tutor = createTutorComId();
+		Pet pet = createPetComId();
+		tutor.setPets(List.of(pet));
+		pet.setTutor(tutor);
+		//when
+		Mockito.when(petRepository.findByNomeEIdTutor(pet.getNome(), tutor.getId())).thenReturn(Optional.of(pet));
+		Mockito.when(petRepository.jaExisteNomePetCadastradoNesteTutor(pet.getNome(), tutor.getId())).thenReturn(Boolean.TRUE);
+		boolean result = service.validarNomePet(pet.getId(), pet.getNome(), tutor.getId());
+		//then
+		Assertions.assertThat(result).isEqualTo(true);
+	}
+	
+	@Test
+	@DisplayName("Deve retornar True com Pet de mesmo Nome Presente - ValidarNomePet")
+	public void deveRetornarTrueComPetDeMesmoNomePresente_validarNomePet() {
+		//given
+		Tutor tutor = createTutorComId();
+		Pet pet = createPetComId();
+		pet.setTutor(tutor);
+		tutor.setPets(List.of(pet));
+		Pet petDuplicado = createPetComId(); //mesmo nome (ja existe)
+		//when
+		Mockito.when(petRepository.findByNomeEIdTutor(petDuplicado.getNome(), tutor.getId())).thenReturn(Optional.of(pet));
+		Mockito.when(petRepository.jaExisteNomePetCadastradoNesteTutor(petDuplicado.getNome(), tutor.getId())).thenReturn(Boolean.TRUE);
+		boolean result = service.validarNomePet(petDuplicado.getId(), petDuplicado.getNome(), tutor.getId());
+		//then
+		Assertions.assertThat(result).isEqualTo(true);
+	}
+	
+	@Test
+	@DisplayName("Deve retornar Excecao DataIntegratyViolation - ValidarNomePet")
+	public void deveRetornarExcecaoDataIntegratyViolation_validarNomePet() {
+		//given
+		Tutor tutor = createTutorComId();
+		Pet pet = createPetComId();
+		pet.setTutor(tutor);
+		tutor.setPets(List.of(pet));
+		Pet petDuplicado = createPetComId(); //mesmo nome (ja existe)
+		pet.setId(2L);
+		//when
+		Mockito.when(petRepository.findByNomeEIdTutor(petDuplicado.getNome(), tutor.getId())).thenReturn(Optional.of(pet));
+		Mockito.when(petRepository.jaExisteNomePetCadastradoNesteTutor(petDuplicado.getNome(), tutor.getId())).thenReturn(Boolean.TRUE);
+		//then
+		Assertions.assertThatThrownBy(() -> service.validarNomePet(petDuplicado.getId(), petDuplicado.getNome(), tutor.getId()))
+		          .isExactlyInstanceOf(DataIntegratyViolationException.class);
+	}
+	
+	
 	
 }

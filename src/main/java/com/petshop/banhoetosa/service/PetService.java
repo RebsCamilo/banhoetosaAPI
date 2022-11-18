@@ -62,6 +62,17 @@ public class PetService {
         validarNomePet(id, petAtualizacao.getNome(), idTutor);
         pet.atualizar(petAtualizacao);
         return petRepository.save(pet);
+        //        return petRepository.save(pet);
+//        Pet pet = detalhar(id, idTutor);
+//        System.out.println("DEPOIS DE DETALHAR: "+pet);
+//        validarNomePet(id, petAtualizacao.getNome(), idTutor);
+//        System.out.println("PASSOU DE VALIDAR: "+pet);
+//        pet.atualizar(petAtualizacao);
+//        System.out.println("APÓS ATUALIZAR: "+pet);
+//        Pet petSalvar = petRepository.save(pet);
+//        System.out.println("APÓS SALVAR: "+petSalvar);
+//        return petSalvar;
+////        return petRepository.save(pet);
     }
    
     @Transactional
@@ -126,10 +137,10 @@ public class PetService {
         return true;
     }
     
-    public boolean validarNomePet(Long id, String nome, Long idTutor) { //rever
-        Optional<Pet> pet = petRepository.findByNomeEIdTutor(nome, idTutor);
-        if (pet.isPresent()) { //pet tem que existir E ter o id diferente do passado na url E possuir nome diferente os demais pets deste tutor (exceto se for o proprio nome)
-            if (!pet.get().getId().equals(id) || (!pet.get().getNome().equals(nome) && jaExisteNomePet(nome, idTutor))) {
+    public boolean validarNomePet(Long id, String nomePet, Long idTutor) {
+        Optional<Pet> pet = petRepository.findByNomeEIdTutor(nomePet, idTutor);
+        if (pet.isPresent()) { //pet tem que existir E ter o id diferente do passado na url E possuir nomePet diferente os demais pets deste tutor (exceto se for o proprio nomePet)
+            if (!pet.get().getId().equals(id) || (!pet.get().getNome().equals(nomePet) && jaExisteNomePet(nomePet, idTutor))) {
                 throw new DataIntegratyViolationException("Pet já cadastrado");
             }
         }
