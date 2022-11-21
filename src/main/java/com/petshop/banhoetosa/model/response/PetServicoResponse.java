@@ -1,7 +1,7 @@
 package com.petshop.banhoetosa.model.response;
 
-import com.petshop.banhoetosa.enums.StatusPagamentoEnum;
-import com.petshop.banhoetosa.enums.StatusServicoEnum;
+import com.petshop.banhoetosa.model.enums.StatusPagamentoEnum;
+import com.petshop.banhoetosa.model.enums.StatusServicoEnum;
 import lombok.Getter;
 import lombok.Setter;
 

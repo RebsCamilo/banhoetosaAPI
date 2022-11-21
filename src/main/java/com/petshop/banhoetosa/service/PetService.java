@@ -62,26 +62,12 @@ public class PetService {
         validarNomePet(id, petAtualizacao.getNome(), idTutor);
         pet.atualizar(petAtualizacao);
         return petRepository.save(pet);
-        //        return petRepository.save(pet);
-//        Pet pet = detalhar(id, idTutor);
-//        System.out.println("DEPOIS DE DETALHAR: "+pet);
-//        validarNomePet(id, petAtualizacao.getNome(), idTutor);
-//        System.out.println("PASSOU DE VALIDAR: "+pet);
-//        pet.atualizar(petAtualizacao);
-//        System.out.println("APÓS ATUALIZAR: "+pet);
-//        Pet petSalvar = petRepository.save(pet);
-//        System.out.println("APÓS SALVAR: "+petSalvar);
-//        return petSalvar;
-////        return petRepository.save(pet);
     }
    
     @Transactional
     public void deletar(Long id, Long idTutor) { // <?> diz que tem generics mas nao sabe o tipo
         detalhar(id, idTutor);
         petRepository.deleteById(id);
-//        Pet pet = petRepository.getReferenceById(id);
-////        pet.setPetServicos(null);
-//        petRepository.delete(pet);
     }
 
 
@@ -89,48 +75,7 @@ public class PetService {
         return petRepository.jaExisteNomePetCadastradoNesteTutor(nome, idTutor);
     }
 
-//    public Tutor getTutorDoPet(String email) {
-//        return tutorRepository.getReferenceByEmail(email);
-//    }
-
-//    public boolean existeId(Long id) {
-//        return petRepository.existsById(id);
-//    }
-//
-//    public boolean existeEmailTutor(String email) {
-//        return tutorRepository.existsByEmail(email);
-//    }
-
-//    public Tutor buscaTutor(String email) {
-//        if (tutorRepository.findByEmail(email).isPresent()) {
-//            return tutorRepository.findByEmail(email).get();
-//        }
-//        throw new ObjectNotFoundException("E-mail do tutor não encontrado");
-//    }
-
-//    public List<Pet> buscaPetPorIdTutor(Long tutorId) {
-//        if (petRepository.findByTutorId(tutorId).isPresent()) {
-//            return petRepository.findByTutorId(tutorId).get();
-//        }
-//        return null;
-//    }
-//
-//    public Optional<Pet> buscaPetPeloId(Long id) {
-//        return petRepository.findById(id);
-//    }
-//
-//    public boolean existeTutorPeloId(Long idTutor) {
-//        return petRepository.existsByTutor_Id(idTutor);
-//    }
-//
-//    public String findTutorDoPetByTutorId(Long idTutor) {
-//        return petRepository.findEmailTutorByTutorId(idTutor);
-//    }
-
     public boolean existePeloIdPetEIdTutor(Long idPet, Long idTutor) {
-//        Optional<Pet> pet = petRepository.findByPetAndTutor(idPet, idTutor);
-//        System.out.println("ESTA AQUI -> " + pet);
-//        if (pet.isEmpty()) {
         if (!petRepository.existsByPetAndTutor(idPet, idTutor)) {
             throw new ObjectNotFoundException("Objeto não encontrado");
         }

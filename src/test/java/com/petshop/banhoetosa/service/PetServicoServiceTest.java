@@ -1,27 +1,6 @@
 package com.petshop.banhoetosa.service;
 
-import com.petshop.banhoetosa.enums.StatusPagamentoEnum;
-import com.petshop.banhoetosa.enums.StatusServicoEnum;
-import com.petshop.banhoetosa.model.domain.Pet;
-import com.petshop.banhoetosa.model.domain.PetServico;
-import com.petshop.banhoetosa.model.domain.Servico;
-import com.petshop.banhoetosa.model.domain.Tutor;
-import com.petshop.banhoetosa.repository.PetServicoRepository;
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import javax.persistence.*;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class PetServicoServiceTest {
