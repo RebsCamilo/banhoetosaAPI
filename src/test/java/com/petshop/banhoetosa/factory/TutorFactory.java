@@ -1,4 +1,4 @@
-package com.petshop.banhoetosa.service.factory;
+package com.petshop.banhoetosa.factory;
 
 import com.petshop.banhoetosa.model.domain.Tutor;
 import lombok.AccessLevel;

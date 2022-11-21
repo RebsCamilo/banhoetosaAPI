@@ -1,11 +1,8 @@
-package com.petshop.banhoetosa.service.factory;
+package com.petshop.banhoetosa.factory;
 
 import com.petshop.banhoetosa.model.domain.Pet;
-import com.petshop.banhoetosa.model.domain.Tutor;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PetFactory {

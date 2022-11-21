@@ -17,8 +17,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.List;
 import java.util.Optional;
 
-import static com.petshop.banhoetosa.service.factory.PetFactory.*;
-import static com.petshop.banhoetosa.service.factory.TutorFactory.*;
+import static com.petshop.banhoetosa.factory.PetFactory.*;
+import static com.petshop.banhoetosa.factory.TutorFactory.*;
 
 @SpringBootTest
 //@ExtendWith(MockitoExtension.class) //funcionando mesmo sem essa anotação
@@ -26,6 +26,7 @@ class PetServiceTest {
 	
 	@InjectMocks
 	private PetService service;
+	
 	@Mock
 	private PetRepository petRepository;
 	

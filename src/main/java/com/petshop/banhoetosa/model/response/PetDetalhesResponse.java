@@ -1,5 +1,6 @@
 package com.petshop.banhoetosa.model.response;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,6 +9,7 @@ import java.util.List;
 
 @Getter
 @Setter
+@Builder
 public class PetDetalhesResponse {
 
     private Long id;
