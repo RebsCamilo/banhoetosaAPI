@@ -5,9 +5,7 @@ import com.petshop.banhoetosa.model.domain.PetServico;
 import com.petshop.banhoetosa.model.domain.Servico;
 import com.petshop.banhoetosa.repository.PetServicoRepository;
 import com.petshop.banhoetosa.service.exceptions.ObjectNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -15,6 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class PetServicoService {
 
     private final PetService petService;
@@ -22,15 +21,7 @@ public class PetServicoService {
     private final TutorService tutorService;
     private final PetServicoRepository petServicoRepository;
 
-    @Autowired
-    public PetServicoService(PetService petService, ServicoService servicoService, TutorService tutorService, PetServicoRepository petServicoRepository) { //PetRepository petRepository, ServicoRepository servicoRepository) {
-        this.petService = petService;
-        this.servicoService = servicoService;
-        this.tutorService = tutorService;
-        this.petServicoRepository = petServicoRepository;
-    }
-
-
+    
     public List<PetServico> listar() {
         return petServicoRepository.findAll();
     }

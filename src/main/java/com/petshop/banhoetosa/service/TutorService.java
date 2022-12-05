@@ -5,6 +5,7 @@ import com.petshop.banhoetosa.model.domain.Tutor;
 import com.petshop.banhoetosa.repository.TutorRepository;
 import com.petshop.banhoetosa.service.exceptions.DataIntegratyViolationException;
 import com.petshop.banhoetosa.service.exceptions.ObjectNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,15 +14,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class TutorService {
 
     private final TutorRepository tutorRepository;
-
-    @Autowired
-    public TutorService(TutorRepository tutorRepository) {
-        this.tutorRepository = tutorRepository;
-    }
-
+    
 
     public List<Tutor> listar() {
         return tutorRepository.findAll();

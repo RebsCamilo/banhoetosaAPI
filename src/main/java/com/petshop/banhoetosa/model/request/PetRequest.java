@@ -1,5 +1,6 @@
 package com.petshop.banhoetosa.model.request;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
@@ -9,6 +10,7 @@ import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
+@Builder
 public class PetRequest {
 
     @NotNull @NotEmpty

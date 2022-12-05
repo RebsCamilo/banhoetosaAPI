@@ -4,6 +4,7 @@ import com.petshop.banhoetosa.model.domain.Servico;
 import com.petshop.banhoetosa.repository.ServicoRepository;
 import com.petshop.banhoetosa.service.exceptions.DataIntegratyViolationException;
 import com.petshop.banhoetosa.service.exceptions.ObjectNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,15 +13,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class ServicoService {
 
     private final ServicoRepository servicoRepository;
-
-    @Autowired
-    ServicoService(ServicoRepository servicoRepository) {
-        this.servicoRepository = servicoRepository;
-    }
-
+    
 
     public List<Servico> listarAtivos() {
         return servicoRepository.findByStatus(true); //"substituir por filtro" ?

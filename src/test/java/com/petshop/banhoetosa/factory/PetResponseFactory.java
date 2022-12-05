@@ -1,6 +1,7 @@
 package com.petshop.banhoetosa.factory;
 
 import com.petshop.banhoetosa.model.response.PetDetalhesResponse;
+import com.petshop.banhoetosa.model.response.PetResponse;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -17,6 +18,14 @@ public class PetResponseFactory {
 		          .detalhe("Nenhum")
 //                  .dataCadastro(LocalDateTime.parse("2022-11-21 16:00:00"))
 		          .build();
+	}
+	
+	public static PetResponse createPetResponseComId() {
+		return PetResponse.builder()
+		                          .id(1L)
+		                          .nome("Mel")
+		                          .raca("pinscher")
+		                          .build();
 	}
 	
 }

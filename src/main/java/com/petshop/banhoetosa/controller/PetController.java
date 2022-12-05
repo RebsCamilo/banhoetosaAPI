@@ -52,7 +52,7 @@ public class PetController {
 			@ApiResponse(responseCode = "409", description = "Tutor não encontrado")
 	})
 	@GetMapping(value = "tutores/{idTutor}/pets", produces="application/json")
-	public ResponseEntity<Object> listarPetsDoTutor(@PathVariable Long idTutor) {
+	public ResponseEntity<List<PetResponse>> listarPetsDoTutor(@PathVariable Long idTutor) {
 //		if(!petService.existeTutorPeloId(idTutor)) {
 //			return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Id do tutor inválido");
 //		}

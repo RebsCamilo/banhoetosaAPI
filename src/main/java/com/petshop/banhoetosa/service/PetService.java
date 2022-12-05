@@ -5,7 +5,7 @@ import com.petshop.banhoetosa.model.domain.Tutor;
 import com.petshop.banhoetosa.repository.PetRepository;
 import com.petshop.banhoetosa.service.exceptions.DataIntegratyViolationException;
 import com.petshop.banhoetosa.service.exceptions.ObjectNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -13,24 +13,18 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class PetService {
 
     private final PetRepository petRepository;
     private final TutorService tutorService; // usar o TutorService
 
-    @Autowired
-    public PetService(PetRepository petRepository, TutorService tutorService) {
-        this.petRepository = petRepository;
-        this.tutorService = tutorService;
-    }
-
-//    public List<Pet> listar(String nomePet) { //não é boa pratica devolver sua entidade no controller e sim um Dto (fazer isso na camada controller)
-//        if (nomePet == null) {
-//            return petRepository.findAll();
-//        } else {
-//            return petRepository.findByNome(nomePet);
-//        }
+//    @Autowired
+//    public PetService(PetRepository petRepository, TutorService tutorService) {
+//        this.petRepository = petRepository;
+//        this.tutorService = tutorService;
 //    }
+
 
     public List<Pet> listar() {
         return petRepository.findAll();
