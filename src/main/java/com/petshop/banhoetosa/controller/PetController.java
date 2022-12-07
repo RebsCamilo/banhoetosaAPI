@@ -49,7 +49,7 @@ public class PetController {
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Encontrados com sucesso"), //, content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Pet.class))})
 			@ApiResponse(responseCode = "400", description = "Erro na requisição"),
-			@ApiResponse(responseCode = "409", description = "Tutor não encontrado")
+			@ApiResponse(responseCode = "404", description = "Tutor não encontrado")
 	})
 	@GetMapping(value = "tutores/{idTutor}/pets", produces="application/json")
 	public ResponseEntity<List<PetResponse>> listarPetsDoTutor(@PathVariable Long idTutor) {
@@ -86,7 +86,7 @@ public class PetController {
 	@Operation(summary = "Busca o pet pelo seu id") //@Operation e @ApiResponses são anotações da implantação do swagger OpenApi
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "201", description = "Encontrado com sucesso"),
-			@ApiResponse(responseCode = "400", description = "Erro na requisição. Id fornecido pode ser inválido"),
+			@ApiResponse(responseCode = "400", description = "Erro na requisição."),
 			@ApiResponse(responseCode = "404", description = "Não encontrado")
 	})
 	@GetMapping(value="tutores/{idTutor}/pets/{id}")
@@ -117,7 +117,7 @@ public class PetController {
 	@Operation(summary = "Atualiza o pet pelo seu id")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "201", description = "Cadastrado atualizado com sucesso"),
-			@ApiResponse(responseCode = "400", description = "Erro na requisição. Id fornecido pode ser inválido"),
+			@ApiResponse(responseCode = "400", description = "Erro na requisição."),
 			@ApiResponse(responseCode = "404", description = "Pet ou tutor a ser associado não encontrado")
 	})
 	@PutMapping(value="tutores/{idTutor}/pets/{id}")
@@ -130,7 +130,7 @@ public class PetController {
 	@Operation(summary = "Deleta o pet pelo seu id")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Deletado com sucesso"),
-			@ApiResponse(responseCode = "400", description = "Erro na requisição. Id fornecido pode ser inválido"),
+			@ApiResponse(responseCode = "400", description = "Erro na requisição"),
 			@ApiResponse(responseCode = "404", description = "Não encontrado")
 	})
 	@DeleteMapping("tutores/{idTutor}/pets/{id}")

@@ -1,44 +1,318 @@
 package com.petshop.banhoetosa.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.petshop.banhoetosa.model.domain.Pet;
-import com.petshop.banhoetosa.model.domain.Tutor;
 import com.petshop.banhoetosa.model.mapper.PetMapper;
+import com.petshop.banhoetosa.model.request.PetRequest;
 import com.petshop.banhoetosa.model.response.PetDetalhesResponse;
-import com.petshop.banhoetosa.model.response.PetResponse;
 import com.petshop.banhoetosa.service.PetService;
-import org.assertj.core.api.Assertions;
+import com.petshop.banhoetosa.service.exceptions.DataIntegratyViolationException;
+import com.petshop.banhoetosa.service.exceptions.ObjectNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultMatcher;
 
-import java.util.List;
+import static com.petshop.banhoetosa.factory.PetFactory.createPetComId;
+import static com.petshop.banhoetosa.factory.PetFactory.createPetSemId;
+import static com.petshop.banhoetosa.factory.PetRequestFactory.createPetDetalhesResponse;
+import static com.petshop.banhoetosa.factory.PetRequestFactory.createPetRequest;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import static com.petshop.banhoetosa.factory.PetResponseFactory.*;
-import static com.petshop.banhoetosa.factory.PetFactory.*;
-import static com.petshop.banhoetosa.factory.TutorFactory.*;
-
-@SpringBootTest
+@WebMvcTest(PetController.class)
 class PetControllerTest {
 	
-	@InjectMocks //injeta instancia real da classe, mas tudo o que for usado nela serão mocks
-	private PetController controller;
+	@Autowired
+	private MockMvc mockMvc; //to simulate HTTP requests
 	
-	@Mock
+//	@Mock
+	@MockBean //automatically replaces the bean of the same type in the application context with a Mockito mock.
 	private PetService service;
 	
-	@Mock
+//	@Mock
+//	@Autowired
+	@MockBean
 	private PetMapper mapper;
 	
-	//	private static final Long ID = 1L;
-	private static final int INDEX = 0;
+	@Autowired
+	private ObjectMapper objectMapper;
 	
 	
 	@Test
+	@DisplayName("Deve retornar Ok - Listar")
+	void deveRetornarOk_listar() throws Exception {
+		mockMvc.perform(get("/tutores/pets"))
+		        .andExpect(status().isOk());
+	}
+	
+	@Test
+	@DisplayName("Deve retornar Ok - ListarPetsDoTutor")
+	void deveRetornarOk_listarPetsDoTutor() throws Exception {
+		mockMvc.perform(get("/tutores/1/pets"))
+		        .andExpect(status().isOk());
+	}
+	
+	@Test
+	@DisplayName("Deve retornar NotFound - ListarPetsDoTutor")
+	void deveRetornarNotFound_listarPetsDoTutor() throws Exception {
+		Mockito.when(service.listarPetsDoTutor(10L)).thenThrow(ObjectNotFoundException.class);
+		mockMvc.perform(get("/tutores/10/pets"))
+		        .andExpect(status().isNotFound());
+	}
+	
+	@Test
+	@DisplayName("Deve retornar BadRequest - ListarPetsDoTutor")
+	void deveRetornarBadRequest_listarPetsDoTutor() throws Exception {
+		mockMvc.perform(get("/tutores/1x/pets"))
+		       .andExpect(status().isBadRequest());
+	}
+	
+	@Test
+	@DisplayName("Deve retornar Created - Cadastrar")
+	void deveRetornarCreated_cadastrar() throws Exception {
+		//given
+		Pet pet = createPetComId();
+		PetRequest petRequest = createPetRequest();
+		//when
+		Mockito.when(mapper.petRequestToPet(Mockito.any())).thenReturn(pet);
+		Mockito.when(service.cadastrar(pet, 1L)).thenReturn(pet);
+		//then
+		mockMvc.perform(post("/tutores/1/pets")
+					                .contentType(MediaType.APPLICATION_JSON)
+					                .content(objectMapper.writeValueAsString(petRequest)))
+		        .andExpect(status().isCreated())
+		        .andExpect(content().string("Pet cadastrado com sucesso"));
+	}
+	
+	@Test
+	@DisplayName("Deve retornar BadRequest por DataIntegratyViolation - Cadastrar") //ex: nome pet ja existente
+	void deveRetornarBadRequestPorDataIntegratyViolation_cadastrar() throws Exception {
+		//given
+		PetRequest petRequest = createPetRequest();
+		Pet pet = createPetSemId();
+		//when
+		Mockito.when(mapper.petRequestToPet(Mockito.any())).thenReturn(pet);
+		Mockito.when(service.cadastrar(pet, 1L)).thenThrow(DataIntegratyViolationException.class);
+		//then
+		mockMvc.perform(post("/tutores/1/pets")
+				                .contentType(MediaType.APPLICATION_JSON)
+				                .content(objectMapper.writeValueAsString(petRequest)))
+		       .andExpect(status().isBadRequest())
+		       .andExpect(result -> assertTrue(result.getResolvedException() instanceof DataIntegratyViolationException));
+	}
+	
+	@Test
+	@DisplayName("Deve retornar ObjectNotFound - Cadastrar") //tutor não existe
+	void deveRetornarObjectNotFound_cadastrar() throws Exception {
+		//given
+		PetRequest petRequest = createPetRequest();
+		Pet pet = createPetSemId();
+		//when
+		Mockito.when(mapper.petRequestToPet(Mockito.any())).thenReturn(pet);
+		Mockito.when(service.cadastrar(pet, 1L)).thenThrow(ObjectNotFoundException.class);
+		//then
+		mockMvc.perform(post("/tutores/1/pets")
+				                .contentType(MediaType.APPLICATION_JSON)
+				                .content(objectMapper.writeValueAsString(petRequest)))
+		       .andExpect(status().isNotFound())
+		       .andExpect(result -> assertTrue(result.getResolvedException() instanceof ObjectNotFoundException));
+	}
+	
+	@Test
+	@DisplayName("Deve retornar BadRequest - Cadastrar")
+	void deveRetornarBadRequest_cadastrar() throws Exception {
+		//given
+		PetRequest petRequest = createPetRequest();
+		//then
+		mockMvc.perform(post("/tutores/1x/pets")
+				                .contentType(MediaType.APPLICATION_JSON)
+				                .content(objectMapper.writeValueAsString(petRequest)))
+		        .andExpect(status().isBadRequest());
+	}
+	
+	@Test
+	@DisplayName("Deve retornar Ok - Detalhar")
+	void deveRetornarOk_detalhar() throws Exception {
+		//given
+		Pet pet = createPetComId();
+		PetDetalhesResponse petDetalhesResponse = createPetDetalhesResponse();
+		//when
+		Mockito.when(service.detalhar(1L, 1L)).thenReturn(pet);
+		Mockito.when(mapper.petServicosToPetDetalhesResponse(Mockito.any())).thenReturn(petDetalhesResponse);
+		//then
+		mockMvc.perform(get("/tutores/1/pets/1"))
+		       .andExpect(status().isOk());
+				//como faço para conferir se objeto é o mesmo? classe e parametros
+//		       .andExpect(result -> assertTrue(result.getResponse() instanceof PetDetalhesResponse));
+	}
+	
+	
+	@Test
+	@DisplayName("Deve retornar NotFound - Detalhar")
+	void deveRetornarNotFound_detalhar() throws Exception {
+		//when
+		Mockito.when(service.detalhar(1L, 1L)).thenThrow(ObjectNotFoundException.class);
+		//then
+		mockMvc.perform(get("/tutores/1/pets/1"))
+		       .andExpect(status().isNotFound())
+		       .andExpect(result -> assertTrue(result.getResolvedException() instanceof ObjectNotFoundException));
+	}
+	
+	@Test
+	@DisplayName("Deve retornar Ok - Atualizar")
+	void deveRetornarOk_atualizar() throws Exception {
+		//given
+		Pet pet = createPetComId();
+		PetRequest petRequest = createPetRequest();
+		//when
+		Mockito.when(mapper.petRequestToPet(Mockito.any())).thenReturn(pet);
+		Mockito.when(service.atualizar(1L, pet, 1L)).thenReturn(pet);
+		//then
+		mockMvc.perform(put("/tutores/1/pets/1")
+				                .contentType(MediaType.APPLICATION_JSON)
+				                .content(objectMapper.writeValueAsString(petRequest)))
+		       .andExpect(status().isOk())
+		       .andExpect(content().string("Cadastro do pet atualizado com sucesso"));
+	}
+	
+	@Test
+	@DisplayName("Deve retornar NotFound - Atualizar")
+	void deveRetornarNotFound_atualizar() throws Exception {
+		//given
+		Pet pet = createPetComId();
+		PetRequest petRequest = createPetRequest();
+		//when
+		Mockito.when(mapper.petRequestToPet(Mockito.any())).thenReturn(pet);
+		Mockito.when(service.atualizar(1L, pet, 1L)).thenThrow(ObjectNotFoundException.class);
+		//then
+		mockMvc.perform(put("/tutores/1/pets/1")
+				                .contentType(MediaType.APPLICATION_JSON)
+				                .content(objectMapper.writeValueAsString(petRequest)))
+		       .andExpect(status().isNotFound())
+		       .andExpect(result -> assertTrue(result.getResolvedException() instanceof ObjectNotFoundException));
+	}
+	
+	@Test
+	@DisplayName("Deve retornar BadRequest - Atualizar")
+	void deveRetornarBadRequest_atualizar() throws Exception {
+		//given
+		Pet pet = createPetComId();
+		PetRequest petRequest = createPetRequest();
+		//when
+		Mockito.when(mapper.petRequestToPet(Mockito.any())).thenReturn(pet);
+		Mockito.when(service.atualizar(1L, pet, 1L)).thenThrow(DataIntegratyViolationException.class);
+		//then
+		mockMvc.perform(put("/tutores/1/pets/1")
+				                .contentType(MediaType.APPLICATION_JSON)
+				                .content(objectMapper.writeValueAsString(petRequest)))
+		       .andExpect(status().isBadRequest())
+		       .andExpect(result -> assertTrue(result.getResolvedException() instanceof DataIntegratyViolationException));
+	}
+	
+	@Test
+	@DisplayName("Deve retornar Ok - Deletar")
+	void deveRetornarOk_deletar() throws Exception {
+		//when
+		Mockito.doNothing().when(service).deletar(1L, 1L);
+		//then
+		mockMvc.perform(delete("/tutores/1/pets/1"))
+		       .andExpect(status().isOk())
+		       .andExpect(content().string("Pet excluído com sucesso"));
+	}
+	
+	@Test
+	@DisplayName("Deve retornar NotFound - Deletar")
+	void deveRetornarNotFound_deletar() throws Exception {
+		//when
+		Mockito.doThrow(ObjectNotFoundException.class).when(service).deletar(1L, 1L);
+		//then
+		mockMvc.perform(delete("/tutores/1/pets/1"))
+		       .andExpect(status().isNotFound())
+		       .andExpect(result -> assertTrue(result.getResolvedException() instanceof ObjectNotFoundException));
+	}
+
+	
+}
+
+//	@Test
+//	@DisplayName("Deve retornar Not Found - ListarPetsDoTutor")
+//	void deveRetornarNotFound_listarPetsDoTutor() throws Exception {
+//
+//		Mockito.when(tutorService.buscaTutor(ID)).thenThrow(ObjectNotFoundException.class);
+//		//then
+//		Assertions.assertThatThrownBy(() -> service.listarPetsDoTutor(ID)).isExactlyInstanceOf(ObjectNotFoundException.class);
+//
+//
+//		mockMvc.perform(get("/tutores/10/pets"))
+//				.getClass()
+////                .contentType("application/json"))
+////		        .andExpect(status().isNotFound());
+//	}
+	
+	
+//		@Test
+//		@DisplayName("teste")
+//		void testando2(){
+//	//		mockMvc.getClass().equals(MockMvc.class);
+//
+//
+//
+//	//				perform(post("/tutores/pets")
+//	//                .contentType("application/json"))
+//	//		        .andExpect(status().isOk());
+//		}
+	
+	
+//	@Test
+//	void testando2() throws Exception {
+////		mockMvc.getClass().equals(MockMvc.class);
+//		mockMvc.perform(get("/tutores/pets")
+//				                .contentType("application/json"));
+//
+//
+////				perform(post("/tutores/pets")
+////                .contentType("application/json"))
+////		        .andExpect(status().isOk());
+//	}
+	
+	
+//	@Test
+//	void testando() throws Exception {
+//		mockMvc.perform(get("/tutores/pets")
+//                .contentType("application/json"))
+//		        .andExpect(status().isOk());
+//	}
+
+
+
+	
+//	@Test
+//	@DisplayName("Deve retornar Ok - Listar")
+//	void deveRetornarOk_listar() throws Exception {
+//		String host = "tutores/pets";
+////		String port = System.getProperty("http.server.port");
+//		URL url = new URL("http://" + host); //+ ":" + port + "/test");
+//
+//		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+//		connection.setRequestMethod("GET");
+//		int responseCode = connection.getResponseCode();
+//
+//		Assertions.assertThat(responseCode).isEqualTo(HttpStatus.OK.value());
+//	}
+	
+	
+
+	
+/*	@Test
 	@DisplayName("Deve retornar uma lista de PetResponse - Listar")
 	void deveRetornarUmaListaDePetResponse_listar() {
 		//given
@@ -130,5 +404,4 @@ class PetControllerTest {
 	
 	@Test
 	void deletar() {
-	}
-}
+	}*/

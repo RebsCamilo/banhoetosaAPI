@@ -5,8 +5,8 @@ import com.petshop.banhoetosa.model.response.PetDetalhesResponse;
 
 public class PetRequestFactory {
 	
-	public static PetRequest createPetDetalhesResponseComId() {
-		return PetRequest.builder()
+	public static PetDetalhesResponse createPetDetalhesResponse() {
+		return PetDetalhesResponse.builder()
 	                      .nome("Mel")
 	                      .especie("cao")
 	                      .raca("pinscher")
@@ -14,5 +14,16 @@ public class PetRequestFactory {
 	                      .detalhe("Nenhum")
 	                      .build();
 	}
+	
+	public static PetRequest createPetRequest() {
+		return PetRequest.builder()
+		                 .nome("Mel")
+		                 .especie("cao")
+		                 .raca("pinscher")
+		                 .idade(10)
+		                 .detalhe("Nenhum")
+		                 .build();
+	}
+	
 	
 }
