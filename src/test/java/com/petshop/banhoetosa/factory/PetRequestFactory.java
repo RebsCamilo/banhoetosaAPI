@@ -2,8 +2,17 @@ package com.petshop.banhoetosa.factory;
 
 import com.petshop.banhoetosa.model.request.PetRequest;
 import com.petshop.banhoetosa.model.response.PetDetalhesResponse;
+import com.petshop.banhoetosa.model.response.PetResponse;
 
 public class PetRequestFactory {
+	
+	public static PetResponse createPetResponse() {
+		return PetResponse.builder()
+		                  .id(1L)
+	                      .nome("Mel")
+	                      .raca("pinscher")
+	                      .build();
+	}
 	
 	public static PetDetalhesResponse createPetDetalhesResponse() {
 		return PetDetalhesResponse.builder()

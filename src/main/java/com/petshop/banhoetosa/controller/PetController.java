@@ -26,7 +26,6 @@ public class PetController {
 	private final PetService petService;
 	private final PetMapper petMapper;
 
-	@Autowired
 	public PetController(PetService petService, PetMapper petMapper) {
 		this.petService = petService;
 		this.petMapper = petMapper;

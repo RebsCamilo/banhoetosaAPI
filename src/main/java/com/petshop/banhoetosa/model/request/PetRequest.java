@@ -24,5 +24,4 @@ public class PetRequest {
     private String detalhe;
 //    @NotNull @NotEmpty
 //    private String emailTutor;
-
 }
