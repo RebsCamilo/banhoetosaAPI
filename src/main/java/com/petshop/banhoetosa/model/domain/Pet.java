@@ -39,7 +39,7 @@ public class Pet {
     private Tutor tutor;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL)//, orphanRemoval = true)
     List<PetServico> petServicos;
 
 
