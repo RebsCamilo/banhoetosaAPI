@@ -1,15 +1,20 @@
 package com.petshop.banhoetosa.model.domain;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 @Table(name = "enderecos")
-@Data
+//@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Endereco {
@@ -52,5 +57,22 @@ public class Endereco {
         this.setComplemento(enderecoAtt.getComplemento());
         this.setCep(enderecoAtt.getCep());
         return this;
+    }
+    
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
+            return false;
+        }
+        final Endereco endereco = (Endereco) o;
+        return id != null && Objects.equals(id, endereco.id);
+    }
+    
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }

@@ -1,19 +1,18 @@
 package com.petshop.banhoetosa.model.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "tutores")
-@Data
-//@Getter
-//@Setter
+//@Data
+@Getter
+@Setter
 //@ToString
 @NoArgsConstructor
 @AllArgsConstructor
@@ -63,5 +62,21 @@ public class Tutor {
         return this;
     }
     
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
+            return false;
+        }
+        final Tutor tutor = (Tutor) o;
+        return id != null && Objects.equals(id, tutor.id);
+    }
+    
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }
 
